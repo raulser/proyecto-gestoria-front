@@ -1,0 +1,412 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg lucideBuilding2 size="24"></svg>
+      </div>
+      <div>
+        <strong>Gestoria</strong>
+        <span>Portal documental</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      @for (item of menuItems; track item.view) {
+        <button type="button" [class.active]="activeView === item.view" (click)="activeView = item.view">
+          @switch (item.icon) {
+            @case ('dashboard') {
+              <svg lucideLayoutDashboard size="18"></svg>
+            }
+            @case ('users') {
+              <svg lucideUsers size="18"></svg>
+            }
+            @case ('documents') {
+              <svg lucideFileText size="18"></svg>
+            }
+            @case ('upload') {
+              <svg lucideUpload size="18"></svg>
+            }
+            @case ('settings') {
+              <svg lucideSettings size="18"></svg>
+            }
+          }
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </nav>
+
+    <div class="account">
+      <span class="avatar">RS</span>
+      <div>
+        <strong>Raul</strong>
+        <small>ADMIN / ASESOR</small>
+      </div>
+      <button type="button" class="icon-button" aria-label="Cerrar sesion">
+        <svg lucideLogOut size="18"></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Proyecto Gestoria</p>
+        <h1>
+          @switch (activeView) {
+            @case ('dashboard') {
+              Panel de asesoría
+            }
+            @case ('clientes') {
+              Clientes
+            }
+            @case ('documentos') {
+              Documentos
+            }
+            @case ('subir') {
+              Subida de documentos
+            }
+            @case ('configuracion') {
+              Configuración
+            }
+          }
+        </h1>
+      </div>
+
+      <div class="topbar-actions">
+        <button type="button" class="secondary" (click)="checkApi()">
+          <svg lucideCircleCheck size="17"></svg>
+          <span>{{ apiStatus }}</span>
+        </button>
+        <button type="button" class="primary" (click)="activeView = 'subir'">
+          <svg lucideFileUp size="17"></svg>
+          <span>Subir documento</span>
+        </button>
+      </div>
+    </header>
+
+    @if (activeView === 'dashboard') {
+      <section class="metrics">
+        <div class="metric">
+          <span>Clientes activos</span>
+          <strong>{{ clients.filter(client => client.active).length }}</strong>
+        </div>
+        <div class="metric">
+          <span>Documentos {{ activeQuarter }}</span>
+          <strong>{{ documentsForQuarter().length }}</strong>
+        </div>
+        <div class="metric warning">
+          <span>Pendiente de accion</span>
+          <strong>{{ pendingCount() }}</strong>
+        </div>
+        <div class="metric success">
+          <span>Trimestres revisados</span>
+          <strong>{{ completionPercent() }}%</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Estado por trimestre</h2>
+            <p>{{ selectedYear }}</p>
+          </div>
+          <div class="segmented">
+            @for (quarter of quarters; track quarter) {
+              <button type="button" [class.active]="activeQuarter === quarter" (click)="activeQuarter = quarter">
+                {{ quarter }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <div class="grid-head">Cliente</div>
+          @for (quarter of quarters; track quarter) {
+            <div class="grid-head">{{ quarter }}</div>
+          }
+
+          @for (client of clients; track client.id) {
+            <div class="client-cell">
+              <strong>{{ client.name }}</strong>
+              <span>{{ client.nif }}</span>
+            </div>
+            @for (quarter of quarters; track quarter) {
+              <div class="quarter-cell">
+                <span class="status" [class]="quarterStatus(client.id, quarter)">
+                  {{ quarterStatus(client.id, quarter) === 'SIN_DATOS' ? '-' : quarterStatus(client.id, quarter) }}
+                </span>
+              </div>
+            }
+          }
+        </div>
+      </section>
+
+      <section class="list-section">
+        <div class="panel-header">
+          <div>
+            <h2>Actividad {{ activeQuarter }}</h2>
+            <p>Ultimos documentos recibidos</p>
+          </div>
+        </div>
+
+        <div class="document-list">
+          @for (document of documentsForQuarter(); track document.id) {
+            <article class="document-row">
+              <div class="file-icon">
+                <svg lucideFileText size="20"></svg>
+              </div>
+              <div>
+                <strong>{{ document.fileName }}</strong>
+                <span>{{ clientName(document.clientId) }} · {{ document.type }} · {{ document.uploadedAt }}</span>
+              </div>
+              <span class="status" [class]="document.status">{{ document.status }}</span>
+            </article>
+          }
+        </div>
+      </section>
+    }
+
+    @if (activeView === 'clientes') {
+      <section class="two-column">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Alta rápida</h2>
+              <p>Cliente de la asesoría</p>
+            </div>
+          </div>
+
+          <form class="form" (ngSubmit)="addClient()">
+            <label>
+              Nombre / razón social
+              <input name="clientName" [(ngModel)]="newClient.name" placeholder="Cliente SL">
+            </label>
+            <label>
+              NIF / CIF
+              <input name="clientNif" [(ngModel)]="newClient.nif" placeholder="B00000000">
+            </label>
+            <label>
+              Email
+              <input name="clientEmail" type="email" [(ngModel)]="newClient.email" placeholder="cliente@empresa.es">
+            </label>
+            <label>
+              Teléfono
+              <input name="clientPhone" [(ngModel)]="newClient.phone" placeholder="600 000 000">
+            </label>
+            <label>
+              Tipo
+              <select name="clientType" [(ngModel)]="newClient.type">
+                <option value="Empresa">Empresa</option>
+                <option value="Autonomo">Autonomo</option>
+              </select>
+            </label>
+            <button type="submit" class="primary">
+              <svg lucidePlus size="17"></svg>
+              <span>Crear cliente</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Listado</h2>
+              <p>{{ filteredClients().length }} clientes</p>
+            </div>
+            <div class="search">
+              <svg lucideSearch size="17"></svg>
+              <input [(ngModel)]="searchTerm" placeholder="Buscar">
+            </div>
+          </div>
+
+          <div class="client-list">
+            @for (client of filteredClients(); track client.id) {
+              <article class="client-card">
+                <div>
+                  <strong>{{ client.name }}</strong>
+                  <span>{{ client.nif }} · {{ client.type }}</span>
+                </div>
+                <div>
+                  <span>{{ client.email }}</span>
+                  <span>{{ client.phone }}</span>
+                </div>
+                <span class="pill" [class.off]="!client.active">{{ client.active ? 'Activo' : 'Inactivo' }}</span>
+              </article>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
+    @if (activeView === 'documentos') {
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Repositorio documental</h2>
+            <p>Facturas, tickets, contratos y nóminas</p>
+          </div>
+          <div class="search">
+            <svg lucideSearch size="17"></svg>
+            <input [(ngModel)]="searchTerm" placeholder="Buscar documento">
+          </div>
+        </div>
+
+        <div class="table">
+          <div class="table-head">Cliente</div>
+          <div class="table-head">Tipo</div>
+          <div class="table-head">Periodo</div>
+          <div class="table-head">Archivo</div>
+          <div class="table-head">Estado</div>
+          <div class="table-head">Acciones</div>
+
+          @for (document of filteredDocuments(); track document.id) {
+            <div>{{ clientName(document.clientId) }}</div>
+            <div>{{ document.type }}</div>
+            <div>{{ document.year }} · {{ document.quarter }} · {{ document.month }}</div>
+            <div>{{ document.fileName }}</div>
+            <div><span class="status" [class]="document.status">{{ document.status }}</span></div>
+            <div class="row-actions">
+              <button type="button" class="icon-button" aria-label="Descargar documento">
+                <svg lucideDownload size="17"></svg>
+              </button>
+              <button type="button" class="secondary small" (click)="setStatus(document, 'REVISADO')">Revisar</button>
+              <button type="button" class="secondary small danger" (click)="setStatus(document, 'RECHAZADO')">Rechazar</button>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (activeView === 'subir') {
+      <section class="upload-layout">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Nuevo documento</h2>
+              <p>Entrada manual para el MVP</p>
+            </div>
+          </div>
+
+          <form class="form" (ngSubmit)="registerUpload()">
+            <label>
+              Cliente
+              <select name="uploadClient" [(ngModel)]="uploadForm.clientId">
+                @for (client of clients; track client.id) {
+                  <option [ngValue]="client.id">{{ client.name }}</option>
+                }
+              </select>
+            </label>
+            <label>
+              Tipo
+              <select name="uploadType" [(ngModel)]="uploadForm.type">
+                @for (type of documentTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </label>
+            <div class="form-row">
+              <label>
+                Año
+                <input name="uploadYear" type="number" [(ngModel)]="uploadForm.year">
+              </label>
+              <label>
+                Trimestre
+                <select name="uploadQuarter" [(ngModel)]="uploadForm.quarter">
+                  @for (quarter of quarters; track quarter) {
+                    <option [value]="quarter">{{ quarter }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+            <label>
+              Mes
+              <input name="uploadMonth" [(ngModel)]="uploadForm.month" placeholder="Mayo">
+            </label>
+            <label>
+              Archivo
+              <input name="uploadFile" [(ngModel)]="uploadForm.fileName" placeholder="facturas_mayo.pdf">
+            </label>
+
+            <div class="dropzone">
+              <svg lucideFileUp size="30"></svg>
+              <strong>Subida preparada</strong>
+              <span>{{ clientName(uploadForm.clientId) }} · {{ uploadForm.type }} · {{ uploadForm.quarter }}</span>
+            </div>
+
+            <button type="submit" class="primary">
+              <svg lucideUpload size="17"></svg>
+              <span>Registrar documento</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="side-summary">
+          <div class="summary-item">
+            <svg lucideCalendarDays size="20"></svg>
+            <div>
+              <strong>Periodo actual</strong>
+              <span>{{ selectedYear }} · {{ activeQuarter }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <svg lucideUsers size="20"></svg>
+            <div>
+              <strong>Clientes activos</strong>
+              <span>{{ clients.filter(client => client.active).length }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <svg lucideFileText size="20"></svg>
+            <div>
+              <strong>Tipos aceptados</strong>
+              <span>PDF, ZIP, XLSX, JPG</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    @if (activeView === 'configuracion') {
+      <section class="two-column">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>API</h2>
+              <p>Backend Spring Boot</p>
+            </div>
+          </div>
+
+          <div class="settings-list">
+            <div>
+              <span>Base URL</span>
+              <strong>{{ apiBaseUrl }}</strong>
+            </div>
+            <div>
+              <span>Estado</span>
+              <strong>{{ apiStatus }}</strong>
+            </div>
+            <button type="button" class="secondary" (click)="checkApi()">
+              <svg lucideCircleCheck size="17"></svg>
+              <span>Comprobar conexión</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Roles MVP</h2>
+              <p>Permisos iniciales</p>
+            </div>
+          </div>
+
+          <div class="role-list">
+            <div><strong>ADMIN</strong><span>Usuarios, clientes y configuración</span></div>
+            <div><strong>ASESOR</strong><span>Clientes, documentos y revisión</span></div>
+            <div><strong>CLIENTE</strong><span>Subida y consulta de sus documentos</span></div>
+          </div>
+        </div>
+      </section>
+    }
+  </main>
+</div>
