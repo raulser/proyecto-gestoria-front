@@ -13,6 +13,12 @@ class ApiFailure implements Exception {
   String toString() => message;
 }
 
+class DownloadedFile {
+  const DownloadedFile(this.bytes, this.contentType);
+  final Uint8List bytes;
+  final String contentType;
+}
+
 class ApiClient {
   ApiClient(AppConfig config, this._tokenProvider)
     : _dio = Dio(
@@ -113,6 +119,13 @@ class ApiClient {
     )).data,
     Vencimiento.fromJson,
   );
+  Future<List<Vencimiento>> generarVencimientos(int anio) async => _list(
+    (await _dio.post(
+      '/api/vencimientos/generar',
+      queryParameters: {'anio': anio},
+    )).data,
+    Vencimiento.fromJson,
+  );
   Future<ResumenPanel> resumen(int anio) async => ResumenPanel.fromJson(
     _json(
       (await _dio.get(
@@ -134,6 +147,114 @@ class ApiClient {
   Future<List<Json>> auditoria() async => _list(
     (await _dio.get('/api/auditoria', queryParameters: {'limit': 30})).data,
     (value) => value,
+  );
+
+  Future<Cliente> guardarCliente(Json data, {int? id}) async =>
+      Cliente.fromJson(
+        _json(
+          (id == null
+                  ? await _dio.post('/api/clientes', data: data)
+                  : await _dio.put('/api/clientes/$id', data: data))
+              .data,
+        ),
+      );
+
+  Future<PerfilFiscal> perfilFiscal(int clienteId) async =>
+      PerfilFiscal.fromJson(
+        _json((await _dio.get('/api/clientes/$clienteId/perfil-fiscal')).data),
+      );
+  Future<PerfilFiscal> guardarPerfilFiscal(
+    int clienteId,
+    PerfilFiscal profile, {
+    bool reviewed = false,
+  }) async => PerfilFiscal.fromJson(
+    _json(
+      (await _dio.put(
+        '/api/clientes/$clienteId/perfil-fiscal',
+        data: profile.toJson(reviewed: reviewed),
+      )).data,
+    ),
+  );
+  Future<List<RecomendacionFiscal>> recomendaciones(int clienteId) async =>
+      _list(
+        (await _dio.get('/api/clientes/$clienteId/recomendaciones-fiscales'))
+            .data,
+        RecomendacionFiscal.fromJson,
+      );
+  Future<List<RecomendacionFiscal>> accionRecomendacion(
+    int clienteId,
+    String clave,
+    String action, {
+    String? reason,
+  }) async => _list(
+    (await _dio.post(
+      '/api/clientes/$clienteId/recomendaciones-fiscales/$clave/$action',
+      data: reason == null ? null : {'motivo': reason},
+    )).data,
+    RecomendacionFiscal.fromJson,
+  );
+
+  Future<Obligacion> guardarObligacion(
+    int clienteId,
+    Json data, {
+    int? id,
+  }) async => Obligacion.fromJson(
+    _json(
+      (id == null
+              ? await _dio.post(
+                  '/api/clientes/$clienteId/obligaciones',
+                  data: data,
+                )
+              : await _dio.put(
+                  '/api/clientes/$clienteId/obligaciones/$id',
+                  data: data,
+                ))
+          .data,
+    ),
+  );
+
+  Future<Solicitud> crearSolicitud(Json data) async => Solicitud.fromJson(
+    _json((await _dio.post('/api/solicitudes', data: data)).data),
+  );
+  Future<List<ComentarioSolicitud>> comentarios(int requestId) async => _list(
+    (await _dio.get('/api/solicitudes/$requestId/comentarios')).data,
+    ComentarioSolicitud.fromJson,
+  );
+  Future<ComentarioSolicitud> comentar(int requestId, String text) async =>
+      ComentarioSolicitud.fromJson(
+        _json(
+          (await _dio.post(
+            '/api/solicitudes/$requestId/comentarios',
+            data: {'texto': text},
+          )).data,
+        ),
+      );
+  Future<void> accionSolicitud(
+    int requestId,
+    String action, {
+    String? reason,
+  }) async {
+    final route = switch (action) {
+      'enviar' => '/enviar',
+      'solicitar-reapertura' => '/reapertura',
+      'aprobar-reapertura' => '/reapertura/aprobar',
+      'rechazar-reapertura' => '/reapertura/rechazar',
+      'reabrir' => '/reabrir',
+      _ => '',
+    };
+    await _dio.post(
+      '/api/solicitudes/$requestId$route',
+      data: reason == null ? null : {'motivo': reason},
+    );
+  }
+
+  Future<void> actualizarEstadoSolicitud(
+    int requestId,
+    String state, {
+    String? description,
+  }) async => _dio.patch(
+    '/api/solicitudes/$requestId',
+    data: {'estado': state, 'descripcion': description},
   );
 
   Future<void> editarSolicitud(
@@ -193,4 +314,66 @@ class ApiClient {
       data: {'estado': estado, 'comentarioAsesor': comentario},
     );
   }
+
+  Future<void> accionDocumento(int id, String action, {String? reason}) async {
+    await _dio.post(
+      '/api/documentos/$id/$action',
+      data: reason == null ? null : {'motivo': reason},
+    );
+  }
+
+  Future<void> asociarDocumento(int id, int? requestId) async {
+    await _dio.patch(
+      '/api/documentos/$id/solicitud',
+      data: {'solicitudId': requestId},
+    );
+  }
+
+  Future<DownloadedFile> descargarDocumento(int id) async {
+    final response = await _dio.get<List<int>>(
+      '/api/documentos/$id/descargar',
+      options: Options(responseType: ResponseType.bytes),
+    );
+    return DownloadedFile(
+      Uint8List.fromList(response.data ?? const []),
+      response.headers.value('content-type') ?? 'application/octet-stream',
+    );
+  }
+
+  Future<DownloadedFile> exportarDocumentos({
+    int? clientId,
+    required int year,
+  }) async {
+    final response = await _dio.get<List<int>>(
+      '/api/documentos/zip',
+      queryParameters: {'anio': year, 'clienteId': ?clientId},
+      options: Options(responseType: ResponseType.bytes),
+    );
+    return DownloadedFile(
+      Uint8List.fromList(response.data ?? const []),
+      'application/zip',
+    );
+  }
+
+  Future<void> marcarNotificacion(int id) async =>
+      _dio.patch('/api/notificaciones/$id/leida');
+  Future<void> generarRecordatorios() async =>
+      _dio.post('/api/notificaciones/generar-recordatorios');
+  Future<Json> guardarEmpresa(Json data) async =>
+      _json((await _dio.put('/api/empresa', data: data)).data);
+  Future<Json> guardarUsuario(Json data, {int? id}) async => _json(
+    (id == null
+            ? await _dio.post('/api/usuarios', data: data)
+            : await _dio.put('/api/usuarios/$id', data: data))
+        .data,
+  );
+  Future<void> asignar(int advisorId, int clientId) async => _dio.post(
+    '/api/asignaciones',
+    data: {'asesorId': advisorId, 'clienteId': clientId},
+  );
+  Future<void> quitarAsignacion(int advisorId, int clientId) async =>
+      _dio.delete(
+        '/api/asignaciones',
+        queryParameters: {'asesorId': advisorId, 'clienteId': clientId},
+      );
 }

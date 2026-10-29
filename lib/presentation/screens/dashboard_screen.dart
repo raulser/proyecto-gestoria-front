@@ -29,10 +29,23 @@ class DashboardScreen extends StatelessWidget {
           subtitle: client
               ? 'Aquí tienes lo importante de tu expediente.'
               : 'Todo lo que necesita atención, de un vistazo.',
-          action: IconButton.filledTonal(
-            onPressed: app.refresh,
-            tooltip: 'Actualizar',
-            icon: const Icon(Icons.refresh_rounded),
+          action: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!client) ...[
+                FilledButton.tonalIcon(
+                  onPressed: app.loading ? null : app.generateAgenda,
+                  icon: const Icon(Icons.auto_awesome_outlined),
+                  label: const Text('Generar agenda'),
+                ),
+                const SizedBox(width: 8),
+              ],
+              IconButton.filledTonal(
+                onPressed: app.loading ? null : app.refresh,
+                tooltip: 'Actualizar',
+                icon: const Icon(Icons.refresh_rounded),
+              ),
+            ],
           ),
         ),
         AdaptiveGrid(
@@ -202,45 +215,51 @@ class DashboardScreen extends StatelessWidget {
                     ...app.notificaciones
                         .take(5)
                         .map(
-                          (item) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  margin: const EdgeInsets.only(top: 5),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: item.leida
-                                        ? AppColors.line
-                                        : AppColors.coral,
+                          (item) => InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: item.leida
+                                ? null
+                                : () => app.readNotification(item),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    margin: const EdgeInsets.only(top: 5),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: item.leida
+                                          ? AppColors.line
+                                          : AppColors.coral,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.titulo,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.ink,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.titulo,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                            color: AppColors.ink,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        item.cuerpo,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          item.cuerpo,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

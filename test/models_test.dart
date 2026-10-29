@@ -24,5 +24,42 @@ void main() {
       expect(etiqueta('PENDIENTE_DOCUMENTACION'), 'Pendiente Documentacion');
       expect(etiqueta('AUTONOMO'), 'Autonomo');
     });
+
+    test('conserva la configuración completa de una obligación', () {
+      final obligation = Obligacion.fromJson({
+        'id': 12,
+        'clienteId': 3,
+        'codigo': '303',
+        'nombre': 'IVA trimestral',
+        'categoria': 'FISCAL',
+        'periodicidad': 'TRIMESTRAL',
+        'mesesPresentacion': '4,7,10,1',
+        'diaLimite': 20,
+        'observaciones': 'Presentación telemática',
+        'tiposDocumentoEsperados': ['FACTURA_EMITIDA', 'FACTURA_RECIBIDA'],
+        'activa': true,
+      });
+
+      expect(obligation.diaLimite, 20);
+      expect(obligation.mesesPresentacion, '4,7,10,1');
+      expect(obligation.tiposDocumentoEsperados, hasLength(2));
+    });
+
+    test('serializa el perfil fiscal para revisión', () {
+      final profile = PerfilFiscal.fromJson({
+        'clienteId': 8,
+        'territorioFiscal': 'COMUN',
+        'regimenIrpf': 'ESTIMACION_DIRECTA_SIMPLIFICADA',
+        'regimenIva': 'GENERAL',
+        'tieneTrabajadores': 'SI',
+        'estadoRevision': 'BORRADOR',
+        'porcentajeCompletado': 46,
+      });
+
+      final payload = profile.toJson(reviewed: true);
+      expect(payload['tieneTrabajadores'], 'SI');
+      expect(payload['operacionesTerceros'], 'PENDIENTE');
+      expect(payload['marcarRevisado'], isTrue);
+    });
   });
 }

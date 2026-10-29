@@ -74,6 +74,9 @@ class Solicitud {
     this.descripcion,
     this.cumplimientoObligacionId,
     this.nombreAsesor,
+    this.motivoReapertura,
+    this.reaperturaSolicitadaEn,
+    this.recurrencia = 'NINGUNA',
   });
   final int id;
   final int clienteId;
@@ -85,6 +88,9 @@ class Solicitud {
   final int? cumplimientoObligacionId;
   final String? nombreAsesor;
   final List<String> tiposEsperados;
+  final String? motivoReapertura;
+  final DateTime? reaperturaSolicitadaEn;
+  final String recurrencia;
   bool get editable => estado == 'ABIERTA' || estado == 'PARCIAL';
   factory Solicitud.fromJson(Json j) => Solicitud(
     id: intValue(j['id']),
@@ -98,9 +104,128 @@ class Solicitud {
         ? null
         : intValue(j['cumplimientoObligacionId']),
     nombreAsesor: castOrNull<String>(j['nombreAsesorAsignado']),
+    motivoReapertura: castOrNull<String>(j['motivoReapertura']),
+    reaperturaSolicitadaEn: DateTime.tryParse(
+      stringValue(j['reaperturaSolicitadaEn']),
+    ),
+    recurrencia: stringValue(j['recurrencia'], 'NINGUNA'),
     tiposEsperados: (j['tiposDocumentoEsperados'] as List? ?? const [])
         .map((e) => '$e')
         .toList(),
+  );
+}
+
+class ComentarioSolicitud {
+  const ComentarioSolicitud({
+    required this.id,
+    required this.nombreAutor,
+    required this.rolAutor,
+    required this.texto,
+    required this.creadoEn,
+  });
+  final int id;
+  final String nombreAutor;
+  final String rolAutor;
+  final String texto;
+  final DateTime? creadoEn;
+  factory ComentarioSolicitud.fromJson(Json j) => ComentarioSolicitud(
+    id: intValue(j['id']),
+    nombreAutor: stringValue(j['nombreAutor']),
+    rolAutor: stringValue(j['rolAutor']),
+    texto: stringValue(j['texto']),
+    creadoEn: DateTime.tryParse(stringValue(j['creadoEn'])),
+  );
+}
+
+class PerfilFiscal {
+  const PerfilFiscal({
+    required this.clienteId,
+    required this.territorioFiscal,
+    required this.regimenIrpf,
+    required this.regimenIva,
+    required this.valores,
+    required this.estadoRevision,
+    required this.porcentajeCompletado,
+  });
+  final int clienteId;
+  final String territorioFiscal;
+  final String regimenIrpf;
+  final String regimenIva;
+  final Map<String, String> valores;
+  final String estadoRevision;
+  final int porcentajeCompletado;
+  factory PerfilFiscal.fromJson(Json j) {
+    const keys = [
+      'tributaSociedades',
+      'pagosFraccionadosSociedades',
+      'tieneTrabajadores',
+      'pagaProfesionalesRetencion',
+      'alquilerSujetoRetencion',
+      'rendimientosCapital',
+      'operacionesIntracomunitarias',
+      'operacionesTerceros',
+      'recibeDonativosDeducibles',
+      'entidadAtribucionRentas',
+      'exoneradoModelo390',
+    ];
+    return PerfilFiscal(
+      clienteId: intValue(j['clienteId']),
+      territorioFiscal: stringValue(j['territorioFiscal'], 'COMUN'),
+      regimenIrpf: stringValue(j['regimenIrpf'], 'PENDIENTE'),
+      regimenIva: stringValue(j['regimenIva'], 'PENDIENTE'),
+      valores: {for (final key in keys) key: stringValue(j[key], 'PENDIENTE')},
+      estadoRevision: stringValue(j['estadoRevision'], 'PENDIENTE'),
+      porcentajeCompletado: intValue(j['porcentajeCompletado']),
+    );
+  }
+  Json toJson({bool reviewed = false}) => {
+    'territorioFiscal': territorioFiscal,
+    'regimenIrpf': regimenIrpf,
+    'regimenIva': regimenIva,
+    ...valores,
+    'marcarRevisado': reviewed,
+  };
+  PerfilFiscal copyWith({
+    String? territorioFiscal,
+    String? regimenIrpf,
+    String? regimenIva,
+    Map<String, String>? valores,
+  }) => PerfilFiscal(
+    clienteId: clienteId,
+    territorioFiscal: territorioFiscal ?? this.territorioFiscal,
+    regimenIrpf: regimenIrpf ?? this.regimenIrpf,
+    regimenIva: regimenIva ?? this.regimenIva,
+    valores: valores ?? this.valores,
+    estadoRevision: estadoRevision,
+    porcentajeCompletado: porcentajeCompletado,
+  );
+}
+
+class RecomendacionFiscal {
+  const RecomendacionFiscal({
+    required this.clave,
+    required this.codigo,
+    required this.nombre,
+    required this.estado,
+    required this.razon,
+    this.advertencia,
+    this.motivoDecision,
+  });
+  final String clave;
+  final String codigo;
+  final String nombre;
+  final String estado;
+  final String razon;
+  final String? advertencia;
+  final String? motivoDecision;
+  factory RecomendacionFiscal.fromJson(Json j) => RecomendacionFiscal(
+    clave: stringValue(j['clave']),
+    codigo: stringValue(j['codigo']),
+    nombre: stringValue(j['nombre']),
+    estado: stringValue(j['estado']),
+    razon: stringValue(j['razon']),
+    advertencia: castOrNull<String>(j['advertencia']),
+    motivoDecision: castOrNull<String>(j['motivoDecision']),
   );
 }
 
@@ -156,6 +281,10 @@ class Obligacion {
     required this.categoria,
     required this.periodicidad,
     required this.activa,
+    this.mesesPresentacion,
+    this.diaLimite,
+    this.observaciones,
+    this.tiposDocumentoEsperados = const [],
   });
   final int id;
   final int clienteId;
@@ -164,6 +293,10 @@ class Obligacion {
   final String categoria;
   final String periodicidad;
   final bool activa;
+  final String? mesesPresentacion;
+  final int? diaLimite;
+  final String? observaciones;
+  final List<String> tiposDocumentoEsperados;
   factory Obligacion.fromJson(Json j) => Obligacion(
     id: intValue(j['id']),
     clienteId: intValue(j['clienteId']),
@@ -172,6 +305,12 @@ class Obligacion {
     categoria: stringValue(j['categoria']),
     periodicidad: stringValue(j['periodicidad']),
     activa: boolValue(j['activa']),
+    mesesPresentacion: castOrNull<String>(j['mesesPresentacion']),
+    diaLimite: j['diaLimite'] == null ? null : intValue(j['diaLimite']),
+    observaciones: castOrNull<String>(j['observaciones']),
+    tiposDocumentoEsperados: (j['tiposDocumentoEsperados'] as List? ?? const [])
+        .map((value) => '$value')
+        .toList(),
   );
 }
 
