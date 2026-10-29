@@ -1,40 +1,51 @@
-# Proyecto Gestoría · Frontend
+# Portal Gestoría · Flutter
 
-Aplicación Angular 21 para administradores, asesores y clientes.
+Frontend multiplataforma del proyecto de gestoría. La misma base de código genera:
 
-## Vistas
+- aplicación web responsive;
+- aplicación Android;
+- aplicación iOS (la compilación y firma de iOS requieren macOS con Xcode).
 
-- Panel con métricas, notificaciones, agenda fiscal y estado trimestral.
-- Clientes y expediente propio/asignado.
-- Ficha fiscal guiada con propuestas explicadas, calendario y configuración manual separada.
-- Solicitudes, checklist, conversación, envío y reapertura.
-- Repositorio histórico con filtros de origen, periodo, categoría y visibilidad.
-- Subida múltiple de PDF/JPEG/PNG, libre o asociada a una solicitud.
-- Equipo, asignaciones, plan, auditoría y marca para administradores.
-- Estado de API e identidad de la sesión.
+La versión Angular anterior se conserva en la rama `main` y en la etiqueta
+`angular-stable-2026-10-29`. El desarrollo Flutter vive en `flutter-migration`.
 
-## Arranque local
+## Requisitos
 
-```powershell
-pnpm install
-pnpm start -- --host 127.0.0.1 --port 4200
-```
+- Flutter 3.47.8 estable (el proyecto puede gestionarse con Puro);
+- API Java y Keycloak del proyecto para trabajar con datos reales;
+- Android SDK para generar APK/AAB;
+- macOS y Xcode para generar el binario de iOS.
 
-La aplicación queda en `http://localhost:4200` y usa la API configurada en `public/config.js`. Para el recorrido integrado se recomienda arrancar toda la pila desde la raíz con `docker compose up --build` y acceder a `http://localhost:8080`.
-
-## Calidad
+## Ejecutar en local
 
 ```powershell
-pnpm exec ng test --no-progress --coverage --watch=false
-pnpm build
-pnpm audit --prod
+flutter pub get
+flutter run -d chrome --web-port 4200
 ```
 
-La batería automatizada cubre lógica de negocio, autenticación, formularios y componentes; los recorridos E2E con Playwright y axe validan los tres perfiles y la vista móvil.
+La configuración local se encuentra en `assets/config/app-config.json`. Dentro de
+Docker se reescribe al arrancar el contenedor con las variables ya utilizadas por
+el `compose.yaml`: `GESTORIA_API_URL`, `GESTORIA_KEYCLOAK_URL`,
+`GESTORIA_KEYCLOAK_REALM`, `GESTORIA_KEYCLOAK_CLIENT_ID` y
+`GESTORIA_SUPPORT_EMAIL`.
 
-```bash
-pnpm test:coverage --watch=false
-pnpm test:e2e
+## Validación
+
+```powershell
+flutter test
+flutter analyze
+flutter build web --release
+flutter build apk --debug
 ```
 
-Los recorridos E2E cubren los tres perfiles y una vista móvil. Incluyen comprobación WCAG automática sin infracciones graves o críticas.
+Nginx sirve la aplicación web, aplica el fallback de SPA y redirige `/api/` al
+contenedor Java. El inicio de sesión usa OpenID Connect con PKCE contra Keycloak,
+con almacenamiento seguro de la sesión en Android/iOS.
+
+El cliente público de Keycloak debe admitir además estas URI para las apps
+nativas:
+
+```text
+com.raulser.proyectogestoria:/oauthredirect
+com.raulser.proyectogestoria:/
+```

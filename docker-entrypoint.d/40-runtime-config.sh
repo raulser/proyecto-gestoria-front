@@ -1,28 +1,14 @@
 #!/bin/sh
 set -eu
 
-escape_js() {
-  printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+config_file="/usr/share/nginx/html/assets/assets/config/app-config.json"
+
+cat > "$config_file" <<EOF
+{
+  "apiUrl": "${APP_API_URL:-${GESTORIA_API_URL:-}}",
+  "keycloakUrl": "${APP_KEYCLOAK_URL:-${GESTORIA_KEYCLOAK_URL:-http://localhost:8081}}",
+  "keycloakRealm": "${APP_KEYCLOAK_REALM:-${GESTORIA_KEYCLOAK_REALM:-gestoria}}",
+  "keycloakClientId": "${APP_KEYCLOAK_CLIENT_ID:-${GESTORIA_KEYCLOAK_CLIENT_ID:-gestoria-web}}",
+  "supportEmail": "${APP_SUPPORT_EMAIL:-${GESTORIA_SUPPORT_EMAIL:-soporte@example.com}}"
 }
-
-legal_name=$(escape_js "${GESTORIA_LEGAL_NAME:-Proveedor pendiente de configurar}")
-legal_nif=$(escape_js "${GESTORIA_LEGAL_NIF:-NIF pendiente de configurar}")
-privacy_email=$(escape_js "${GESTORIA_PRIVACY_EMAIL:-privacidad@example.com}")
-support_email=$(escape_js "${GESTORIA_SUPPORT_EMAIL:-soporte@example.com}")
-support_hours=$(escape_js "${GESTORIA_SUPPORT_HOURS:-Laborables de 09:00 a 18:00 (Europe/Madrid)}")
-privacy_version=$(escape_js "${GESTORIA_PRIVACY_VERSION:-2026-08-13}")
-
-cat > /usr/share/nginx/html/config.js <<EOF
-window.__GESTORIA_CONFIG__ = {
-  urlApi: "${GESTORIA_API_URL-}",
-  urlKeycloak: "${GESTORIA_KEYCLOAK_URL:-http://localhost:8081}",
-  reinoKeycloak: "${GESTORIA_KEYCLOAK_REALM:-gestoria}",
-  idClienteKeycloak: "${GESTORIA_KEYCLOAK_CLIENT_ID:-gestoria-web}",
-  nombreProveedor: "$legal_name",
-  nifProveedor: "$legal_nif",
-  emailPrivacidad: "$privacy_email",
-  emailSoporte: "$support_email",
-  horarioSoporte: "$support_hours",
-  versionPrivacidad: "$privacy_version"
-};
 EOF
