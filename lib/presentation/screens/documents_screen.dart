@@ -44,40 +44,10 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
             label: Text('Exportar ${app.year}'),
           ),
         ),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            SizedBox(
-              width: 390,
-              child: SearchField(
-                onChanged: (v) => setState(() => query = v),
-                hint: 'Buscar archivo, cliente o tipo',
-              ),
-            ),
-            DropdownButton<String>(
-              value: status,
-              borderRadius: BorderRadius.circular(14),
-              items:
-                  const [
-                        'TODOS',
-                        'RECIBIDO',
-                        'REVISADO',
-                        'RECHAZADO',
-                        'PUBLICADO',
-                      ]
-                      .map(
-                        (v) => DropdownMenuItem(
-                          value: v,
-                          child: Text(
-                            v == 'TODOS' ? 'Todos los estados' : etiqueta(v),
-                          ),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (v) => setState(() => status = v ?? 'TODOS'),
-            ),
-          ],
+        _DocumentFilters(
+          status: status,
+          onQueryChanged: (value) => setState(() => query = value),
+          onStatusChanged: (value) => setState(() => status = value),
         ),
         const SizedBox(height: 18),
         if (groups.isEmpty)
@@ -121,11 +91,9 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    ...entry.value.map(
-                      (doc) => _DocumentItem(
-                        document: doc,
-                        request: _request(app.solicitudes, doc.solicitudId),
-                      ),
+                    _ClientDocumentGroups(
+                      documents: entry.value,
+                      requests: app.solicitudes,
                     ),
                   ],
                 ),
@@ -135,32 +103,169 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
       ],
     );
   }
+}
 
-  Solicitud? _request(List<Solicitud> values, int? id) {
-    for (final item in values) {
-      if (item.id == id) return item;
+class _ClientDocumentGroups extends StatelessWidget {
+  const _ClientDocumentGroups({
+    required this.documents,
+    required this.requests,
+  });
+  final List<Documento> documents;
+  final List<Solicitud> requests;
+
+  @override
+  Widget build(BuildContext context) {
+    final requestsById = {for (final request in requests) request.id: request};
+    final groups = <String, List<Documento>>{};
+    final groupRequests = <String, Solicitud?>{};
+    for (final document in documents) {
+      final request = requestsById[document.solicitudId];
+      final key = request == null
+          ? 'GENERAL'
+          : request.cumplimientoObligacionId == null
+          ? 'SOLICITUD_${request.id}'
+          : 'OBLIGACION_${request.id}';
+      groups.putIfAbsent(key, () => []).add(document);
+      groupRequests[key] = request;
     }
-    return null;
+    return Column(
+      children: groups.entries.map((entry) {
+        final request = groupRequests[entry.key];
+        final obligation = request?.cumplimientoObligacionId != null;
+        final title = request == null
+            ? 'Documentos generales'
+            : obligation
+            ? 'Obligación · ${request.titulo}'
+            : 'Solicitud · ${request.titulo}';
+        return Container(
+          margin: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.fromLTRB(12, 11, 12, 12),
+          decoration: BoxDecoration(
+            color: AppColors.canvas,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.line),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    obligation
+                        ? Icons.fact_check_outlined
+                        : request == null
+                        ? Icons.folder_outlined
+                        : Icons.task_alt_outlined,
+                    size: 19,
+                    color: AppColors.teal,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: AppColors.ink,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${entry.value.length}',
+                    style: const TextStyle(
+                      color: AppColors.inkSoft,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              ...entry.value.map(
+                (document) => _DocumentItem(document: document),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
   }
 }
 
+class _DocumentFilters extends StatelessWidget {
+  const _DocumentFilters({
+    required this.status,
+    required this.onQueryChanged,
+    required this.onStatusChanged,
+  });
+  final String status;
+  final ValueChanged<String> onQueryChanged;
+  final ValueChanged<String> onStatusChanged;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final compact = constraints.maxWidth < 680;
+      final search = SearchField(
+        onChanged: onQueryChanged,
+        hint: 'Buscar por archivo, cliente o tipo',
+      );
+      final state = DropdownButtonFormField<String>(
+        initialValue: status,
+        decoration: const InputDecoration(
+          labelText: 'Estado',
+          prefixIcon: Icon(Icons.filter_list_rounded),
+        ),
+        items:
+            const [
+                  'TODOS',
+                  'RECIBIDO',
+                  'REVISADO',
+                  'RECHAZADO',
+                  'PUBLICADO',
+                  'RETIRADO',
+                ]
+                .map(
+                  (value) => DropdownMenuItem(
+                    value: value,
+                    child: Text(
+                      value == 'TODOS' ? 'Todos los estados' : etiqueta(value),
+                    ),
+                  ),
+                )
+                .toList(),
+        onChanged: (value) => onStatusChanged(value ?? 'TODOS'),
+      );
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.line),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: compact
+            ? Column(children: [search, const SizedBox(height: 10), state])
+            : Row(
+                children: [
+                  Expanded(child: search),
+                  const SizedBox(width: 12),
+                  SizedBox(width: 230, child: state),
+                ],
+              ),
+      );
+    },
+  );
+}
+
 class _DocumentItem extends StatelessWidget {
-  const _DocumentItem({required this.document, this.request});
+  const _DocumentItem({required this.document});
   final Documento document;
-  final Solicitud? request;
   @override
   Widget build(BuildContext context) {
-    final contextText = request == null
-        ? 'Sin solicitud asociada'
-        : request!.cumplimientoObligacionId == null
-        ? 'Solicitud · ${request!.titulo}'
-        : 'Obligación / solicitud · ${request!.titulo}';
     return Container(
       margin: const EdgeInsets.only(top: 9),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.canvas,
-        borderRadius: BorderRadius.circular(15),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(11),
+        border: Border.all(color: AppColors.line),
       ),
       child: Row(
         children: [
@@ -194,7 +299,7 @@ class _DocumentItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  '$contextText · ${etiqueta(document.tipo)}',
+                  etiqueta(document.tipo),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -41,10 +41,14 @@ class _MoreScreenState extends State<MoreScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const PageHeader(
+        PageHeader(
           eyebrow: 'Gestión',
-          title: 'Equipo y configuración',
-          subtitle: 'Cuenta, organización, plan y actividad administrativa en un único espacio.',
+          title: app.usuario?.esAdmin == true
+              ? 'Equipo y configuración'
+              : 'Mi cuenta',
+          subtitle: app.usuario?.esAdmin == true
+              ? 'Organización, equipo, asignaciones y actividad administrativa.'
+              : 'Información de acceso y seguridad de su cuenta.',
         ),
         FutureBuilder<List<dynamic>>(
           future: data,
@@ -64,7 +68,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   title: 'No se pudo cargar la configuración',
                   message: 'Actualiza la pantalla para volver a intentarlo.',
                   action: FilledButton.tonal(
-                    onPressed: () => setState(() => data = null),
+                    onPressed: () => _reload(app),
                     child: const Text('Reintentar'),
                   ),
                 ),
@@ -106,7 +110,7 @@ class _MoreScreenState extends State<MoreScreen> {
                           ),
                           const Divider(height: 28),
                           const Text(
-                            'La sesión se gestiona de forma segura mediante Keycloak. No se almacenan contraseñas en esta aplicación.',
+                            'El acceso está protegido mediante identidad segura. La aplicación no almacena su contraseña.',
                           ),
                         ],
                       ),
@@ -172,6 +176,15 @@ class _MoreScreenState extends State<MoreScreen> {
                         ],
                       ),
                     );
+                    if (app.usuario?.esAdmin != true) {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 640),
+                          child: profile,
+                        ),
+                      );
+                    }
                     return wide
                         ? Row(
                             crossAxisAlignment: CrossAxisAlignment.start,

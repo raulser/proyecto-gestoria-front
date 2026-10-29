@@ -27,7 +27,8 @@ La configuración local se encuentra en `assets/config/app-config.json`. Dentro 
 Docker se reescribe al arrancar el contenedor con las variables ya utilizadas por
 el `compose.yaml`: `GESTORIA_API_URL`, `GESTORIA_KEYCLOAK_URL`,
 `GESTORIA_KEYCLOAK_REALM`, `GESTORIA_KEYCLOAK_CLIENT_ID` y
-`GESTORIA_SUPPORT_EMAIL`.
+`GESTORIA_ORGANIZATION_NAME`. `GESTORIA_SUPPORT_EMAIL` es opcional: si no se
+configura, el acceso no muestra un contacto ficticio.
 
 ## Validación
 

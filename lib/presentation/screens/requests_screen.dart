@@ -30,7 +30,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
         PageHeader(
           eyebrow: 'Seguimiento',
           title: 'Solicitudes documentales',
-          subtitle: 'Qué falta, para quién y en qué estado. Sin acciones que no expliquen qué hacen.',
+          subtitle: 'Documentación solicitada, fechas límite y estado de cada expediente.',
           action: app.usuario?.esCliente == true
               ? null
               : FilledButton.icon(
@@ -42,30 +42,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   label: const Text('Nueva solicitud'),
                 ),
         ),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            SizedBox(
-              width: 390,
-              child: SearchField(
-                onChanged: (v) => setState(() => query = v),
-                hint: 'Buscar solicitud o cliente',
-              ),
-            ),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'TODAS', label: Text('Todas')),
-                ButtonSegment(value: 'ABIERTA', label: Text('Abiertas')),
-                ButtonSegment(value: 'PARCIAL', label: Text('Parciales')),
-                ButtonSegment(value: 'COMPLETADA', label: Text('Completadas')),
-              ],
-              selected: {status},
-              onSelectionChanged: (value) =>
-                  setState(() => status = value.first),
-              showSelectedIcon: false,
-            ),
-          ],
+        _RequestFilters(
+          status: status,
+          onQueryChanged: (value) => setState(() => query = value),
+          onStatusChanged: (value) => setState(() => status = value),
         ),
         const SizedBox(height: 18),
         if (items.isEmpty)
@@ -164,8 +144,10 @@ class _RequestCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 TextButton.icon(
                   onPressed: () => showModalBottomSheet<void>(
@@ -187,7 +169,6 @@ class _RequestCard extends StatelessWidget {
                   icon: const Icon(Icons.folder_open_outlined),
                   label: const Text('Ver documentos'),
                 ),
-                const SizedBox(width: 8),
                 if (request.editable && app.usuario?.esCliente != true)
                   FilledButton.tonalIcon(
                     onPressed: () => showDialog<void>(
@@ -204,6 +185,63 @@ class _RequestCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _RequestFilters extends StatelessWidget {
+  const _RequestFilters({
+    required this.status,
+    required this.onQueryChanged,
+    required this.onStatusChanged,
+  });
+  final String status;
+  final ValueChanged<String> onQueryChanged;
+  final ValueChanged<String> onStatusChanged;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final compact = constraints.maxWidth < 720;
+      final search = SearchField(
+        onChanged: onQueryChanged,
+        hint: 'Buscar por solicitud o cliente',
+      );
+      final state = DropdownButtonFormField<String>(
+        initialValue: status,
+        decoration: const InputDecoration(
+          labelText: 'Estado',
+          prefixIcon: Icon(Icons.filter_list_rounded),
+        ),
+        items: const ['TODAS', 'ABIERTA', 'PARCIAL', 'COMPLETADA', 'CANCELADA']
+            .map(
+              (value) => DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value == 'TODAS' ? 'Todos los estados' : etiqueta(value),
+                ),
+              ),
+            )
+            .toList(),
+        onChanged: (value) => onStatusChanged(value ?? 'TODAS'),
+      );
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.line),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: compact
+            ? Column(children: [search, const SizedBox(height: 10), state])
+            : Row(
+                children: [
+                  Expanded(child: search),
+                  const SizedBox(width: 12),
+                  SizedBox(width: 230, child: state),
+                ],
+              ),
+      );
+    },
+  );
 }
 
 class _Meta extends StatelessWidget {
@@ -355,13 +393,23 @@ class _RequestDocuments extends StatelessWidget {
                       itemCount: documents.length,
                       separatorBuilder: (_, _) => const Divider(),
                       itemBuilder: (_, i) => ListTile(
+                        onTap: () => context
+                            .read<AppController>()
+                            .downloadDocument(documents[i]),
                         leading: const Icon(
                           Icons.description_outlined,
                           color: AppColors.teal,
                         ),
                         title: Text(documents[i].nombreArchivo),
                         subtitle: Text(etiqueta(documents[i].tipo)),
-                        trailing: StatusChip(documents[i].estado),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StatusChip(documents[i].estado),
+                            const SizedBox(width: 6),
+                            const Icon(Icons.download_outlined, size: 20),
+                          ],
+                        ),
                       ),
                     ),
             ),
@@ -432,48 +480,41 @@ class _CreateRequestDialogState extends State<_CreateRequestDialog> {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
+              ResponsiveFormRow(
                 children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 1095),
-                          ),
-                          initialDate: dueDate,
-                        );
-                        if (picked != null) setState(() => dueDate = picked);
-                      },
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Fecha límite',
-                          prefixIcon: Icon(Icons.event_outlined),
+                  InkWell(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 1095),
                         ),
-                        child: Text(dateFormat.format(dueDate)),
+                        initialDate: dueDate,
+                      );
+                      if (picked != null) setState(() => dueDate = picked);
+                    },
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Fecha límite',
+                        prefixIcon: Icon(Icons.event_outlined),
                       ),
+                      child: Text(dateFormat.format(dueDate)),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: recurrence,
-                      decoration: const InputDecoration(
-                        labelText: 'Recurrencia',
-                      ),
-                      items: const ['NINGUNA', 'MENSUAL', 'TRIMESTRAL', 'ANUAL']
-                          .map(
-                            (v) => DropdownMenuItem(
-                              value: v,
-                              child: Text(etiqueta(v)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) =>
-                          setState(() => recurrence = v ?? recurrence),
-                    ),
+                  DropdownButtonFormField<String>(
+                    initialValue: recurrence,
+                    decoration: const InputDecoration(labelText: 'Recurrencia'),
+                    items: const ['NINGUNA', 'MENSUAL', 'TRIMESTRAL', 'ANUAL']
+                        .map(
+                          (v) => DropdownMenuItem(
+                            value: v,
+                            child: Text(etiqueta(v)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) =>
+                        setState(() => recurrence = v ?? recurrence),
                   ),
                 ],
               ),

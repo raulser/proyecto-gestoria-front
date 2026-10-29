@@ -22,7 +22,8 @@ class GestoriaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Gestoría',
+    title:
+        '${context.watch<AppController>().config.organizationName} · Área privada',
     theme: buildAppTheme(),
     locale: const Locale('es'),
     supportedLocales: const [Locale('es')],
@@ -49,11 +50,20 @@ class _SplashScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
-            radius: 31,
-            backgroundColor: AppColors.ink,
-            foregroundColor: Colors.white,
-            child: Icon(Icons.balance_rounded, size: 30),
+          SizedBox(
+            width: 58,
+            height: 58,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.ink,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Icon(
+                Icons.account_balance_outlined,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
           ),
           SizedBox(height: 22),
           CircularProgressIndicator(),

@@ -8,6 +8,7 @@ class AppConfig {
     required this.keycloakUrl,
     required this.keycloakRealm,
     required this.keycloakClientId,
+    required this.organizationName,
     required this.supportEmail,
   });
 
@@ -15,6 +16,7 @@ class AppConfig {
   final String keycloakUrl;
   final String keycloakRealm;
   final String keycloakClientId;
+  final String organizationName;
   final String supportEmail;
 
   String get issuer => '$keycloakUrl/realms/$keycloakRealm';
@@ -35,7 +37,8 @@ class AppConfig {
           .replaceAll(RegExp(r'/$'), ''),
       keycloakRealm: json['keycloakRealm'] as String? ?? 'gestoria',
       keycloakClientId: json['keycloakClientId'] as String? ?? 'gestoria-web',
-      supportEmail: json['supportEmail'] as String? ?? 'soporte@example.com',
+      organizationName: json['organizationName'] as String? ?? 'Gestoría',
+      supportEmail: json['supportEmail'] as String? ?? '',
     );
   }
 }

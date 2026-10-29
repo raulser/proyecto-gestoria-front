@@ -1,11 +1,11 @@
 {
-    "name": "Portal Gestoría",
-    "short_name": "Gestoría",
+    "name": "Gestoría · Área privada",
+    "short_name": "Área privada",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#F5F6F2",
     "theme_color": "#14213D",
-    "description": "Portal fiscal y documental de tu gestoría.",
+    "description": "Área privada de gestión fiscal y documental.",
     "orientation": "any",
     "prefer_related_applications": false,
     "icons": [

@@ -395,11 +395,60 @@ class Notificacion {
   );
 }
 
-String etiqueta(String value) => value
-    .toLowerCase()
-    .split('_')
-    .map(
-      (part) =>
-          part.isEmpty ? part : '${part[0].toUpperCase()}${part.substring(1)}',
-    )
-    .join(' ');
+String etiqueta(String value) {
+  const labels = <String, String>{
+    'ADMIN': 'Administrador',
+    'ADMIN_PLATAFORMA': 'Administrador de plataforma',
+    'ASESOR': 'Asesor',
+    'CLIENTE': 'Cliente',
+    'AUTONOMO': 'Autónomo',
+    'EMPRESA': 'Empresa',
+    'PARTICULAR': 'Particular',
+    'COMUNIDAD_BIENES': 'Comunidad de bienes',
+    'SOCIEDAD_CIVIL': 'Sociedad civil',
+    'COMUNIDAD_PROPIETARIOS': 'Comunidad de propietarios',
+    'ASOCIACION_FUNDACION': 'Asociación / fundación',
+    'ENTIDAD_SIN_PERSONALIDAD': 'Entidad sin personalidad jurídica',
+    'FACTURA_EMITIDA': 'Factura emitida',
+    'FACTURA_RECIBIDA': 'Factura recibida',
+    'NOMINA': 'Nómina',
+    'EXTRACTO_BANCARIO': 'Extracto bancario',
+    'MODELO_TRIBUTARIO': 'Modelo tributario',
+    'JUSTIFICANTE_PRESENTACION': 'Justificante de presentación',
+    'COMUNICACION_ADMINISTRACION': 'Comunicación de la Administración',
+    'PENDIENTE_DOCUMENTACION': 'Pendiente de documentación',
+    'NO_APLICA': 'No aplica',
+    'PAIS_VASCO': 'País Vasco',
+    'CEUTA_MELILLA': 'Ceuta y Melilla',
+    'ESTIMACION_DIRECTA_NORMAL': 'Estimación directa normal',
+    'ESTIMACION_DIRECTA_SIMPLIFICADA': 'Estimación directa simplificada',
+    'ESTIMACION_OBJETIVA': 'Estimación objetiva',
+    'NO_SUJETO_EXENTO': 'No sujeto / exento',
+    'RECARGO_EQUIVALENCIA': 'Recargo de equivalencia',
+    'tributaSociedades': 'Tributa por Sociedades',
+    'pagosFraccionadosSociedades': 'Pagos fraccionados de Sociedades',
+    'tieneTrabajadores': 'Tiene trabajadores',
+    'pagaProfesionalesRetencion': 'Paga profesionales con retención',
+    'alquilerSujetoRetencion': 'Alquiler sujeto a retención',
+    'rendimientosCapital': 'Rendimientos del capital',
+    'operacionesIntracomunitarias': 'Operaciones intracomunitarias',
+    'operacionesTerceros': 'Operaciones con terceros',
+    'recibeDonativosDeducibles': 'Recibe donativos deducibles',
+    'entidadAtribucionRentas': 'Entidad en atribución de rentas',
+    'exoneradoModelo390': 'Exonerado del modelo 390',
+  };
+  if (labels.containsKey(value)) return labels[value]!;
+  final normalized = value.replaceAllMapped(
+    RegExp(r'([a-záéíóúñ])([A-ZÁÉÍÓÚÑ])'),
+    (match) => '${match[1]}_${match[2]}',
+  );
+  return normalized
+      .toLowerCase()
+      .split('_')
+      .map(
+        (part) => part.isEmpty
+            ? part
+            : '${part[0].toUpperCase()}${part.substring(1)}',
+      )
+      .join(' ');
+}

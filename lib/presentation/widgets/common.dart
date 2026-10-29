@@ -21,31 +21,44 @@ class PageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 24),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Column(
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 680;
+        final heading = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              eyebrow.toUpperCase(),
+              style: const TextStyle(
+                color: AppColors.teal,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.2,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 7),
+            Text(title, style: Theme.of(context).textTheme.headlineMedium),
+            const SizedBox(height: 6),
+            Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        );
+        if (compact) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                eyebrow.toUpperCase(),
-                style: const TextStyle(
-                  color: AppColors.teal,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.2,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 7),
-              Text(title, style: Theme.of(context).textTheme.headlineMedium),
-              const SizedBox(height: 6),
-              Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
+              heading,
+              if (action != null) ...[const SizedBox(height: 16), action!],
             ],
-          ),
-        ),
-        if (action != null) ...[const SizedBox(width: 16), action!],
-      ],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(child: heading),
+            if (action != null) ...[const SizedBox(width: 16), action!],
+          ],
+        );
+      },
     ),
   );
 }
@@ -233,7 +246,47 @@ class SearchField extends StatelessWidget {
     decoration: InputDecoration(
       prefixIcon: const Icon(Icons.search_rounded),
       hintText: hint,
-      suffixIcon: const Icon(Icons.tune_rounded),
     ),
+  );
+}
+
+class ResponsiveFormRow extends StatelessWidget {
+  const ResponsiveFormRow({
+    super.key,
+    required this.children,
+    this.flexes,
+    this.breakpoint = 520,
+    this.spacing = 12,
+  });
+  final List<Widget> children;
+  final List<int>? flexes;
+  final double breakpoint;
+  final double spacing;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      if (constraints.maxWidth < breakpoint) {
+        return Column(
+          children: [
+            for (var index = 0; index < children.length; index++) ...[
+              if (index > 0) SizedBox(height: spacing),
+              children[index],
+            ],
+          ],
+        );
+      }
+      return Row(
+        children: [
+          for (var index = 0; index < children.length; index++) ...[
+            if (index > 0) SizedBox(width: spacing),
+            Expanded(
+              flex: flexes == null ? 1 : flexes![index],
+              child: children[index],
+            ),
+          ],
+        ],
+      );
+    },
   );
 }

@@ -274,10 +274,14 @@ class _DesktopNavigation extends StatelessWidget {
                   selectedIcon: Icon(Icons.cloud_upload_rounded),
                   label: Text('Subir documento'),
                 ),
-                const NavigationRailDestination(
-                  icon: Icon(Icons.settings_outlined),
-                  selectedIcon: Icon(Icons.settings_rounded),
-                  label: Text('Equipo y ajustes'),
+                NavigationRailDestination(
+                  icon: const Icon(Icons.settings_outlined),
+                  selectedIcon: const Icon(Icons.settings_rounded),
+                  label: Text(
+                    app.usuario?.esAdmin == true
+                        ? 'Equipo y ajustes'
+                        : 'Mi cuenta',
+                  ),
                 ),
               ],
             ),
@@ -344,16 +348,23 @@ class _Brand extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      CircleAvatar(
-        radius: 19,
-        backgroundColor: dark ? Colors.white : AppColors.ink,
-        foregroundColor: dark ? AppColors.ink : Colors.white,
-        child: const Icon(Icons.balance_rounded, size: 20),
+      Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: dark ? Colors.white : AppColors.ink,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(
+          Icons.account_balance_outlined,
+          size: 20,
+          color: dark ? AppColors.ink : Colors.white,
+        ),
       ),
       if (!compact) ...[
         const SizedBox(width: 11),
         Text(
-          'Gestoría',
+          context.read<AppController>().config.organizationName,
           style: TextStyle(
             color: dark ? Colors.white : AppColors.ink,
             fontWeight: FontWeight.w900,

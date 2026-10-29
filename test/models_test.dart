@@ -21,8 +21,12 @@ void main() {
     });
 
     test('normaliza etiquetas para mostrarlas al usuario', () {
-      expect(etiqueta('PENDIENTE_DOCUMENTACION'), 'Pendiente Documentacion');
-      expect(etiqueta('AUTONOMO'), 'Autonomo');
+      expect(etiqueta('PENDIENTE_DOCUMENTACION'), 'Pendiente de documentación');
+      expect(etiqueta('AUTONOMO'), 'Autónomo');
+      expect(
+        etiqueta('pagaProfesionalesRetencion'),
+        'Paga profesionales con retención',
+      );
     });
 
     test('conserva la configuración completa de una obligación', () {

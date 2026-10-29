@@ -675,43 +675,38 @@ class _ClientDialogState extends State<_ClientDialog> {
                 ),
               ],
               const SizedBox(height: 12),
-              Row(
+              ResponsiveFormRow(
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: nif,
-                      decoration: const InputDecoration(labelText: 'NIF / CIF'),
-                      validator: (v) => v == null || v.trim().isEmpty
-                          ? 'Introduce el NIF'
-                          : null,
-                    ),
+                  TextFormField(
+                    controller: nif,
+                    decoration: const InputDecoration(labelText: 'NIF / CIF'),
+                    validator: (v) => v == null || v.trim().isEmpty
+                        ? 'Introduce el NIF'
+                        : null,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: type,
-                      decoration: const InputDecoration(labelText: 'Tipo'),
-                      items:
-                          const [
-                                'AUTONOMO',
-                                'EMPRESA',
-                                'PARTICULAR',
-                                'COMUNIDAD_BIENES',
-                                'SOCIEDAD_CIVIL',
-                                'COMUNIDAD_PROPIETARIOS',
-                                'ASOCIACION_FUNDACION',
-                                'ENTIDAD_SIN_PERSONALIDAD',
-                                'OTRO',
-                              ]
-                              .map(
-                                (v) => DropdownMenuItem(
-                                  value: v,
-                                  child: Text(etiqueta(v)),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (v) => setState(() => type = v ?? type),
-                    ),
+                  DropdownButtonFormField<String>(
+                    initialValue: type,
+                    decoration: const InputDecoration(labelText: 'Tipo'),
+                    items:
+                        const [
+                              'AUTONOMO',
+                              'EMPRESA',
+                              'PARTICULAR',
+                              'COMUNIDAD_BIENES',
+                              'SOCIEDAD_CIVIL',
+                              'COMUNIDAD_PROPIETARIOS',
+                              'ASOCIACION_FUNDACION',
+                              'ENTIDAD_SIN_PERSONALIDAD',
+                              'OTRO',
+                            ]
+                            .map(
+                              (v) => DropdownMenuItem(
+                                value: v,
+                                child: Text(etiqueta(v)),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (v) => setState(() => type = v ?? type),
                   ),
                 ],
               ),
@@ -835,103 +830,86 @@ class _ObligationDialogState extends State<_ObligationDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              ResponsiveFormRow(
+                flexes: const [1, 2],
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: code,
-                      decoration: const InputDecoration(
-                        labelText: 'Modelo o código',
-                      ),
-                      validator: _required,
+                  TextFormField(
+                    controller: code,
+                    decoration: const InputDecoration(
+                      labelText: 'Modelo o código',
                     ),
+                    validator: _required,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      controller: name,
-                      decoration: const InputDecoration(labelText: 'Nombre'),
-                      validator: _required,
-                    ),
+                  TextFormField(
+                    controller: name,
+                    decoration: const InputDecoration(labelText: 'Nombre'),
+                    validator: _required,
                   ),
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
+              ResponsiveFormRow(
                 children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: category,
-                      decoration: const InputDecoration(labelText: 'Categoría'),
-                      items:
-                          const [
-                                'FISCAL',
-                                'LABORAL',
-                                'CONTABLE',
-                                'MERCANTIL',
-                                'OTRA',
-                              ]
-                              .map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(etiqueta(value)),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (value) =>
-                          setState(() => category = value ?? category),
-                    ),
+                  DropdownButtonFormField<String>(
+                    initialValue: category,
+                    decoration: const InputDecoration(labelText: 'Categoría'),
+                    items:
+                        const [
+                              'FISCAL',
+                              'LABORAL',
+                              'CONTABLE',
+                              'MERCANTIL',
+                              'OTRA',
+                            ]
+                            .map(
+                              (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(etiqueta(value)),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (value) =>
+                        setState(() => category = value ?? category),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: periodicity,
-                      decoration: const InputDecoration(
-                        labelText: 'Periodicidad',
-                      ),
-                      items: const ['MENSUAL', 'TRIMESTRAL', 'ANUAL', 'PUNTUAL']
-                          .map(
-                            (value) => DropdownMenuItem(
-                              value: value,
-                              child: Text(etiqueta(value)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) =>
-                          setState(() => periodicity = value ?? periodicity),
+                  DropdownButtonFormField<String>(
+                    initialValue: periodicity,
+                    decoration: const InputDecoration(
+                      labelText: 'Periodicidad',
                     ),
+                    items: const ['MENSUAL', 'TRIMESTRAL', 'ANUAL', 'PUNTUAL']
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(etiqueta(value)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) =>
+                        setState(() => periodicity = value ?? periodicity),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
+              ResponsiveFormRow(
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: months,
-                      decoration: const InputDecoration(
-                        labelText: 'Meses de presentación',
-                        hintText: 'Ej. 4,7,10,1',
-                      ),
+                  TextFormField(
+                    controller: months,
+                    decoration: const InputDecoration(
+                      labelText: 'Meses de presentación',
+                      hintText: 'Ej. 4,7,10,1',
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: day,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Día límite',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) return null;
-                        final parsed = int.tryParse(value);
-                        return parsed == null || parsed < 1 || parsed > 31
-                            ? 'Indica un día entre 1 y 31'
-                            : null;
-                      },
-                    ),
+                  TextFormField(
+                    controller: day,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Día límite'),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) return null;
+                      final parsed = int.tryParse(value);
+                      return parsed == null || parsed < 1 || parsed > 31
+                          ? 'Indica un día entre 1 y 31'
+                          : null;
+                    },
                   ),
                 ],
               ),
