@@ -3,3 +3,6 @@ dist
 .git
 .idea
 *.log
+coverage
+playwright-report
+test-results

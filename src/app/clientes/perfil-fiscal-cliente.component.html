@@ -1,0 +1,210 @@
+<section class="perfil">
+  <header>
+    <div>
+      <span class="eyebrow">Configuración fiscal</span>
+      <h3>¿Qué obligaciones pueden corresponder a {{ cliente.nombre }}?</h3>
+      <p>
+        Completa los datos conocidos. “Pendiente” evita que la aplicación haga una propuesta
+        insegura.
+      </p>
+    </div>
+    <div class="progreso" [attr.aria-label]="'Perfil fiscal completado al ' + porcentaje + '%'">
+      <strong>{{ porcentaje }}%</strong>
+      <span>completado</span>
+      <div><i [style.width.%]="porcentaje"></i></div>
+    </div>
+  </header>
+
+  <nav aria-label="Pasos de configuración fiscal">
+    @for (paso of pasos; track paso.numero) {
+      <button
+        type="button"
+        [class.activo]="pasoActual === paso.numero"
+        [class.completado]="pasoActual > paso.numero"
+        (click)="pasoActual = paso.numero"
+      >
+        <span>{{ paso.numero }}</span
+        >{{ paso.etiqueta }}
+      </button>
+    }
+  </nav>
+
+  <form (ngSubmit)="guardar.emit()">
+    @if (pasoActual === 1) {
+      <div class="paso">
+        <div class="intro">
+          <strong>Situación y territorio</strong>
+          <p>El tipo jurídico es {{ etiquetaTipoCliente(cliente) }}.</p>
+        </div>
+        <div class="campos dos">
+          <label>
+            Territorio fiscal
+            <select name="territorioFiscal" [(ngModel)]="formulario.territorioFiscal">
+              <option value="COMUN">Territorio común</option>
+              <option value="CANARIAS">Canarias</option>
+              <option value="PAIS_VASCO">País Vasco</option>
+              <option value="NAVARRA">Navarra</option>
+              <option value="CEUTA_MELILLA">Ceuta o Melilla</option>
+            </select>
+            <small>
+              Las propuestas automáticas se confirman directamente sólo para territorio común.
+            </small>
+          </label>
+          <div class="dato-juridico">
+            <span>Tipo de cliente</span>
+            <strong>{{ etiquetaTipoCliente(cliente) }}</strong>
+            <small>Se modifica desde los datos generales del cliente.</small>
+          </div>
+        </div>
+        <aside class="aviso-censal">
+          <strong>Modelo 036: trámite puntual</strong>
+          <span>
+            Para altas, modificaciones o bajas censales se puede añadir desde “Configuración
+            manual”. No se propone como obligación periódica y el antiguo 037 ya no se utiliza.
+          </span>
+        </aside>
+      </div>
+    }
+
+    @if (pasoActual === 2) {
+      <div class="paso">
+        <div class="intro">
+          <strong>Regímenes principales</strong>
+          <p>Estos datos determinan IRPF, IVA e Impuesto sobre Sociedades.</p>
+        </div>
+        <div class="campos dos">
+          <label>
+            Régimen de IRPF de actividad
+            <select name="regimenIrpf" [(ngModel)]="formulario.regimenIrpf">
+              <option value="PENDIENTE">Pendiente de revisar</option>
+              <option value="NO_APLICA">No aplica</option>
+              <option value="ESTIMACION_DIRECTA_NORMAL">Estimación directa normal</option>
+              <option value="ESTIMACION_DIRECTA_SIMPLIFICADA">
+                Estimación directa simplificada
+              </option>
+              <option value="ESTIMACION_OBJETIVA">Módulos / estimación objetiva</option>
+            </select>
+          </label>
+          <label>
+            Régimen de IVA
+            <select name="regimenIva" [(ngModel)]="formulario.regimenIva">
+              <option value="PENDIENTE">Pendiente de revisar</option>
+              <option value="NO_SUJETO_EXENTO">No sujeto o exento</option>
+              <option value="GENERAL">Régimen general</option>
+              <option value="SIMPLIFICADO">Régimen simplificado</option>
+              <option value="RECARGO_EQUIVALENCIA">Recargo de equivalencia</option>
+              <option value="SII">SII / liquidación mensual</option>
+            </select>
+          </label>
+          <label>
+            ¿Tributa por Impuesto sobre Sociedades?
+            <select name="tributaSociedades" [(ngModel)]="formulario.tributaSociedades">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="SI">Sí</option>
+              <option value="NO">No</option>
+            </select>
+          </label>
+          <label>
+            ¿Debe realizar pagos fraccionados de Sociedades?
+            <select
+              name="pagosFraccionadosSociedades"
+              [(ngModel)]="formulario.pagosFraccionadosSociedades"
+            >
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="SI">Sí</option>
+              <option value="NO">No</option>
+            </select>
+          </label>
+          <label>
+            ¿Está exonerado del resumen anual de IVA 390?
+            <select name="exoneradoModelo390" [(ngModel)]="formulario.exoneradoModelo390">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="SI">Sí, exonerado</option>
+              <option value="NO">No, debe revisarse el 390</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    }
+
+    @if (pasoActual === 3) {
+      <div class="paso">
+        <div class="intro">
+          <strong>Circunstancias del cliente</strong>
+          <p>Responde sólo lo que esté verificado documentalmente.</p>
+        </div>
+        <div class="preguntas">
+          @for (pregunta of preguntas; track pregunta.campo) {
+            <label>
+              <span>{{ pregunta.etiqueta }}</span>
+              <select
+                [name]="pregunta.campo"
+                [ngModel]="valorDato(pregunta.campo)"
+                (ngModelChange)="cambiarDato(pregunta.campo, $event)"
+              >
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="SI">Sí</option>
+                <option value="NO">No</option>
+              </select>
+            </label>
+          }
+        </div>
+      </div>
+    }
+
+    @if (pasoActual === 4) {
+      <div class="paso revision">
+        <div class="intro">
+          <strong>Revisión y guardado</strong>
+          <p>
+            Al guardar se recalcularán las propuestas, pero ninguna obligación nueva se activará sin
+            confirmación del asesor.
+          </p>
+        </div>
+        <div class="resumen">
+          <div>
+            <span>Territorio</span><strong>{{ formulario.territorioFiscal }}</strong>
+          </div>
+          <div>
+            <span>IRPF</span><strong>{{ formulario.regimenIrpf }}</strong>
+          </div>
+          <div>
+            <span>IVA</span><strong>{{ formulario.regimenIva }}</strong>
+          </div>
+          <div>
+            <span>Datos resueltos</span><strong>{{ porcentaje }}%</strong>
+          </div>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="marcarRevisado" [(ngModel)]="formulario.marcarRevisado" />
+          <span>
+            <strong>Marcar el perfil como revisado</strong>
+            <small>
+              Puede conservar datos pendientes y volver a actualizarlos cuando sea necesario.
+            </small>
+          </span>
+        </label>
+      </div>
+    }
+
+    <footer>
+      <button
+        type="button"
+        class="secondary"
+        [disabled]="pasoActual === 1"
+        (click)="pasoActual = pasoActual - 1"
+      >
+        Anterior
+      </button>
+      @if (pasoActual < 4) {
+        <button type="button" class="primary" (click)="pasoActual = pasoActual + 1">
+          Continuar
+        </button>
+      } @else {
+        <button type="submit" class="primary" [disabled]="guardando">
+          {{ guardando ? 'Guardando…' : 'Guardar y recalcular propuestas' }}
+        </button>
+      }
+    </footer>
+  </form>
+</section>

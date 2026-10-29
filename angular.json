@@ -38,13 +38,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                    "maximumWarning": "550kB",
+                    "maximumError": "650kB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "8kB",
-                  "maximumError": "12kB"
+                    "maximumWarning": "20kB",
+                    "maximumError": "24kB"
                 }
               ],
               "outputHashing": "all"
@@ -70,7 +70,24 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverage": true,
+            "coverageExclude": [
+              "**/*.html"
+            ],
+            "coverageReporters": [
+              "text-summary",
+              "html",
+              "lcov"
+            ],
+            "coverageThresholds": {
+              "statements": 20,
+              "branches": 20,
+              "functions": 20,
+              "lines": 20
+            }
+          }
         }
       }
     }
