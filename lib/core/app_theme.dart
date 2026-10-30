@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  static const ink = Color(0xFF25272B);
-  static const inkSoft = Color(0xFF707075);
-  static const teal = Color(0xFF363A40);
-  static const tealSoft = Color(0xFFF0EEEB);
-  static const coral = Color(0xFFB97953);
-  static const canvas = Color(0xFFF7F7F5);
+  static const ink = Color(0xFF242529);
+  static const inkSoft = Color(0xFF66676D);
+  static const teal = Color(0xFF34363C);
+  static const tealSoft = Color(0xFFF0F0ED);
+  static const coral = Color(0xFF73766E);
+  static const canvas = Color(0xFFF5F6F8);
   static const surface = Color(0xFFFFFFFF);
   static const line = Color(0xFFE3E2DF);
   static const success = Color(0xFF3F7258);
@@ -27,7 +27,7 @@ ThemeData buildAppTheme() {
     useMaterial3: true,
     colorScheme: scheme,
     scaffoldBackgroundColor: AppColors.canvas,
-    fontFamily: 'Roboto',
+    fontFamily: 'Inter',
     textTheme: const TextTheme(
       displaySmall: TextStyle(
         color: AppColors.ink,

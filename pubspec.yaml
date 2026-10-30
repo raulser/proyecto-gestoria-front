@@ -66,7 +66,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/config/app-config.json
-    - assets/brand/gestoria-symbol.png
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

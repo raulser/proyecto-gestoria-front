@@ -15,7 +15,18 @@ class WebAuthGateway implements AuthGateway {
 
   @override
   Future<AuthTokens?> initialize() async {
+    final cancelled = Uri.base.queryParameters.containsKey('error');
     await FlutterOpenidWeb.initialize();
+    if (cancelled) {
+      throw StateError(
+        'El inicio de sesión no se ha completado. Puedes volver a intentarlo.',
+      );
+    }
+    if (FlutterOpenidWeb.instance.currentState.status == AuthStatus.error) {
+      throw StateError(
+        'No se ha podido recuperar la sesión. Vuelve a iniciar sesión.',
+      );
+    }
     final tokens = FlutterOpenidWeb.instance.currentState.tokens;
     return tokens == null
         ? null
@@ -48,7 +59,7 @@ class WebAuthGateway implements AuthGateway {
         idToken: tokens!.idToken!,
         issuer: config.issuer,
         clientId: config.keycloakClientId,
-        postLogoutRedirectUri: config.webRedirectUri,
+        postLogoutRedirectUri: '${config.webRedirectUri}/?signed_out=1',
         serviceConfiguration: _service,
       ),
     );

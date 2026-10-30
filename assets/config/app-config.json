@@ -3,6 +3,6 @@
   "keycloakUrl": "http://localhost:8081",
   "keycloakRealm": "gestoria",
   "keycloakClientId": "gestoria-web",
-  "organizationName": "Gestoría",
+  "organizationName": "Savia",
   "supportEmail": ""
 }

@@ -3,6 +3,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 
 import '../auth/auth_gateway.dart';
+import '../auth/sign_in_policy.dart';
 import '../core/app_config.dart';
 import '../data/api_client.dart';
 import '../domain/models.dart';
@@ -40,8 +41,16 @@ class AppController extends ChangeNotifier {
   double? uploadProgress;
   String? uploadFileName;
   int _noticeId = 0;
+  bool _openLoginAutomatically = false;
+
+  bool consumeAutomaticLogin() {
+    final pending = _openLoginAutomatically;
+    _openLoginAutomatically = false;
+    return pending;
+  }
 
   static Future<AppController> bootstrap() async {
+    final entryUri = Uri.base;
     final config = await AppConfig.load();
     final auth = createAuthGateway(config);
     late ApiClient api;
@@ -51,6 +60,10 @@ class AppController extends ChangeNotifier {
       final tokens = await auth.initialize();
       if (tokens == null) {
         controller.status = SessionStatus.signedOut;
+        controller._openLoginAutomatically = shouldOpenSignInAutomatically(
+          isWeb: kIsWeb,
+          entryUri: entryUri,
+        );
       } else {
         await controller._openSession();
       }
@@ -62,12 +75,16 @@ class AppController extends ChangeNotifier {
   }
 
   Future<void> login() async {
+    if (loading) return;
+    _openLoginAutomatically = false;
     loading = true;
     notifyListeners();
     try {
       await auth.login();
       if (await auth.accessToken() != null) await _openSession();
     } catch (error) {
+      status = SessionStatus.signedOut;
+      usuario = null;
       _notifyError(_message(error));
     } finally {
       loading = false;

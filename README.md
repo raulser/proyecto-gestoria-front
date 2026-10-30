@@ -1,4 +1,4 @@
-# Portal Gestoría · Flutter
+# Savia · Flutter
 
 Frontend multiplataforma del proyecto de gestoría. La misma base de código genera:
 
@@ -42,6 +42,18 @@ flutter build apk --debug
 Nginx sirve la aplicación web, aplica el fallback de SPA y redirige `/api/` al
 contenedor Java. El inicio de sesión usa OpenID Connect con PKCE contra Keycloak,
 con almacenamiento seguro de la sesión en Android/iOS.
+
+En web, una visita sin sesión abre directamente el formulario de Keycloak. El
+retorno con un error y el cierre de sesión dejan una pantalla de recuperación
+con un botón para reintentar; no reinician automáticamente el acceso. Android e
+iOS mantienen la apertura del navegador de autenticación por acción del usuario.
+
+El tema de acceso de Savia está versionado en `keycloak-theme/savia`. Compose
+debe montar ese directorio en `/opt/keycloak/themes/savia` (solo lectura) y el
+realm debe tener `displayName: Savia` y `loginTheme: savia`. El nombre visible en
+Flutter usa `GESTORIA_ORGANIZATION_NAME`, cuyo valor predeterminado es `Savia`.
+La configuración de identidad conserva los identificadores y esquemas anteriores
+para que las cuentas y las redirecciones nativas sigan funcionando.
 
 El cliente público de Keycloak debe admitir además estas URI para las apps
 nativas:

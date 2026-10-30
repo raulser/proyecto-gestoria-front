@@ -1,0 +1,150 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/Inter.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+/* Savia access theme, revision 4. */
+:root {
+  color-scheme: light;
+  --pf-v5-global--primary-color--100: #242529;
+  --pf-v5-global--primary-color--200: #111214;
+  --pf-v5-global--link--Color: #34363c;
+}
+
+html, body { min-width: 280px; margin: 0; }
+body, #keycloak-bg {
+  background: #f5f6f8;
+  color: #242529;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.pf-v5-c-login {
+  min-height: 100svh;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pf-v5-c-login__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 0;
+}
+.pf-v5-c-login__header { margin: 0; padding: 0; }
+#kc-header-wrapper {
+  margin: 0;
+  padding: 0 0 4px;
+  color: #242529 !important;
+  text-align: center;
+  text-transform: lowercase;
+  font: 800 44px/1.05 'Inter', sans-serif;
+  letter-spacing: -2.8px;
+}
+.pf-v5-c-login__main {
+  align-self: center;
+  width: min(440px, 100%);
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  border: 1px solid #e6e8ec;
+  border-radius: 24px;
+  box-shadow: 0 24px 72px #151c2a0a;
+}
+.pf-v5-c-login__main-header { padding: 36px 36px 28px; border-top: 0; }
+.pf-v5-c-login__main-body { padding: 0 36px 36px; }
+#kc-page-title {
+  font-size: 27px;
+  line-height: 1.25;
+  letter-spacing: -.9px;
+  font-weight: 650;
+  color: #242529;
+}
+#kc-form-login { gap: 22px; }
+.pf-v5-c-form__label-text, .pf-v5-c-form__label {
+  color: #434449;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pf-v5-c-form-control {
+  min-height: 52px;
+  border-radius: 12px;
+  background: #f7f8fa;
+  --pf-v5-c-form-control--after--BorderBottomWidth: 0;
+  --pf-v5-c-form-control--before--BorderColor: #e4e6eb;
+  --pf-v5-c-form-control--before--BorderRadius: 12px;
+}
+.pf-v5-c-form-control::before { border: 1px solid #e4e6eb; border-radius: 12px; }
+.pf-v5-c-form-control::after { display: none; }
+.pf-v5-c-form-control > input {
+  min-height: 52px;
+  padding: 14px 15px;
+  font-size: 16px;
+  color: #242529;
+  border: 0;
+  outline: none;
+  border-radius: 12px;
+  background: transparent;
+}
+.pf-v5-c-input-group {
+  border: 1px solid #e4e6eb;
+  border-radius: 12px;
+  background: #f7f8fa;
+  overflow: hidden;
+}
+.pf-v5-c-input-group .pf-v5-c-form-control::before { border: 0; }
+.pf-v5-c-input-group .pf-v5-c-button {
+  min-height: 52px;
+  width: 46px;
+  color: #74757a;
+  background: transparent;
+  border: 0;
+}
+.pf-v5-c-input-group .pf-v5-c-button::after { border: 0; }
+.pf-v5-c-button::after { border-radius: 12px; }
+.pf-v5-c-input-group:focus-within,
+.pf-v5-c-form__group > .pf-v5-c-form-control:focus-within {
+  outline: 2px solid #737780;
+  outline-offset: 3px;
+}
+#kc-login, .pf-v5-c-button.pf-m-primary {
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: #242529;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 650;
+  box-shadow: none;
+}
+#kc-login:hover { background: #111214; }
+a { color: #55565c; text-underline-offset: 3px; }
+a:hover { color: #202125; text-decoration: underline; }
+.pf-v5-c-check { color: #66676d; font-size: 13px; min-height: 24px; align-items: center; }
+.pf-v5-c-check__input { width: 16px; height: 16px; }
+.pf-v5-c-helper-text__item a { display: inline-block; line-height: 24px; }
+.pf-v5-c-helper-text__item, .pf-v5-c-helper-text__item a { font-size: 13px; }
+.pf-v5-c-check__input { accent-color: #242529; }
+.pf-v5-c-login__main-footer:empty { display: none; }
+.pf-v5-c-login__main-footer-band { background: #fafaf9; border-top: 1px solid #ecece8; }
+.pf-v5-c-alert { border-radius: 9px; }
+#kc-attempted-username { min-width: 0; overflow-wrap: anywhere; }
+#reset-login .kc-tooltip-text { display: none; }
+#kc-form, #kc-form-wrapper, .pf-v5-c-form__group, .pf-v5-c-input-group__item { min-width: 0; }
+@media (max-width: 480px) {
+  .pf-v5-c-login { padding: 28px 18px; }
+  .pf-v5-c-login__container { gap: 26px; }
+  #kc-header-wrapper { font-size: 40px; letter-spacing: -2.5px; }
+  .pf-v5-c-login__main-header { padding: 30px 26px 26px; }
+  .pf-v5-c-login__main-body { padding: 0 26px 30px; }
+  #kc-form-options .pf-v5-c-helper-text { flex-wrap: wrap; gap: 12px; }
+}
+@media (max-height: 640px) {
+  .pf-v5-c-login { align-items: flex-start; padding-block: 24px; }
+  .pf-v5-c-login__container { gap: 20px; }
+}

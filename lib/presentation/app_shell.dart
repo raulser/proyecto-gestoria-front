@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../core/app_theme.dart';
 import '../state/app_controller.dart';
+import 'widgets/savia_wordmark.dart';
 import 'screens/clients_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/documents_screen.dart';
@@ -348,30 +349,11 @@ class _Brand extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Container(
-        width: 38,
-        height: 38,
-        decoration: BoxDecoration(
-          color: dark ? Colors.white : AppColors.ink,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(
-          Icons.account_balance_outlined,
-          size: 20,
-          color: dark ? AppColors.ink : Colors.white,
-        ),
+      SaviaWordmark(
+        name: context.read<AppController>().config.organizationName,
+        size: compact ? 20 : 30,
+        color: dark ? Colors.white : AppColors.ink,
       ),
-      if (!compact) ...[
-        const SizedBox(width: 11),
-        Text(
-          context.read<AppController>().config.organizationName,
-          style: TextStyle(
-            color: dark ? Colors.white : AppColors.ink,
-            fontWeight: FontWeight.w900,
-            fontSize: 19,
-          ),
-        ),
-      ],
     ],
   );
 }

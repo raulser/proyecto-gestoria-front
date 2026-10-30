@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'core/app_theme.dart';
 import 'presentation/app_shell.dart';
 import 'presentation/login_screen.dart';
+import 'presentation/widgets/savia_wordmark.dart';
 import 'state/app_controller.dart';
 
 Future<void> main() async {
@@ -50,21 +51,7 @@ class _SplashScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: 58,
-            height: 58,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.ink,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Icon(
-                Icons.account_balance_outlined,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-          ),
+          SaviaWordmark(size: 54),
           SizedBox(height: 22),
           CircularProgressIndicator(),
           SizedBox(height: 13),

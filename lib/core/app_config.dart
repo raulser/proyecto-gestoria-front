@@ -37,7 +37,7 @@ class AppConfig {
           .replaceAll(RegExp(r'/$'), ''),
       keycloakRealm: json['keycloakRealm'] as String? ?? 'gestoria',
       keycloakClientId: json['keycloakClientId'] as String? ?? 'gestoria-web',
-      organizationName: json['organizationName'] as String? ?? 'Gestoría',
+      organizationName: json['organizationName'] as String? ?? 'Savia',
       supportEmail: json['supportEmail'] as String? ?? '',
     );
   }

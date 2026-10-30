@@ -9,7 +9,7 @@ cat > "$config_file" <<EOF
   "keycloakUrl": "${APP_KEYCLOAK_URL:-${GESTORIA_KEYCLOAK_URL:-http://localhost:8081}}",
   "keycloakRealm": "${APP_KEYCLOAK_REALM:-${GESTORIA_KEYCLOAK_REALM:-gestoria}}",
   "keycloakClientId": "${APP_KEYCLOAK_CLIENT_ID:-${GESTORIA_KEYCLOAK_CLIENT_ID:-gestoria-web}}",
-  "organizationName": "${APP_ORGANIZATION_NAME:-${GESTORIA_ORGANIZATION_NAME:-Gestoría}}",
+  "organizationName": "${APP_ORGANIZATION_NAME:-${GESTORIA_ORGANIZATION_NAME:-Savia}}",
   "supportEmail": "${APP_SUPPORT_EMAIL:-${GESTORIA_SUPPORT_EMAIL:-}}"
 }
 EOF
