@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  static const ink = Color(0xFF2D2A27);
-  static const inkSoft = Color(0xFF6E6962);
-  static const teal = Color(0xFF486B5C);
-  static const tealSoft = Color(0xFFE8EFEB);
-  static const coral = Color(0xFFA56F48);
-  static const canvas = Color(0xFFF7F6F2);
+  static const ink = Color(0xFF29243B);
+  static const inkSoft = Color(0xFF6C6678);
+  static const teal = Color(0xFF6558D6);
+  static const tealSoft = Color(0xFFEFECFB);
+  static const coral = Color(0xFFC86C79);
+  static const canvas = Color(0xFFF6F4FA);
   static const surface = Color(0xFFFFFFFF);
-  static const line = Color(0xFFDFDDD6);
+  static const line = Color(0xFFE2DEEA);
   static const success = Color(0xFF3F7258);
   static const warning = Color(0xFF9A650D);
   static const danger = Color(0xFFB2473E);
