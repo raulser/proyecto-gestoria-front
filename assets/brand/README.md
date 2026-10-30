@@ -1,7 +1,19 @@
-# Símbolo de Gestoría
+# Marca de Savia
 
-Archivo: `gestoria-symbol.png`. Generado con la herramienta integrada de imagen, con fondo transparente. La aplicación muestra el nombre como texto nativo, separado del símbolo.
+`savia-logo.svg` y `savia-symbol.svg` son las fuentes vectoriales editables.
+El símbolo y las letras están trazados como curvas, sin depender de una fuente
+instalada o de servicios externos. El nombre accesible se conserva en la web
+y en Flutter.
 
-Prompt de generación:
+El tema de Keycloak usa el SVG completo; Flutter usa los PNG transparentes a
+cuatro veces su tamaño de diseño. `savia-logo-light.png` conserva el símbolo
+y cambia las letras a blanco para las cabeceras oscuras. Los iconos de pestaña
+y aplicación web utilizan solo el símbolo para mantenerlo legible.
 
-> Use case: logo-brand. Asset type: production logo symbol for a professional Spanish accounting and advisory client portal named Gestoría. Create one original abstract emblem: two carefully interlocking folded bands, suggesting collaboration, precision and ordered paths, compact balanced silhouette, confident and memorable, sophisticated European professional services identity. Flat vector-like artwork with crisp edges, graphite charcoal #25272B and restrained warm copper #B97953. The symbol must be readable at 48 pixels. Center emblem tightly with modest transparent margins, genuinely transparent background. No text, no letters, no G, no monogram, no checkmark, no shields, no building, no bank, no scales, no folder, no coins, no circular enclosing badge, no gradients, no 3D, no mockup, no shadows, no watermark. Single final logo emblem only.
+Para regenerar las copias y los PNG, ejecutar `node tool/build-brand.cjs` con
+Sharp disponible. Si está instalado fuera del proyecto, `SAVIA_SHARP_MODULE`
+puede apuntar a su directorio. Después hay que recompilar Flutter y reiniciar
+Keycloak si se han cambiado los recursos montados. Los nombres publicados en
+Keycloak y web se versionan al cambiar su contenido para invalidar la caché.
+
+`gestoria-symbol.png` es un recurso histórico que ya no usa la aplicación.

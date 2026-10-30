@@ -351,7 +351,7 @@ class _Brand extends StatelessWidget {
     children: [
       SaviaWordmark(
         name: context.read<AppController>().config.organizationName,
-        size: compact ? 20 : 30,
+        size: compact ? 28 : 34,
         color: dark ? Colors.white : AppColors.ink,
       ),
     ],

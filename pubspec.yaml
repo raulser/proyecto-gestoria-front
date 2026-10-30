@@ -66,6 +66,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/config/app-config.json
+    - assets/brand/savia-logo.png
+    - assets/brand/savia-logo-light.png
   fonts:
     - family: Inter
       fonts:

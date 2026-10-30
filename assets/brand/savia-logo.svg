@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 56" fill="none" role="img" aria-label="Savia">
+  <defs>
+    <linearGradient id="savia" x1="4" y1="8" x2="44" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9081F4"/>
+      <stop offset=".5" stop-color="#6552DF"/>
+      <stop offset="1" stop-color="#4732AE"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#savia)" transform="translate(0 4)">
+    <path d="M40 4H22C12.06 4 4 12.06 4 22c0 4.97 2.01 9.47 5.27 12.73L17 27a7 7 0 0 1 5-12h7L40 4Z"/>
+    <path d="M8 44h18c9.94 0 18-8.06 18-18 0-4.97-2.01-9.47-5.27-12.73L31 21a7 7 0 0 1-5 12h-7L8 44Z"/>
+  </g>
+  <g stroke="#36304D" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M85 15c-2-3-5.4-4.5-9.4-4.5-6.5 0-10.6 3.5-10.6 8.2 0 5.2 4.5 7 10.3 8.7 6.1 1.8 10.7 3.9 10.7 9.3 0 5.3-4.5 9-11 9-4.4 0-8.7-1.9-11.5-5.6"/>
+    <path d="M114 24v21m0-10.5c0-6.3-3.5-10.5-8.6-10.5-5.7 0-9.4 4.5-9.4 10.5S99.7 45 105.4 45c5.1 0 8.6-4.2 8.6-10.5Z"/>
+    <path d="m125 24 9.5 21 9.5-21M156 24v21"/>
+    <path d="M189 24v21m0-10.5c0-6.3-3.5-10.5-8.6-10.5-5.7 0-9.4 4.5-9.4 10.5S174.7 45 180.4 45c5.1 0 8.6-4.2 8.6-10.5Z"/>
+  </g>
+  <circle cx="156" cy="14" r="2.7" fill="#6552DF"/>
+</svg>

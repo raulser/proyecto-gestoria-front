@@ -56,7 +56,9 @@ La configuración de identidad conserva los identificadores y esquemas anteriore
 para que las cuentas y las redirecciones nativas sigan funcionando.
 
 Los estilos de acceso están en `resources/css/savia-access-v3.css` dentro del
-tema. El fondo vectorial y la fuente se sirven desde el propio Keycloak, sin
+tema; `resources/css/savia-brand-v1.css` integra el logo. Las fuentes editables
+de la marca están en `assets/brand`. El fondo vectorial, el logo y la fuente
+se sirven desde el propio Keycloak, sin
 dependencias externas. Al cambiar el tema montado basta con reiniciar Keycloak;
 no es necesario recompilar Flutter. Si se cambia un recurso ya publicado, se
 debe versionar su nombre para evitar que el navegador reutilice la copia en caché.
