@@ -13,6 +13,9 @@
       logo.width = 196;
       logo.height = 56;
       header.replaceChildren(logo);
+      const brandHeader = header.closest('header');
+      const card = document.querySelector('.pf-v5-c-login__main');
+      if (brandHeader && card) card.prepend(brandHeader);
     }
     const icon = document.querySelector('link[rel="icon"]');
     if (icon) {

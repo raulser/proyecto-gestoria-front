@@ -1,0 +1,53 @@
+/* Brand assets are local, vector based, and shared with the app. */
+.pf-v5-c-login { padding: clamp(32px, 10vh, 96px) 24px 56px; }
+.pf-v5-c-login__header {
+  position: static;
+  margin: 0 auto 24px;
+  padding: 0;
+}
+.pf-v5-c-login__main > .pf-v5-c-login__header {
+  margin: 0;
+  padding: 36px 0 0;
+}
+#kc-header-wrapper {
+  width: 168px;
+  height: 48px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  background: url('../img/savia-logo-v1.svg') no-repeat left center / contain;
+}
+#kc-header-wrapper img { display: block; width: 100%; height: 100%; }
+.pf-v5-c-login__main-header { padding: 24px 44px 28px; }
+#kc-page-title { text-align: center; font-size: 23px; }
+.pf-v5-c-input-group { transition: border-color 140ms; }
+.pf-v5-c-input-group:hover { border-color: #a8a2c6; }
+.pf-v5-c-form-control:hover::before { border-color: #a8a2c6; }
+.pf-v5-c-input-group .pf-v5-c-button:hover {
+  color: #5850df;
+  background: #f4f2ff;
+}
+.pf-v5-c-button.pf-m-primary:disabled {
+  background: #e5e1fa;
+  color: #71678d;
+  box-shadow: none;
+  cursor: wait;
+}
+@media (max-width: 600px) {
+  .pf-v5-c-login { padding: max(24px, 6vh) 20px 40px; }
+  .pf-v5-c-login__main > .pf-v5-c-login__header { padding-top: 28px; }
+  #kc-header-wrapper { width: 154px; height: 44px; }
+  .pf-v5-c-login__main-header { padding: 24px 28px; }
+  #kc-page-title { font-size: 22px; }
+}
+@media (max-width: 360px) {
+  .pf-v5-c-login { padding-inline: 12px; }
+  .pf-v5-c-login__main-header { padding-inline: 22px; }
+}
+@media (max-height: 540px) and (min-width: 601px) {
+  .pf-v5-c-login { padding-top: 24px; padding-bottom: 24px; }
+  .pf-v5-c-login__main > .pf-v5-c-login__header { padding-top: 24px; }
+  #kc-header-wrapper { width: 154px; height: 44px; }
+}

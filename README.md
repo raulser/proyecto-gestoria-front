@@ -56,7 +56,8 @@ La configuración de identidad conserva los identificadores y esquemas anteriore
 para que las cuentas y las redirecciones nativas sigan funcionando.
 
 Los estilos de acceso están en `resources/css/savia-access-v3.css` dentro del
-tema; `resources/css/savia-brand-v1.css` integra el logo. Las fuentes editables
+tema; `resources/css/savia-brand-v2.css` integra el logo centrado dentro de la
+tarjeta de acceso. Las fuentes editables
 de la marca están en `assets/brand`. El fondo vectorial, el logo y la fuente
 se sirven desde el propio Keycloak, sin
 dependencias externas. Al cambiar el tema montado basta con reiniciar Keycloak;
