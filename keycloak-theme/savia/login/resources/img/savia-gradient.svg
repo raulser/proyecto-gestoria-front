@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" fill="none">
+  <defs>
+    <linearGradient id="flow" x1="430" y1="-100" x2="1410" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b8e7ff"/>
+      <stop offset=".22" stop-color="#a7bbff"/>
+      <stop offset=".43" stop-color="#9578fa"/>
+      <stop offset=".63" stop-color="#f4a8e1"/>
+      <stop offset=".83" stop-color="#ffb982"/>
+      <stop offset="1" stop-color="#ffefc6"/>
+    </linearGradient>
+    <linearGradient id="light" x1="800" y1="0" x2="1250" y2="880" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff2b6"/>
+      <stop offset=".38" stop-color="#ffbc77"/>
+      <stop offset=".7" stop-color="#ff9bcc"/>
+      <stop offset="1" stop-color="#a998ff"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="800" y1="0" x2="800" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop offset=".1" stop-color="white" stop-opacity="0"/>
+      <stop offset="1" stop-color="white"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="44"/>
+    </filter>
+    <filter id="ribbon" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+  <path d="M260-300C560-70 660 205 880 416S1320 700 1540 1180" stroke="url(#flow)" stroke-width="480" filter="url(#soft)"/>
+  <path d="M640-310C900-40 965 240 1050 462S1265 745 1470 1150" stroke="url(#light)" stroke-width="210" filter="url(#ribbon)" opacity=".85"/>
+  <path d="M410-260C680 20 725 180 875 400S1180 660 1420 1090" stroke="#e8f1ff" stroke-width="26" filter="url(#ribbon)" opacity=".65"/>
+  <path d="M920-300C1100 0 1115 240 1225 490S1410 790 1600 950" stroke="#dfb1ff" stroke-width="120" filter="url(#soft)" opacity=".7"/>
+  <path fill="url(#fade)" d="M0 0h1600v1100H0z"/>
+</svg>

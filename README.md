@@ -55,6 +55,12 @@ Flutter usa `GESTORIA_ORGANIZATION_NAME`, cuyo valor predeterminado es `Savia`.
 La configuración de identidad conserva los identificadores y esquemas anteriores
 para que las cuentas y las redirecciones nativas sigan funcionando.
 
+Los estilos de acceso están en `resources/css/savia-access-v3.css` dentro del
+tema. El fondo vectorial y la fuente se sirven desde el propio Keycloak, sin
+dependencias externas. Al cambiar el tema montado basta con reiniciar Keycloak;
+no es necesario recompilar Flutter. Si se cambia un recurso ya publicado, se
+debe versionar su nombre para evitar que el navegador reutilice la copia en caché.
+
 El cliente público de Keycloak debe admitir además estas URI para las apps
 nativas:
 
