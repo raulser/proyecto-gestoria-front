@@ -11,13 +11,7 @@
   <main class="login-shell">
     <section class="login-panel">
       <div class="brand login-brand">
-        <div class="brand-mark">
-          <svg lucideBuilding2 size="24"></svg>
-        </div>
-        <div>
-          <strong>Gestoria</strong>
-          <span>Portal documental</span>
-        </div>
+        <img src="savia-logo.svg" alt="Savia" width="168" height="48" />
       </div>
 
       <div class="form">
@@ -27,17 +21,15 @@
 
         <button type="button" class="primary" [disabled]="loading" (click)="iniciarSesion()">
           <svg lucideCircleCheck size="17"></svg>
-          <span>{{ loading ? 'Abriendo acceso seguro' : 'Entrar con Keycloak' }}</span>
+          <span>{{ loading ? 'Abriendo acceso…' : 'Iniciar sesión' }}</span>
         </button>
       </div>
 
       <div class="demo-usuarios">
-        <strong>Acceso seguro</strong>
+        <strong>Acceso a tu gestoría</strong>
         <span
-          >Tu contraseña se valida en el servicio de identidad y nunca se entrega a la
-          aplicación.</span
+          >Utiliza la cuenta que te ha proporcionado tu gestoría.</span
         >
-        <span>Los perfiles internos protegen además el acceso mediante un segundo factor.</span>
         @if (showLocalDemoCredentials) {
           <div class="demo-credentials">
             <p><strong>Usuarios locales de demostración</strong></p>

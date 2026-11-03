@@ -15,7 +15,7 @@ privacy_version=$(escape_js "${GESTORIA_PRIVACY_VERSION:-2026-08-13}")
 cat > /usr/share/nginx/html/config.js <<EOF
 window.__GESTORIA_CONFIG__ = {
   urlApi: "${GESTORIA_API_URL-}",
-  urlKeycloak: "${GESTORIA_KEYCLOAK_URL:-http://localhost:8081}",
+  urlKeycloak: "${GESTORIA_KEYCLOAK_URL:-http://localhost:8091}",
   reinoKeycloak: "${GESTORIA_KEYCLOAK_REALM:-gestoria}",
   idClienteKeycloak: "${GESTORIA_KEYCLOAK_CLIENT_ID:-gestoria-web}",
   nombreProveedor: "$legal_name",

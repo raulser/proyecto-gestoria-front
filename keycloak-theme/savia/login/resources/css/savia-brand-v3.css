@@ -1,0 +1,62 @@
+/* Brand assets are local, vector based, and shared with the app. */
+.savia-demo-accounts { margin-top: 28px; padding-top: 24px; border-top: 1px solid #e8e5f2; }
+.savia-demo-accounts h2 { font-size: 14px; font-weight: 650; color: #41405a; }
+.savia-demo-accounts > p { margin: 6px 0 14px; font-size: 12px; line-height: 1.6; color: #737085; }
+.savia-demo-account { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; padding: 12px 0; }
+.savia-demo-account + .savia-demo-account { border-top: 1px solid #f0eef5; }
+.savia-demo-account strong { font-size: 12px; color: #4c4562; }
+.savia-demo-account code { grid-column: 1; font-size: 12px; line-height: 1.6; color: #655d78; overflow-wrap: anywhere; }
+.savia-demo-account button { grid-column: 2; grid-row: 1 / 4; align-self: center; min-height: 36px; padding: 0 12px; border: 1px solid #e2dcf5; border-radius: 6px; color: #5850df; background: #f8f6ff; font: 600 12px Inter, sans-serif; cursor: pointer; }
+.savia-demo-account button:hover { background: #eeeaff; }
+.pf-v5-c-login { padding: clamp(32px, 10vh, 96px) 24px 56px; }
+.pf-v5-c-login__header {
+  position: static;
+  margin: 0 auto 24px;
+  padding: 0;
+}
+.pf-v5-c-login__main > .pf-v5-c-login__header {
+  margin: 0;
+  padding: 36px 0 0;
+}
+#kc-header-wrapper {
+  width: 168px;
+  height: 48px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  background: url('../img/savia-logo-v1.svg') no-repeat left center / contain;
+}
+#kc-header-wrapper img { display: block; width: 100%; height: 100%; }
+.pf-v5-c-login__main-header { padding: 24px 44px 28px; }
+#kc-page-title { text-align: center; font-size: 23px; }
+.pf-v5-c-input-group { transition: border-color 140ms; }
+.pf-v5-c-input-group:hover { border-color: #a8a2c6; }
+.pf-v5-c-form-control:hover::before { border-color: #a8a2c6; }
+.pf-v5-c-input-group .pf-v5-c-button:hover {
+  color: #5850df;
+  background: #f4f2ff;
+}
+.pf-v5-c-button.pf-m-primary:disabled {
+  background: #e5e1fa;
+  color: #71678d;
+  box-shadow: none;
+  cursor: wait;
+}
+@media (max-width: 600px) {
+  .pf-v5-c-login { padding: max(24px, 6vh) 20px 40px; }
+  .pf-v5-c-login__main > .pf-v5-c-login__header { padding-top: 28px; }
+  #kc-header-wrapper { width: 154px; height: 44px; }
+  .pf-v5-c-login__main-header { padding: 24px 28px; }
+  #kc-page-title { font-size: 22px; }
+}
+@media (max-width: 360px) {
+  .pf-v5-c-login { padding-inline: 12px; }
+  .pf-v5-c-login__main-header { padding-inline: 22px; }
+}
+@media (max-height: 540px) and (min-width: 601px) {
+  .pf-v5-c-login { padding-top: 24px; padding-bottom: 24px; }
+  .pf-v5-c-login__main > .pf-v5-c-login__header { padding-top: 24px; }
+  #kc-header-wrapper { width: 154px; height: 44px; }
+}

@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #eef3f0;
+  background: #fff url('/savia-gradient.svg') no-repeat center top / cover;
 }
 
 .login-panel {
@@ -16,13 +16,18 @@
   display: grid;
   gap: 22px;
   padding: 24px;
-  border: 1px solid #dde5e0;
-  border-radius: 8px;
+  border: 1px solid #eeeaf7;
+  border-radius: 12px;
   background: #ffffff;
+  box-shadow: 0 24px 64px -20px #27346030;
 }
+
+.login-panel .primary { background: #5850df; }
+.login-panel .primary:hover { background: #4840c6; }
 
 .login-brand {
   color: #17211d;
+  justify-content: center;
 }
 
 .login-brand span,

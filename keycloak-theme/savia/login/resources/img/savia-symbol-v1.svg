@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="savia" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9081F4"/>
+      <stop offset=".5" stop-color="#6552DF"/>
+      <stop offset="1" stop-color="#4732AE"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#savia)">
+    <path d="M40 4H22C12.06 4 4 12.06 4 22c0 4.97 2.01 9.47 5.27 12.73L17 27a7 7 0 0 1 5-12h7L40 4Z"/>
+    <path d="M8 44h18c9.94 0 18-8.06 18-18 0-4.97-2.01-9.47-5.27-12.73L31 21a7 7 0 0 1-5 12h-7L8 44Z"/>
+  </g>
+</svg>

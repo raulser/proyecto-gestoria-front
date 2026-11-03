@@ -2,6 +2,16 @@
 
 Aplicación Angular 21 para administradores, asesores y clientes.
 
+Se continúa el desarrollo en `main`. La alternativa Flutter permanece conservada
+en `flutter-migration` y no se utiliza para construir ni arrancar esta rama.
+El acceso conserva el tema de Savia en `keycloak-theme/savia`, montado por Compose
+en `/opt/keycloak/themes/savia`. El realm debe usar `loginTheme: savia`.
+
+En el entorno local, la entrada y el formulario de identidad muestran las cuentas
+de demostración de administrador, asesor y cliente. El formulario permite rellenar
+la cuenta elegida y requiere pulsar **Iniciar sesión** para acceder. Estas ayudas
+solo se muestran cuando el host del navegador es loopback.
+
 ## Vistas
 
 - Panel con métricas, notificaciones, agenda fiscal y estado trimestral.
@@ -20,7 +30,7 @@ pnpm install
 pnpm start -- --host 127.0.0.1 --port 4200
 ```
 
-La aplicación queda en `http://localhost:4200` y usa la API configurada en `public/config.js`. Para el recorrido integrado se recomienda arrancar toda la pila desde la raíz con `docker compose up --build` y acceder a `http://localhost:8080`.
+La aplicación queda en `http://localhost:4200` y usa la API configurada en `public/config.js`. Para el recorrido integrado se recomienda arrancar toda la pila desde la raíz con `docker compose up --build` y acceder a `http://localhost:8090`. Keycloak utiliza `http://localhost:8091`.
 
 ## Calidad
 

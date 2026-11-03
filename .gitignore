@@ -44,3 +44,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Generated files retained locally when switching from the Flutter backup branch.
+/.dart_tool/
+/.flutter-plugins-dependencies
+/build/
+/android/
+/ios/
+*.iml

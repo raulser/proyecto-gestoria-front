@@ -6,3 +6,11 @@ dist
 coverage
 playwright-report
 test-results
+keycloak-theme
+.dart_tool
+build
+.puro.json
+android
+ios
+.flutter-plugins-dependencies
+*.iml

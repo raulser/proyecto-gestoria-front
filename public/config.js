@@ -1,6 +1,6 @@
 window.__GESTORIA_CONFIG__ = {
   urlApi: 'http://localhost:30001',
-  urlKeycloak: 'http://localhost:8081',
+  urlKeycloak: 'http://localhost:8091',
   reinoKeycloak: 'gestoria',
   idClienteKeycloak: 'gestoria-web',
   nombreProveedor: 'Proyecto Gestoría (entorno local)',

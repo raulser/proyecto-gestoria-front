@@ -19,7 +19,7 @@ declare global {
 
 export const configuracionEjecucion: ConfiguracionEjecucionGestoria = {
   urlApi: window.__GESTORIA_CONFIG__?.urlApi ?? 'http://localhost:30001',
-  urlKeycloak: window.__GESTORIA_CONFIG__?.urlKeycloak ?? 'http://localhost:8081',
+  urlKeycloak: window.__GESTORIA_CONFIG__?.urlKeycloak ?? 'http://localhost:8091',
   reinoKeycloak: window.__GESTORIA_CONFIG__?.reinoKeycloak ?? 'gestoria',
   idClienteKeycloak: window.__GESTORIA_CONFIG__?.idClienteKeycloak ?? 'gestoria-web',
   nombreProveedor:
