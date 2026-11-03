@@ -1,0 +1,539 @@
+@font-face {
+  font-family: Inter;
+  src: url('/fonts/Inter.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root {
+  --brand-primary: #6654d9;
+}
+html {
+  color: #292b40;
+  background: #f7f8fc;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  font-size: 14px;
+}
+button,
+input,
+select,
+textarea {
+  font-family: Inter, system-ui, sans-serif;
+}
+:root app-root .shell {
+  background: #f7f8fc;
+  color: #292b40;
+  grid-template-columns: 232px minmax(0, 1fr);
+}
+:root app-root .shell .sidebar {
+  background: #fff;
+  border-right: 1px solid #e9eaf2;
+  color: #37364c;
+  padding: 28px 16px;
+  gap: 32px;
+}
+:root app-root .sidebar .brand {
+  padding: 0 14px;
+  min-height: 44px;
+}
+:root app-root .sidebar .brand img {
+  max-width: 145px;
+  height: auto;
+}
+:root app-root .sidebar .nav {
+  gap: 5px;
+}
+:root app-root .sidebar .nav button {
+  min-height: 44px;
+  border-radius: 9px;
+  padding: 0 14px;
+  color: #77788c;
+  font-size: 12px;
+  font-weight: 500;
+  gap: 12px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+:root app-root .sidebar .nav button:hover {
+  background: #f6f4fc;
+  color: #6454bf;
+}
+:root app-root .sidebar .nav button.activo {
+  background: #eeebfb;
+  color: #6654d9;
+  font-weight: 650;
+}
+:root app-root .sidebar .nav svg {
+  width: 18px;
+  height: 18px;
+}
+:root app-root .sidebar .account {
+  border-top: 1px solid #ececf3;
+  padding: 20px 4px 0;
+  gap: 10px;
+}
+:root app-root .sidebar .account strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: #424258;
+}
+:root app-root .sidebar .account small {
+  color: #767588;
+  font-size: 12px;
+  line-height: 1.5;
+}
+:root app-root .sidebar .avatar {
+  background: #efecfb;
+  color: #7867cd;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+:root app-root .sidebar .icon-button {
+  color: #9996ac;
+  background: transparent;
+}
+:root app-root .shell .workspace {
+  padding: 32px clamp(22px, 3vw, 48px);
+  max-width: 1600px;
+}
+:root app-root .workspace .topbar {
+  align-items: center;
+  margin-bottom: 30px;
+}
+:root app-root .workspace .eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #777287;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+:root app-root .workspace h1 {
+  font-size: 27px;
+  font-weight: 650;
+  letter-spacing: -1px;
+  color: #292a40;
+}
+:root app-root .workspace h2 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #38394d;
+}
+:root app-root .workspace .panel-header p,
+:root app-root .workspace .panel-header small {
+  color: #767287;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 5px;
+}
+:root app-root .workspace .primary {
+  background: var(--brand-primary);
+  border-radius: 8px;
+  min-height: 39px;
+  font-size: 12px;
+  font-weight: 550;
+  box-shadow: 0 2px 3px #6250d01a;
+  padding: 0 14px;
+  color: white;
+}
+:root app-root .workspace .primary:hover {
+  filter: brightness(0.95);
+}
+:root app-root .workspace .secondary {
+  background: #fff;
+  border: 1px solid #e5e4ee;
+  color: #767388;
+  border-radius: 8px;
+  min-height: 37px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0 12px;
+}
+:root app-root .workspace .secondary:hover {
+  border-color: #bfb6e9;
+  background: #fcfbff;
+  color: #6b59bd;
+}
+:root app-root .workspace .icon-button {
+  background: #faf9fd;
+  color: #8d85a5;
+  border-radius: 8px;
+}
+:root app-root .workspace .panel {
+  border: 1px solid #e9e9f1;
+  border-radius: 14px;
+  box-shadow: 0 3px 8px #2b244503;
+  padding: 24px;
+  background: #fff;
+}
+:root app-root .workspace .panel-header {
+  margin-bottom: 20px;
+}
+:root app-root .workspace .metrics {
+  gap: 18px;
+  margin-bottom: 24px;
+}
+:root app-root .workspace .metric {
+  background: white;
+  border: 1px solid #e9e9f1;
+  border-radius: 13px;
+  padding: 21px 23px;
+  box-shadow: 0 3px 8px #2b244503;
+}
+:root app-root .workspace .metric > span {
+  color: #9190a4;
+  font-size: 12px;
+  font-weight: 500;
+}
+:root app-root .workspace .metric > strong {
+  display: block;
+  color: #39364f;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-top: 12px;
+}
+:root app-root .workspace .metric.warning {
+  border-top: 2px solid #eabf80;
+}
+:root app-root .workspace .metric.exito {
+  border-top: 2px solid #a4cbb9;
+}
+:root app-root .workspace input:not([type='checkbox']),
+:root app-root .workspace select,
+:root app-root .workspace textarea {
+  border-color: #e2e2ed;
+  border-radius: 8px;
+  background: #fff;
+  color: #4c495f;
+  font-size: 12px;
+  min-height: 39px;
+}
+:root app-root .workspace input::placeholder,
+:root app-root .workspace textarea::placeholder {
+  color: #b3afc1;
+}
+:root app-root .workspace label {
+  font-size: 12px;
+  font-weight: 550;
+  color: #6e6881;
+}
+:root app-root .workspace input[type='checkbox'] {
+  accent-color: var(--brand-primary);
+}
+:root app-root .workspace .buscar {
+  background: #fafafe;
+  border: 1px solid #e9e7f1;
+  border-radius: 8px;
+  padding-inline: 10px;
+  color: #a6a0b7;
+}
+:root app-root .workspace .buscar input {
+  background: transparent;
+  border: 0;
+  min-width: 180px;
+}
+:root app-root .workspace button:focus-visible,
+:root app-root .workspace input:focus-visible,
+:root app-root .workspace select:focus-visible,
+:root app-root .workspace textarea:focus-visible {
+  outline: 3px solid #9b8ae84d;
+  outline-offset: 2px;
+}
+:root app-root .workspace .cliente-listar {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+:root app-root .workspace .cliente-card {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.3fr) minmax(170px, 1fr) auto auto;
+  gap: 10px 18px;
+  align-items: center;
+  border: 1px solid #e9e8f1;
+  border-radius: 11px;
+  padding: 18px 20px;
+  background: #fff;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+:root app-root .workspace .cliente-card:hover {
+  border-color: #c7beec;
+  box-shadow: 0 4px 16px #67549c08;
+}
+:root app-root .workspace .cliente-card > div:first-child strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444056;
+}
+:root app-root .workspace .cliente-card > div span {
+  font-size: 12px;
+  color: #797185;
+  margin-top: 5px;
+  display: block;
+}
+:root app-root .workspace .cliente-card > button {
+  font-size: 12px;
+  min-height: 31px;
+}
+:root app-root .workspace .cliente-card > button:nth-of-type(n + 2) {
+  grid-row: 2;
+}
+:root app-root .workspace .cliente-card > button:last-child {
+  justify-self: start;
+}
+:root app-root .workspace .pill,
+:root app-root .workspace .estado {
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 550;
+  padding: 4px 8px;
+  background: #f0f7f3;
+  color: #599179;
+  border: 0;
+}
+:root app-root .workspace .pill.off {
+  background: #f6f5f8;
+  color: #a09aaa;
+}
+:root app-root .workspace .solicitud-card {
+  border-color: #e9e8f1;
+  border-radius: 13px;
+  box-shadow: 0 3px 10px #24203503;
+  background: white;
+}
+:root app-root .workspace .solicitud-heading h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4d4660;
+}
+:root app-root .workspace table {
+  font-size: 13px;
+}
+:root app-root .workspace th {
+  color: #746c83;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  background: #fcfbfe;
+}
+:root app-root .workspace td {
+  border-color: #f0eef5;
+  padding-block: 15px;
+  color: #6d667e;
+}
+:root app-root .workspace .empty {
+  color: #787184;
+  background: #fbfafe;
+  border: 1px dashed #e8e3f1;
+  border-radius: 10px;
+  font-size: 12px;
+  padding: 30px;
+  text-align: center;
+}
+:root app-root .workspace .ficha-tabs {
+  background: #f7f5fc;
+  border: 1px solid #ebe7f4;
+  border-radius: 10px;
+  padding: 5px;
+  gap: 5px;
+}
+:root app-root .workspace .ficha-tabs button {
+  font-size: 12px;
+  background: transparent;
+  color: #8f859e;
+  border-radius: 7px;
+  font-weight: 500;
+}
+:root app-root .workspace .ficha-tabs button.activo {
+  background: #fff;
+  color: #6754c0;
+  box-shadow: 0 2px 6px #5e467a0d;
+}
+:root app-root .workspace .ficha-tabs button span {
+  background: #eeeaf8;
+  color: #7c6bb6;
+}
+:root app-root .workspace .dropzone {
+  border-color: #c7bde8;
+  background: #faf8ff;
+  color: #8a76bd;
+  border-radius: 13px;
+  padding: 38px 24px;
+}
+:root app-root .workspace .dropzone span {
+  color: #a295b2;
+}
+:root app-root .workspace .segmented {
+  background: #f5f3fa;
+  border-radius: 9px;
+  padding: 4px;
+  gap: 2px;
+}
+:root app-root .workspace .segmented button {
+  border: 0;
+  color: #a499b2;
+  font-size: 12px;
+  background: transparent;
+}
+:root app-root .workspace .segmented button.active,
+:root app-root .workspace .segmented button.activo {
+  background: white;
+  color: #6654d9;
+  box-shadow: 0 2px 5px #49327812;
+}
+:root app-root .workspace .importacion-clientes {
+  border: 0;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 12px;
+  color: #7c7387;
+}
+:root app-root .workspace .importacion-clientes summary {
+  font-size: 12px;
+  color: #756780;
+}
+:root app-root .workspace .importacion-clientes[open] {
+  background: #faf8fe;
+  padding: 14px;
+  border-radius: 9px;
+}
+:root app-root .workspace .guia {
+  background: #faf8ff;
+  border-color: #e6dff6;
+  border-left: 3px solid #b5a5e4;
+}
+@media (max-width: 980px) {
+  :root app-root .shell {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+  :root app-root .workspace .cliente-card {
+    grid-template-columns: 1fr 1fr;
+  }
+  :root app-root .workspace .cliente-card > button:nth-of-type(n + 2) {
+    grid-row: auto;
+  }
+  :root app-root .shell .workspace {
+    padding: 24px;
+  }
+  :root app-root .workspace .metrics {
+    gap: 10px;
+  }
+}
+@media (max-width: 760px) {
+  :root app-root .shell {
+    display: block;
+  }
+  :root app-root .shell .sidebar {
+    position: static;
+    height: auto;
+    gap: 14px;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid #ebe7f3;
+  }
+  :root app-root .sidebar .nav {
+    display: flex;
+    overflow: auto;
+    gap: 4px;
+    padding-bottom: 2px;
+  }
+  :root app-root .sidebar .nav button {
+    flex: 0 0 auto;
+    min-height: 36px;
+    padding-inline: 12px;
+    font-size: 12px;
+  }
+  :root app-root .sidebar .account {
+    display: none;
+  }
+  :root app-root .shell .workspace {
+    padding: 20px 16px;
+  }
+  :root app-root .workspace .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  :root app-root .workspace .topbar h1 {
+    font-size: 23px;
+  }
+  :root app-root .workspace .panel {
+    padding: 18px;
+  }
+  :root app-root .workspace .cliente-card {
+    padding: 14px;
+    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+  }
+  :root app-root .workspace .buscar input {
+    min-width: 0;
+    width: 130px;
+  }
+}
+:root app-root .workspace .cliente-plan {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #7d6cba;
+}
+:root app-root .workspace .cliente-acciones {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #f1eef6;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+:root app-root .workspace .cliente-mas {
+  position: relative;
+  margin-left: auto;
+  font-size: 12px;
+  color: #7a738a;
+}
+:root app-root .workspace .cliente-mas summary {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 7px;
+  list-style: none;
+}
+:root app-root .workspace .cliente-mas summary::after {
+  content: ' ···';
+  letter-spacing: 2px;
+}
+:root app-root .workspace .cliente-mas[open] > div {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  display: grid;
+  gap: 5px;
+  background: white;
+  padding: 8px;
+  width: 190px;
+  border: 1px solid #e5e0ef;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px #2e234218;
+}
+:root app-root .workspace .cliente-mas[open] > div button {
+  text-align: left;
+  justify-content: flex-start;
+  border: 0;
+}
+:root app-root .login-shell {
+  background: radial-gradient(ellipse at 30% 0%, #e8e3fc 0, transparent 55%), #f7f8fc;
+}
+:root app-root .login-panel {
+  border-color: #e8e7f1;
+  border-radius: 20px;
+  box-shadow: 0 24px 70px -28px #30295830;
+}
+:root app-root .login-panel .primary {
+  background: #6654d9;
+}

@@ -1,3 +1,13 @@
+@defer (when editorClienteAbierto) {
+  <app-editor-cliente
+    [abierto]="editorClienteAbierto"
+    [cliente]="clienteParaEditar"
+    [guardando]="guardandoCliente"
+    [error]="errorAltaCliente"
+    (cancelar)="cerrarEditorCliente()"
+    (guardar)="guardarAltaCliente($event)"
+  />
+}
 <app-centro-feedback />
 <app-dialogo-accion />
 <app-asociar-documento
@@ -11,7 +21,7 @@
   <main class="login-shell">
     <section class="login-panel">
       <div class="brand login-brand">
-        <img src="savia-logo.svg" alt="Savia" width="168" height="48" />
+        <img src="savia-logo-v2.svg" alt="Savia" width="168" height="48" />
       </div>
 
       <div class="form">
@@ -27,9 +37,7 @@
 
       <div class="demo-usuarios">
         <strong>Acceso a tu gestoría</strong>
-        <span
-          >Utiliza la cuenta que te ha proporcionado tu gestoría.</span
-        >
+        <span>Utiliza la cuenta que te ha proporcionado tu gestoría.</span>
         @if (showLocalDemoCredentials) {
           <div class="demo-credentials">
             <p><strong>Usuarios locales de demostración</strong></p>
@@ -56,16 +64,10 @@
     </section>
   </main>
 } @else {
-  <div class="shell">
+  <div class="shell" [attr.inert]="editorClienteAbierto ? '' : null">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-mark">
-          <svg lucideBuilding2 size="24"></svg>
-        </div>
-        <div>
-          <strong>Gestoria</strong>
-          <span>{{ usuarioActual.nombreEmpresa }}</span>
-        </div>
+        <img src="savia-logo-v2.svg" width="132" height="38" alt="Savia" />
       </div>
 
       <nav class="nav">
@@ -119,7 +121,7 @@
     <main class="workspace">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Proyecto Gestoria</p>
+          <p class="eyebrow">{{ usuarioActual.nombreEmpresa }}</p>
           <h1>{{ tituloVista() }}</h1>
         </div>
 
@@ -388,153 +390,11 @@
             (exportar)="exportarRgpd($event)"
           />
         } @else {
-          <section class="two-column">
-            @if (puedeGestionarClientes()) {
-              <div class="panel">
-                <div class="panel-header">
-                  <div>
-                    <h2>{{ clienteEditandoId ? 'Editar cliente' : 'Alta rápida' }}</h2>
-                    <p>
-                      {{
-                        clienteEditandoId
-                          ? 'Actualiza sus datos o situación'
-                          : 'Cliente de la asesoría'
-                      }}
-                    </p>
-                  </div>
-                </div>
-
-                <form class="form" (ngSubmit)="agregarCliente()">
-                  <label>
-                    Nombre / razón social
-                    <input
-                      name="nombreCliente"
-                      [(ngModel)]="nuevoCliente.nombre"
-                      placeholder="Cliente SL"
-                    />
-                  </label>
-                  <label>
-                    NIF / CIF
-                    <input
-                      name="clientNif"
-                      [(ngModel)]="nuevoCliente.nif"
-                      placeholder="B00000000"
-                    />
-                  </label>
-                  <label>
-                    Email
-                    <input
-                      name="clientEmail"
-                      type="email"
-                      [(ngModel)]="nuevoCliente.email"
-                      placeholder="cliente@empresa.es"
-                    />
-                  </label>
-                  <label>
-                    Teléfono
-                    <input
-                      name="clientPhone"
-                      [(ngModel)]="nuevoCliente.telefono"
-                      placeholder="600 000 000"
-                    />
-                  </label>
-                  <label>
-                    Tipo
-                    <select name="clientType" [(ngModel)]="nuevoCliente.tipo">
-                      <option value="EMPRESA">Sociedad / empresa</option>
-                      <option value="AUTONOMO">Autónomo</option>
-                      <option value="PARTICULAR">Particular</option>
-                      <option value="COMUNIDAD_BIENES">Comunidad de bienes</option>
-                      <option value="SOCIEDAD_CIVIL">Sociedad civil</option>
-                      <option value="COMUNIDAD_PROPIETARIOS">Comunidad de propietarios</option>
-                      <option value="ASOCIACION_FUNDACION">Asociación o fundación</option>
-                      <option value="ENTIDAD_SIN_PERSONALIDAD">
-                        Entidad sin personalidad jurídica
-                      </option>
-                      <option value="OTRO">Otra entidad</option>
-                    </select>
-                  </label>
-                  @if (clienteEditandoId) {
-                    <label class="check-line">
-                      <input
-                        name="clientActive"
-                        type="checkbox"
-                        [(ngModel)]="nuevoCliente.activo"
-                      />
-                      Cliente activo
-                    </label>
-                  }
-                  <button type="submit" class="primary">
-                    <svg lucidePlus size="17"></svg>
-                    <span>{{ clienteEditandoId ? 'Guardar cambios' : 'Crear cliente' }}</span>
-                  </button>
-                  @if (clienteEditandoId) {
-                    <button type="button" class="secondary" (click)="cancelarEdicionCliente()">
-                      Cancelar edición
-                    </button>
-                  }
-                </form>
-
-                @if (!clienteEditandoId) {
-                  <details class="importacion-clientes">
-                    <summary>Importar varios clientes desde CSV</summary>
-                    <p>
-                      Usa las columnas <strong>nombre, nif, email, telefono y tipo</strong>. Primero
-                      verás una validación; no se crea nada hasta que confirmes.
-                    </p>
-                    <button
-                      type="button"
-                      class="secondary small"
-                      (click)="descargarPlantillaClientes()"
-                    >
-                      Descargar plantilla
-                    </button>
-                    <label class="selector-archivo-importacion">
-                      Seleccionar CSV
-                      <input
-                        type="file"
-                        accept=".csv,.txt,text/csv,text/plain"
-                        (change)="analizarArchivoClientes($event)"
-                      />
-                    </label>
-                    @if (clientesImportados.length > 0) {
-                      <div class="resumen-importacion" role="status">
-                        <strong>{{ clientesImportados.length }} clientes preparados</strong>
-                        <span>Revísalos antes de confirmar la importación.</span>
-                      </div>
-                      <button
-                        type="button"
-                        class="primary"
-                        [disabled]="importacionClientesEnCurso"
-                        (click)="importarClientesPreparados()"
-                      >
-                        {{
-                          importacionClientesEnCurso ? 'Importando…' : 'Importar clientes válidos'
-                        }}
-                      </button>
-                    }
-                    @if (erroresImportacionClientes.length > 0) {
-                      <div class="errores-importacion" role="alert">
-                        <strong
-                          >{{ erroresImportacionClientes.length }} incidencias que debes
-                          revisar</strong
-                        >
-                        <ul>
-                          @for (incidencia of erroresImportacionClientes; track incidencia) {
-                            <li>{{ incidencia }}</li>
-                          }
-                        </ul>
-                      </div>
-                    }
-                  </details>
-                }
-              </div>
-            }
-
+          <section class="directorio-clientes">
             <div class="panel">
               <div class="panel-header">
                 <div>
-                  <h2>Listado</h2>
+                  <h2>Todos los clientes</h2>
                   <p>
                     {{ clientesFiltrados().length }}
                     {{ clientesFiltrados().length === 1 ? 'cliente' : 'clientes' }}
@@ -546,12 +406,72 @@
                 </div>
               </div>
 
+              @if (puedeGestionarClientes()) {
+                <button type="button" class="primary" (click)="nuevoAltaCliente()">
+                  <svg lucidePlus size="17"></svg>Nuevo cliente
+                </button>
+                <details class="importacion-clientes">
+                  <summary>Importar varios clientes desde CSV</summary>
+                  <p>
+                    Usa las columnas <strong>nombre, nif, email, telefono y tipo</strong>. Primero
+                    verás una validación; no se crea nada hasta que confirmes.
+                  </p>
+                  <button
+                    type="button"
+                    class="secondary small"
+                    (click)="descargarPlantillaClientes()"
+                  >
+                    Descargar plantilla
+                  </button>
+                  <label class="selector-archivo-importacion">
+                    Seleccionar CSV
+                    <input
+                      type="file"
+                      accept=".csv,.txt,text/csv,text/plain"
+                      (change)="analizarArchivoClientes($event)"
+                    />
+                  </label>
+                  @if (clientesImportados.length > 0) {
+                    <div class="resumen-importacion" role="status">
+                      <strong>{{ clientesImportados.length }} clientes preparados</strong>
+                      <span>Revísalos antes de confirmar la importación.</span>
+                    </div>
+                    <button
+                      type="button"
+                      class="primary"
+                      [disabled]="importacionClientesEnCurso"
+                      (click)="importarClientesPreparados()"
+                    >
+                      {{ importacionClientesEnCurso ? 'Importando…' : 'Importar clientes válidos' }}
+                    </button>
+                  }
+                  @if (erroresImportacionClientes.length > 0) {
+                    <div class="errores-importacion" role="alert">
+                      <strong
+                        >{{ erroresImportacionClientes.length }} incidencias que debes
+                        revisar</strong
+                      >
+                      <ul>
+                        @for (incidencia of erroresImportacionClientes; track incidencia) {
+                          <li>{{ incidencia }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                </details>
+              }
               <div class="cliente-listar">
                 @for (cliente of clientesFiltrados(); track cliente.id) {
                   <article class="cliente-card">
                     <div>
                       <strong>{{ cliente.nombre }}</strong>
                       <span>{{ cliente.nif }} - {{ etiquetaTipoCliente(cliente.tipo) }}</span>
+                      @if (cliente.planDocumental) {
+                        <small class="cliente-plan"
+                          >Plan documental
+                          {{ cliente.planDocumental.automatico ? 'automático' : 'manual' }}</small
+                        >
+                      }
                     </div>
                     <div>
                       <span>{{ cliente.email }}</span>
@@ -561,34 +481,47 @@
                       cliente.activo ? 'Activo' : 'Inactivo'
                     }}</span>
                     <button type="button" class="primary small" (click)="abrirExpediente(cliente)">
-                      Abrir expediente
+                      Ver documentos
                     </button>
-                    <button
-                      type="button"
-                      class="secondary small"
-                      (click)="abrirObligaciones(cliente)"
-                    >
-                      Obligaciones
-                    </button>
-                    @if (puedeGestionarClientes()) {
+                    <div class="cliente-acciones">
                       <button
                         type="button"
                         class="secondary small"
-                        (click)="editarCliente(cliente)"
+                        (click)="abrirObligaciones(cliente)"
                       >
-                        Editar
+                        Ficha fiscal
                       </button>
-                      <button
-                        type="button"
-                        class="secondary small"
-                        (click)="alternarCliente(cliente)"
-                      >
-                        {{ cliente.activo ? 'Archivar' : 'Reactivar' }}
-                      </button>
-                    }
-                    <button type="button" class="secondary small" (click)="exportarRgpd(cliente)">
-                      Exportación RGPD
-                    </button>
+                      @if (puedeGestionarClientes()) {
+                        <button
+                          type="button"
+                          class="secondary small"
+                          (click)="editarCliente(cliente)"
+                        >
+                          Configurar cliente
+                        </button>
+                      }
+                      <details class="cliente-mas">
+                        <summary>Más opciones</summary>
+                        <div>
+                          @if (puedeGestionarClientes()) {
+                            <button
+                              type="button"
+                              class="secondary small"
+                              (click)="alternarCliente(cliente)"
+                            >
+                              {{ cliente.activo ? 'Archivar' : 'Reactivar' }}
+                            </button>
+                          }
+                          <button
+                            type="button"
+                            class="secondary small"
+                            (click)="exportarRgpd(cliente)"
+                          >
+                            Exportación RGPD
+                          </button>
+                        </div>
+                      </details>
+                    </div>
                   </article>
                 } @empty {
                   <p class="empty">No hay clientes.</p>

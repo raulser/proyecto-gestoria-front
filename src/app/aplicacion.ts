@@ -3,7 +3,6 @@ import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/c
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  LucideBuilding2,
   LucideCalendarDays,
   LucideCircleCheck,
   LucideDownload,
@@ -36,6 +35,8 @@ import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
 import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.component';
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
+import { EditorClienteComponent } from './clientes/editor-cliente.component';
+import { FormularioCliente } from './modelos-aplicacion';
 import {
   EstadoDocumento,
   EstadoSolicitud,
@@ -74,9 +75,9 @@ import {
 @Component({
   selector: 'app-root',
   imports: [
+    EditorClienteComponent,
     CommonModule,
     FormsModule,
-    LucideBuilding2,
     LucideCalendarDays,
     LucideCircleCheck,
     LucideDownload,
@@ -107,6 +108,57 @@ import {
   styleUrl: './aplicacion.scss',
 })
 export class Aplicacion implements OnInit {
+  private solicitudEnlaceAbierta = false;
+  editorClienteAbierto = false;
+  clienteParaEditar: RespuestaCliente | null = null;
+  guardandoCliente = false;
+  errorAltaCliente = '';
+
+  nuevoAltaCliente(): void {
+    this.clienteParaEditar = null;
+    this.errorAltaCliente = '';
+    this.editorClienteAbierto = true;
+  }
+  cerrarEditorCliente(): void {
+    if (!this.guardandoCliente) this.editorClienteAbierto = false;
+  }
+  guardarAltaCliente(formulario: FormularioCliente): void {
+    if (this.guardandoCliente || !this.puedeGestionarClientes()) return;
+    this.guardandoCliente = true;
+    this.errorAltaCliente = '';
+    const llamada = this.clienteParaEditar
+      ? this.http.put<RespuestaApi<RespuestaCliente>>(
+          `${this.urlBaseApi}/api/clientes/${this.clienteParaEditar.id}`,
+          formulario,
+          { headers: this.cabecerasAutenticacion() },
+        )
+      : this.http.post<RespuestaApi<RespuestaCliente>>(
+          `${this.urlBaseApi}/api/clientes`,
+          formulario,
+          { headers: this.cabecerasAutenticacion() },
+        );
+    llamada
+      .pipe(
+        finalize(() => {
+          this.guardandoCliente = false;
+          this.detectorCambios.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.editorClienteAbierto = false;
+          this.aviso = this.clienteParaEditar
+            ? 'Datos y documentación actualizados'
+            : 'Cliente creado con su plan documental';
+          this.cargarClientes();
+          this.cargarPanel();
+        },
+        error: (e) => {
+          this.errorAltaCliente = this.obtenerErrorApi(e, 'No se pudo guardar el cliente');
+          this.detectorCambios.markForCheck();
+        },
+      });
+  }
   private readonly http = inject(HttpClient);
   private readonly autenticacion = inject(ServicioAutenticacionKeycloak);
   private readonly detectorCambios = inject(ChangeDetectorRef);
@@ -578,6 +630,12 @@ export class Aplicacion implements OnInit {
       .subscribe({
         next: (respuesta) => {
           this.solicitudes = respuesta.datos;
+          const destino = Number(new URLSearchParams(location.search).get('solicitud'));
+          const solicitudDestino = this.solicitudes.find((s) => s.id === destino);
+          if (solicitudDestino && !this.solicitudEnlaceAbierta) {
+            this.solicitudEnlaceAbierta = true;
+            this.usarSolicitudParaSubida(solicitudDestino);
+          }
           this.detectorCambios.markForCheck();
         },
         error: (error) =>
@@ -822,6 +880,9 @@ export class Aplicacion implements OnInit {
   }
 
   editarCliente(cliente: RespuestaCliente): void {
+    this.clienteParaEditar = cliente;
+    this.errorAltaCliente = '';
+    this.editorClienteAbierto = true;
     this.clienteEditandoId = cliente.id;
     this.nuevoCliente = {
       nombre: cliente.nombre,
@@ -1678,8 +1739,8 @@ export class Aplicacion implements OnInit {
     this.formularioSubida.solicitudId = solicitud.id;
     this.formularioSubida.tipo = solicitud.tiposDocumentoEsperados[0] ?? 'OTRO';
     this.formularioSubida.anio = solicitud.anio ?? this.anioSeleccionado;
-    this.formularioSubida.periodo = 'TRIMESTRAL';
-    this.formularioSubida.trimestre = solicitud.trimestre ?? this.trimestreActivo;
+    this.formularioSubida.periodo = solicitud.trimestre ? 'TRIMESTRAL' : 'PUNTUAL';
+    this.formularioSubida.trimestre = solicitud.trimestre ?? null;
     this.formularioSubida.mes = null;
     this.formularioSubida.origen = 'APORTADO_CLIENTE';
     this.formularioSubida.visibilidad = 'COMPARTIDO_CLIENTE';
@@ -3040,7 +3101,10 @@ export class Aplicacion implements OnInit {
   }
 
   private aplicarMarca(color: string | null): void {
-    globalThis.document.documentElement.style.setProperty('--brand-primary', color ?? '#226b3b');
+    globalThis.document.documentElement.style.setProperty(
+      '--brand-primary',
+      !color || color.toLowerCase() === '#226b3b' ? '#6654d9' : color,
+    );
   }
 
   private obtenerErrorApi(error: unknown, fallback: string): string {

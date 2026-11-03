@@ -2,8 +2,8 @@
 (() => {
   const source = document.currentScript;
   if (!source) return;
-  const logoUrl = new URL('../img/savia-logo-v1.svg', source.src).href;
-  const symbolUrl = new URL('../img/savia-symbol-v1.svg', source.src).href;
+  const logoUrl = new URL('../img/savia-logo-v2.svg', source.src).href;
+  const symbolUrl = new URL('../img/savia-symbol-v2.svg', source.src).href;
   const showBrand = () => {
     const header = document.getElementById('kc-header-wrapper');
     if (header) {

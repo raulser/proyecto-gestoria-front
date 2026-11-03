@@ -16,12 +16,20 @@ solo se muestran cuando el host del navegador es loopback.
 
 - Panel con métricas, notificaciones, agenda fiscal y estado trimestral.
 - Clientes y expediente propio/asignado.
+- Alta y edición en tres pasos: tarjetas de tipo, plan documental individual y revisión.
+- Documentos propios, periodicidad mensual/trimestral/anual/puntual o sin vencimiento, fechas y recordatorios editables.
 - Ficha fiscal guiada con propuestas explicadas, calendario y configuración manual separada.
 - Solicitudes, checklist, conversación, envío y reapertura.
 - Repositorio histórico con filtros de origen, periodo, categoría y visibilidad.
 - Subida múltiple de PDF/JPEG/PNG, libre o asociada a una solicitud.
 - Equipo, asignaciones, plan, auditoría y marca para administradores.
 - Estado de API e identidad de la sesión.
+
+El plan documental se guarda con cada cliente. Las propuestas iniciales se copian;
+modificarlas no altera otros clientes. «Otro» permite dar nombre al tipo y empezar
+un plan vacío. Las fechas sugeridas son de entrega documental, no plazos fiscales.
+La documentación sin vencimiento no genera solicitudes automáticas. Para recibir
+avisos debe existir una cuenta activa de cliente, creada desde la administración.
 
 ## Arranque local
 

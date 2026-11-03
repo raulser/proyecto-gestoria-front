@@ -130,6 +130,33 @@ export interface RespuestaCliente {
   tipo: TipoCliente;
   activo: boolean;
   creadoEn: string;
+  planDocumental?: PlanDocumentalCliente | null;
+}
+
+export type PeriodicidadDocumental = 'MENSUAL' | 'TRIMESTRAL' | 'ANUAL' | 'PUNTUAL' | 'PERMANENTE';
+export interface PautaDocumentalCliente {
+  id: string;
+  nombre: string;
+  tipo: TipoDocumento;
+  periodicidad: PeriodicidadDocumental;
+  activa: boolean;
+  apertura: string | null;
+  fechaLimite: string | null;
+  diasRecordatorio: number | null;
+}
+export interface PlanDocumentalCliente {
+  automatico: boolean;
+  documentos: PautaDocumentalCliente[];
+  tipoPersonalizado: string;
+}
+export interface FormularioCliente {
+  nombre: string;
+  nif: string;
+  email: string;
+  telefono: string;
+  tipo: TipoCliente;
+  activo: boolean;
+  planDocumental: PlanDocumentalCliente;
 }
 export interface PeticionPerfilFiscalCliente {
   territorioFiscal: TerritorioFiscal;

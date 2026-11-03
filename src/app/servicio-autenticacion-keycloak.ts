@@ -37,7 +37,12 @@ export class ServicioAutenticacionKeycloak {
   }
 
   iniciarSesion(): Promise<void> {
-    return this.keycloak.login({ redirectUri: window.location.origin });
+    const solicitud = new URLSearchParams(window.location.search).get('solicitud');
+    const redirectUri =
+      solicitud && /^\d+$/.test(solicitud)
+        ? `${window.location.origin}/?solicitud=${solicitud}`
+        : window.location.origin;
+    return this.keycloak.login({ redirectUri });
   }
 
   cerrarSesion(): Promise<void> {

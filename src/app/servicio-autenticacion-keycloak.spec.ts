@@ -56,4 +56,16 @@ describe('ServicioAutenticacionKeycloak', () => {
     expect(keycloak.login).toHaveBeenCalledWith({ redirectUri: window.location.origin });
     expect(keycloak.logout).toHaveBeenCalledWith({ redirectUri: window.location.origin });
   });
+
+  it('conserva el enlace documental después de identificarse', async () => {
+    window.history.replaceState({}, '', '/?solicitud=31');
+    try {
+      await servicio.iniciarSesion();
+      expect(keycloak.login).toHaveBeenCalledWith({
+        redirectUri: `${window.location.origin}/?solicitud=31`,
+      });
+    } finally {
+      window.history.replaceState({}, '', '/');
+    }
+  });
 });

@@ -4,7 +4,7 @@
 
 .perfil {
   overflow: hidden;
-  border: 1px solid #d6e2da;
+  border: 1px solid #e5e2ee;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 14px 36px rgb(31 65 44 / 7%);
@@ -15,23 +15,23 @@ header {
   justify-content: space-between;
   gap: 20px;
   padding: 22px 24px 18px;
-  background: linear-gradient(135deg, #f4faf6, #fff);
+  background: linear-gradient(135deg, #f8f6fe, #fff);
 }
 
 h3 {
   margin: 4px 0 5px;
-  color: #173d28;
+  color: #363247;
   font-size: 20px;
 }
 
 p {
   margin: 0;
-  color: #526159;
+  color: #746f83;
   line-height: 1.5;
 }
 
 .eyebrow {
-  color: #397b53;
+  color: #7664c8;
   font-size: 11px;
   font-weight: 850;
   letter-spacing: 0.08em;
@@ -48,12 +48,12 @@ p {
   }
 
   strong {
-    color: #226b3b;
+    color: #6654d9;
     font-size: 24px;
   }
 
   span {
-    color: #526159;
+    color: #746f83;
     font-size: 12px;
   }
 
@@ -69,15 +69,15 @@ p {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: #397b53;
+    background: #7664c8;
   }
 }
 
 nav {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border-block: 1px solid #e1e9e4;
-  background: #fbfdfc;
+  border-block: 1px solid #eae6f3;
+  background: #fdfcff;
 
   button {
     display: flex;
@@ -87,9 +87,9 @@ nav {
     min-height: 48px;
     padding: 8px;
     border: 0;
-    border-right: 1px solid #e1e9e4;
+    border-right: 1px solid #eae6f3;
     background: transparent;
-    color: #526159;
+    color: #746f83;
     font: inherit;
     font-size: 12px;
     font-weight: 750;
@@ -116,7 +116,7 @@ nav {
     &.activo span,
     &.completado span {
       color: #fff;
-      background: #397b53;
+      background: #7664c8;
     }
   }
 }
@@ -133,7 +133,7 @@ form {
   margin-bottom: 18px;
 
   strong {
-    color: #263b2f;
+    color: #444052;
     font-size: 16px;
   }
 
@@ -156,7 +156,7 @@ label,
 .dato-juridico {
   display: grid;
   gap: 6px;
-  color: #41544a;
+  color: #6c627c;
   font-size: 13px;
   font-weight: 700;
 }
@@ -166,30 +166,30 @@ label,
   gap: 3px;
   margin-top: 14px;
   padding: 11px 13px;
-  border-left: 3px solid #7dad8c;
+  border-left: 3px solid #b3a2df;
   border-radius: 0 9px 9px 0;
-  background: #f4f8f5;
-  color: #56685e;
+  background: #f8f6fe;
+  color: #7c718a;
   font-size: 12px;
 }
 
 .aviso-censal strong {
-  color: #2e5a3e;
+  color: #645075;
 }
 
 select {
   width: 100%;
   min-height: 43px;
   padding: 0 11px;
-  border: 1px solid #cbd7d0;
+  border: 1px solid #ddd6eb;
   border-radius: 9px;
   background: #fff;
-  color: #263c30;
+  color: #444052;
   font: inherit;
 }
 
 small {
-  color: #526159;
+  color: #746f83;
   font-size: 11px;
   font-weight: 500;
   line-height: 1.4;
@@ -198,12 +198,12 @@ small {
 .dato-juridico {
   align-content: center;
   padding: 14px;
-  border: 1px solid #dce6e0;
+  border: 1px solid #e5e2ee;
   border-radius: 10px;
-  background: #f8fbf9;
+  background: #fbfaff;
 
   strong {
-    color: #214e32;
+    color: #56446e;
     font-size: 16px;
   }
 }
@@ -217,7 +217,7 @@ small {
     grid-template-columns: minmax(0, 1fr) 128px;
     align-items: center;
     padding: 10px 12px;
-    border: 1px solid #e0e8e3;
+    border: 1px solid #eae6f3;
     border-radius: 10px;
   }
 }
@@ -231,7 +231,7 @@ small {
   div {
     padding: 13px;
     border-radius: 10px;
-    background: #f3f8f5;
+    background: #f8f6fd;
   }
 
   span,
@@ -241,13 +241,13 @@ small {
   }
 
   span {
-    color: #526159;
+    color: #746f83;
     font-size: 11px;
   }
 
   strong {
     margin-top: 4px;
-    color: #244b32;
+    color: #56446e;
     font-size: 12px;
   }
 }
@@ -257,15 +257,15 @@ small {
   align-items: flex-start;
   gap: 10px;
   padding: 14px;
-  border: 1px solid #cde0d3;
+  border: 1px solid #e1daef;
   border-radius: 10px;
-  background: #f5faf7;
+  background: #faf8fe;
 
   input {
     width: 18px;
     height: 18px;
     margin-top: 2px;
-    accent-color: #397b53;
+    accent-color: #7664c8;
   }
 
   span,
@@ -295,8 +295,8 @@ button.secondary {
 }
 
 button.primary {
-  border: 1px solid #226b3b;
-  background: #226b3b;
+  border: 1px solid #6654d9;
+  background: #6654d9;
   color: #fff;
 }
 
