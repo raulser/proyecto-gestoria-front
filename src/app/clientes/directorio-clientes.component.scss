@@ -17,7 +17,7 @@ button:focus-visible,
 input:focus-visible,
 summary:focus-visible,
 a:focus-visible {
-  outline: 3px solid #4364f94d;
+  outline: 3px solid #6b3fd14d;
   outline-offset: 3px;
 }
 button:disabled {
@@ -85,13 +85,13 @@ button:disabled {
   white-space: nowrap;
 }
 .principal {
-  background: #2463eb;
-  border: 1px solid #2463eb;
+  background: #6b3fd1;
+  border: 1px solid #6b3fd1;
   color: white;
   box-shadow: 0 2px 3px #17235612;
 }
 .principal:hover {
-  background: #3651d4;
+  background: #5932b6;
 }
 .principal > span {
   font-size: 22px;
@@ -123,8 +123,8 @@ button:disabled {
   border-radius: 7px;
 }
 .herramientas nav button.actual {
-  background: #e7ecfa;
-  color: #3959ca;
+  background: #f0eafa;
+  color: #6238b7;
   font-weight: 600;
 }
 .busqueda {
@@ -349,7 +349,7 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 .contacto a:hover {
-  color: #4964d5;
+  color: #6b3fd1;
 }
 .resumen {
   display: grid;
@@ -389,7 +389,7 @@ button:disabled {
   border: 0;
   text-align: left;
   padding: 13px 2px;
-  color: #5371cd;
+  color: #7043b4;
 }
 .accesos button + button {
   border-top: 1px solid #eff1f6;

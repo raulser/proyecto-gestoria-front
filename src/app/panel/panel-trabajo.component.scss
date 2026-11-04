@@ -12,7 +12,7 @@ button {
 }
 button:focus-visible,
 select:focus-visible {
-  outline: 3px solid #2463eb4d;
+  outline: 3px solid #6b3fd14d;
   outline-offset: 3px;
 }
 .periodo {
@@ -84,11 +84,11 @@ select:focus-visible {
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: #edf2ff;
-  color: #4862d4;
+  background: #f0eafa;
+  color: #7043b4;
 }
 .indicadores .violeta {
-  background: #f2edfb;
+  background: #fceee8;
   color: #526582;
 }
 .indicadores .ambar {
@@ -169,11 +169,11 @@ select:focus-visible {
   padding: 3px 0;
   font-size: 12px;
   font-weight: 550;
-  color: #526bc1;
+  color: #7043b4;
   white-space: nowrap;
 }
 .enlace:hover {
-  color: #3b60c7;
+  color: #5932b6;
 }
 .tarjeta > footer {
   display: flex;
@@ -206,7 +206,7 @@ select:focus-visible {
   min-height: 72px;
 }
 .tarea:hover {
-  background: #f9fbff;
+  background: #faf7fd;
 }
 .fecha {
   width: 35px;
@@ -559,7 +559,7 @@ select:focus-visible {
 .columna i {
   display: block;
   width: 100%;
-  background: #c5d5f4;
+  background: #baa3e5;
   border-radius: 6px;
   min-height: 2px;
 }
@@ -802,7 +802,7 @@ select:focus-visible {
   font-size: 12px;
 }
 .archivos-cliente button:hover {
-  color: #2463eb;
+  color: #6b3fd1;
 }
 .archivos-cliente button > span {
   flex: 1;
@@ -820,7 +820,7 @@ select:focus-visible {
 .archivos-cliente b {
   font-size: 20px;
   font-weight: 500;
-  color: #6c81ab;
+  color: #8b64b3;
 }
 .archivos-cliente i {
   font-style: normal;
@@ -847,8 +847,8 @@ select:focus-visible {
 
 /* A stronger focal point for capacity, with the same data at every size. */
 .almacenamiento {
-  background: #1c2d50;
-  border-color: #263d69;
+  background: linear-gradient(145deg, #45305d, #2c203d);
+  border-color: #48335e;
   box-shadow: 0 5px 18px #1a2e5114;
 }
 .almacenamiento h2,
@@ -862,32 +862,32 @@ select:focus-visible {
 .almacenamiento .plan-uso,
 .almacenamiento .plan-uso strong,
 .almacenamiento .uso-simple p {
-  color: #c2cee5;
+  color: #e0d4e8;
 }
 .almacenamiento .enlace {
-  color: #c1ceff;
+  color: #ebd3f4;
 }
 .almacenamiento .punto {
-  background: #a8b9ff;
+  background: #e7ac9d;
 }
 .anillo {
-  background: conic-gradient(#a3b3ff var(--porcentaje), #35496c 0);
+  background: conic-gradient(#e6ab9e var(--porcentaje), #503e61 0);
 }
 .anillo > div {
-  background: #1c2d50;
+  background: #322441;
 }
 .anillo strong {
   color: #f6f8ff;
 }
 .anillo strong small,
 .anillo span {
-  color: #c2cee5;
+  color: #e0d4e8;
 }
 .barra {
-  background: #35496c;
+  background: #503e61;
 }
 .barra i {
-  background: #a5b6ff;
+  background: #e6ab9e;
 }
 .proximas {
   min-height: 250px;
@@ -921,19 +921,19 @@ select:focus-visible {
 .grafico-vacio i {
   width: 13px;
   height: 30px;
-  background: #e3e9f7;
+  background: #ede4f5;
   border-radius: 4px;
 }
 .grafico-vacio i:nth-child(2) {
   height: 42px;
-  background: #d7e0f6;
+  background: #ddcdef;
 }
 .grafico-vacio i:nth-child(3) {
   height: 23px;
 }
 .grafico-vacio i:nth-child(4) {
   height: 35px;
-  background: #d7e0f6;
+  background: #ddcdef;
 }
 @media (max-width: 600px) {
   .proximas {
@@ -973,4 +973,12 @@ select:focus-visible {
   .almacenamiento .uso {
     padding: 4px 22px 15px;
   }
+}
+
+.indicadores > button:first-child {
+  background: linear-gradient(135deg, #fff, #fff7f2);
+  border-color: #efdfd7;
+}
+.indicadores .violeta {
+  color: #a4524b;
 }

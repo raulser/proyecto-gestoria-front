@@ -31,6 +31,8 @@ El generador usa `fonttools` como dependencia de desarrollo (`python -m pip inst
 fonttools`). La tipografía [Manrope](https://github.com/google/fonts/tree/main/ofl/manrope)
 se sirve localmente con su licencia en `public/fonts/Manrope-OFL.txt`; el logo se
 exporta a contornos SVG y no necesita fuentes instaladas en el equipo.
+La paleta violeta/coral y el recurso del acceso están documentados, junto con el
+prompt de generación, en [docs/identidad-v6.md](docs/identidad-v6.md).
 
 ## Vistas
 

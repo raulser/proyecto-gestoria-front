@@ -2,7 +2,7 @@
   --tinta: #252638;
   --suave: #74758a;
   --linea: #e9eaf1;
-  --acento: #2463eb;
+  --acento: #6b3fd1;
   color: var(--tinta);
 }
 .fondo {
@@ -208,7 +208,7 @@ input::placeholder {
 }
 input:focus,
 select:focus {
-  outline: 3px solid #2463eb1c;
+  outline: 3px solid #6b3fd11c;
   border-color: #9181e4;
 }
 input[type='checkbox'] {

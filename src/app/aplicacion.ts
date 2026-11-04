@@ -3172,7 +3172,7 @@ export class Aplicacion implements OnInit {
   private aplicarMarca(color: string | null): void {
     globalThis.document.documentElement.style.setProperty(
       '--brand-primary',
-      !color || color.toLowerCase() === '#226b3b' ? '#2463eb' : color,
+      !color || color.toLowerCase() === '#226b3b' ? '#6b3fd1' : color,
     );
   }
 

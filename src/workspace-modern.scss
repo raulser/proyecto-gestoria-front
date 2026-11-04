@@ -13,11 +13,13 @@
   font-display: swap;
 }
 :root {
-  --brand-primary: #2463eb;
+  --brand-primary: #6b3fd1;
+  --brand-soft: #f0eafa;
+  --brand-accent: #dc8276;
 }
 html {
   color: #1c2940;
-  background: #f3f5f9;
+  background: #f7f5f9;
   -webkit-font-smoothing: antialiased;
 }
 body {
@@ -30,14 +32,14 @@ textarea {
   font-family: Inter, system-ui, sans-serif;
 }
 :root app-root .shell {
-  background: #f3f5f9;
+  background: #f7f5f9;
   color: #1c2940;
   grid-template-columns: 224px minmax(0, 1fr);
 }
 :root app-root .shell .sidebar {
   background: #ffffff;
   color: #53637c;
-  border-right: 1px solid #dfe5ee;
+  border-right: 1px solid #e6e1eb;
   padding: 24px 14px 18px;
   gap: 26px;
 }
@@ -46,7 +48,7 @@ textarea {
   padding: 0 14px;
 }
 :root app-root .sidebar .brand img {
-  width: 126px;
+  width: 136px;
   height: auto;
 }
 :root app-root .sidebar .nav {
@@ -69,16 +71,16 @@ textarea {
     color 0.15s;
 }
 :root app-root .sidebar .nav button:hover {
-  background: #f1f5fc;
-  color: #24476f;
+  background: #f5f0fa;
+  color: #613b84;
 }
 :root app-root .sidebar .nav button.activo {
-  background: #eaf1ff;
-  border-color: #dbe6ff;
-  color: #2357c9;
+  background: #f0eafa;
+  border-color: #e4d7f8;
+  color: #6238b7;
 }
 :root app-root .sidebar .nav button.activo svg {
-  color: #2463eb;
+  color: #6b3fd1;
 }
 :root app-root .sidebar .nav svg {
   width: 19px;
@@ -120,23 +122,23 @@ textarea {
   line-height: 1.5;
 }
 :root app-root .sidebar .avatar {
-  background: #eaf0fc;
-  color: #405ba0;
+  background: #f0eafa;
+  color: #7148a9;
   border-radius: 50%;
   width: 32px;
   height: 32px;
   font-size: 11px;
 }
 :root app-root .sidebar .icon-button {
-  color: #526987;
-  background: #edf2f9;
+  color: #71617f;
+  background: #f3eef8;
   width: 31px;
   height: 34px;
   border-radius: 8px;
   flex-shrink: 0;
 }
 :root app-root .sidebar button:focus-visible {
-  outline: 2px solid #b0c1ff;
+  outline: 2px solid #c4a5ec;
   outline-offset: 3px;
 }
 :root app-root .shell .workspace {
@@ -191,7 +193,7 @@ textarea {
   padding: 0 15px;
 }
 :root app-root .workspace .primary:hover {
-  background: #1d4ed8;
+  background: #5932b6;
 }
 :root app-root .workspace .secondary {
   background: #fff;
@@ -204,9 +206,9 @@ textarea {
   padding: 0 13px;
 }
 :root app-root .workspace .secondary:hover {
-  border-color: #97a8d3;
+  border-color: #baa3d9;
   background: #f5f7ff;
-  color: #344fc2;
+  color: #6238b7;
 }
 :root app-root .workspace .icon-button {
   background: #edf1f8;
@@ -214,7 +216,7 @@ textarea {
   border-radius: 8px;
 }
 :root app-root .workspace .panel {
-  border: 1px solid #dfe5ee;
+  border: 1px solid #e6e1eb;
   border-radius: 13px;
   box-shadow: 0 2px 4px #15243b03;
   padding: 23px;
@@ -229,7 +231,7 @@ textarea {
 }
 :root app-root .workspace .metric {
   background: #fff;
-  border: 1px solid #dfe5ee;
+  border: 1px solid #e6e1eb;
   border-radius: 12px;
   padding: 20px;
   box-shadow: none;
@@ -288,7 +290,7 @@ textarea {
   min-width: 180px;
 }
 :root app-root .workspace :is(button, input, select, textarea, summary, a):focus-visible {
-  outline: 3px solid #2463eb66;
+  outline: 3px solid #6b3fd166;
   outline-offset: 3px;
 }
 :root app-root .workspace .pill,
@@ -308,7 +310,7 @@ textarea {
   color: #56647b;
 }
 :root app-root .workspace .solicitud-card {
-  border-color: #dfe5ee;
+  border-color: #e6e1eb;
   border-radius: 13px;
   box-shadow: none;
   background: #fff;
@@ -358,7 +360,7 @@ textarea {
 }
 :root app-root .workspace .ficha-tabs button.activo {
   background: #fff;
-  color: #3653c9;
+  color: #6238b7;
   box-shadow: 0 2px 5px #243e6c12;
 }
 :root app-root .workspace .ficha-tabs button span {
@@ -366,14 +368,14 @@ textarea {
   color: #425ac3;
 }
 :root app-root .workspace .dropzone {
-  border-color: #a7b8e9;
-  background: #f4f7ff;
-  color: #435dbe;
+  border-color: #c4afe5;
+  background: #f6f1fc;
+  color: #7043b4;
   border-radius: 13px;
   padding: 30px 22px;
 }
 :root app-root .workspace .dropzone span {
-  color: #61749b;
+  color: #766289;
 }
 :root app-root .workspace .segmented {
   background: #edf1f7;
@@ -390,7 +392,7 @@ textarea {
 :root app-root .workspace .segmented button.active,
 :root app-root .workspace .segmented button.activo {
   background: #fff;
-  color: #3c56cd;
+  color: #6238b7;
   box-shadow: 0 2px 5px #243e6c12;
 }
 :root app-root .workspace .importacion-clientes {
@@ -410,15 +412,15 @@ textarea {
   border-radius: 9px;
 }
 :root app-root .workspace .guia {
-  background: #f4f7ff;
-  border-color: #dce4fc;
-  border-left: 3px solid #8fa5ee;
+  background: #f6f1fc;
+  border-color: #e6dbf5;
+  border-left: 3px solid #b39bdc;
 }
 :root app-root .workspace .topbar-actions[hidden] {
   display: none;
 }
 :root app-root .workspace .panel-secundario {
-  border: 1px solid #dfe5ee;
+  border: 1px solid #e6e1eb;
   background: #fff;
   border-radius: 11px;
   padding: 0 18px;
@@ -494,7 +496,7 @@ textarea {
   width: 18px;
   height: 18px;
   border: 2px solid #e9edf8;
-  border-top-color: #2463eb;
+  border-top-color: #6b3fd1;
   border-radius: 50%;
   animation: acceso-girar 1s linear infinite;
 }
@@ -509,14 +511,14 @@ textarea {
   gap: 14px;
   padding: 24px;
   background: #fff;
-  border: 1px solid #dfe5ee;
+  border: 1px solid #e6e1eb;
   border-radius: 12px;
   color: #526581;
   font-size: 13px;
 }
 .vista-no-disponible a,
 .formulario-no-disponible a {
-  color: #3a53cb;
+  color: #6238b7;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -564,7 +566,7 @@ textarea {
     padding: 12px 18px;
     gap: 0;
     border-right: 0;
-    border-bottom: 1px solid #dfe5ee;
+    border-bottom: 1px solid #e6e1eb;
   }
   :root app-root .sidebar .brand {
     min-height: 34px;
@@ -573,7 +575,7 @@ textarea {
     justify-content: space-between;
   }
   :root app-root .sidebar .brand img {
-    width: 108px;
+    width: 116px;
   }
   :root app-root .sidebar .salir-movil {
     display: grid;
@@ -601,7 +603,7 @@ textarea {
     overflow: visible;
     padding: 7px 6px max(8px, env(safe-area-inset-bottom));
     background: #fff;
-    border-top: 1px solid #dce3ef;
+    border-top: 1px solid #e6dfed;
     box-shadow: 0 -3px 18px #14264409;
   }
   :root app-root .sidebar .nav button {
@@ -630,17 +632,17 @@ textarea {
     display: flex;
   }
   :root app-root .sidebar .nav button.activo {
-    background: #edf1ff;
-    color: #3653cf;
+    background: #f0eafa;
+    color: #6238b7;
     border: 0;
     font-weight: 650;
   }
   :root app-root .sidebar .nav button.activo svg {
-    color: #2463eb;
+    color: #6b3fd1;
   }
   :root app-root .sidebar .nav button:hover {
     background: #f0f3fa;
-    color: #344fc6;
+    color: #6238b7;
   }
   :root app-root .sidebar .menu-movil {
     display: grid;
@@ -683,7 +685,7 @@ textarea {
     font-size: 12px;
   }
   :root app-root .sidebar .menu-movil button.actual {
-    color: #3653cf;
+    color: #6238b7;
     font-weight: 650;
   }
   :root app-root .shell .workspace {
