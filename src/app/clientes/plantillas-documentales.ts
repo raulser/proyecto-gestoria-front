@@ -59,7 +59,7 @@ export const tiposDeCliente: Array<{
     detalle: 'Otras entidades con gestión propia',
     icono: 'grupo',
   },
-  { valor: 'OTRO', nombre: 'Otro tipo', detalle: 'Empieza con un plan a medida', icono: 'otro' },
+  { valor: 'OTRO', nombre: 'Otro tipo', detalle: 'Documentación configurable', icono: 'otro' },
 ];
 
 export function fechaLocal(fecha: Date): string {

@@ -79,9 +79,7 @@
         </button>
       } @empty {
         <div class="vacio">
-          <strong>{{
-            clientes.length ? 'No hay coincidencias' : 'Tu cartera empieza aquí'
-          }}</strong>
+          <strong>{{ clientes.length ? 'No hay coincidencias' : 'No hay clientes' }}</strong>
           <p>
             {{
               clientes.length

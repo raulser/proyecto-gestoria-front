@@ -5,8 +5,15 @@
   font-weight: 100 900;
   font-display: swap;
 }
+@font-face {
+  font-family: Manrope;
+  src: url('/fonts/Manrope.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
 :root {
-  --brand-primary: #4661ec;
+  --brand-primary: #2463eb;
 }
 html {
   color: #1c2940;
@@ -28,9 +35,9 @@ textarea {
   grid-template-columns: 224px minmax(0, 1fr);
 }
 :root app-root .shell .sidebar {
-  background: #111a2a;
-  color: #b7c3d8;
-  border-right: 1px solid #253148;
+  background: #ffffff;
+  color: #53637c;
+  border-right: 1px solid #dfe5ee;
   padding: 24px 14px 18px;
   gap: 26px;
 }
@@ -51,7 +58,7 @@ textarea {
   min-height: 43px;
   border-radius: 9px;
   padding: 0 13px;
-  color: #b1bfd5;
+  color: #53637c;
   font-size: 13px;
   font-weight: 500;
   gap: 11px;
@@ -62,16 +69,16 @@ textarea {
     color 0.15s;
 }
 :root app-root .sidebar .nav button:hover {
-  background: #1c2a42;
-  color: #fff;
+  background: #f1f5fc;
+  color: #24476f;
 }
 :root app-root .sidebar .nav button.activo {
-  background: #283a61;
-  border-color: #354c7a;
-  color: #fff;
+  background: #eaf1ff;
+  border-color: #dbe6ff;
+  color: #2357c9;
 }
 :root app-root .sidebar .nav button.activo svg {
-  color: #a5b4ff;
+  color: #2463eb;
 }
 :root app-root .sidebar .nav svg {
   width: 19px;
@@ -89,7 +96,7 @@ textarea {
 }
 :root app-root .sidebar .account {
   position: static;
-  border-color: #2a374e;
+  border-color: #e3e9f2;
   padding: 18px 2px 0;
   gap: 9px;
 }
@@ -102,27 +109,27 @@ textarea {
   min-width: 0;
 }
 :root app-root .sidebar .account strong {
-  color: #f0f4fd;
+  color: #25364e;
   font-size: 12px;
   font-weight: 550;
   line-height: 1.5;
 }
 :root app-root .sidebar .account small {
-  color: #a4b4ce;
+  color: #5e708d;
   font-size: 11px;
   line-height: 1.5;
 }
 :root app-root .sidebar .avatar {
-  background: #2b3e62;
-  color: #d4e1ff;
+  background: #eaf0fc;
+  color: #405ba0;
   border-radius: 50%;
   width: 32px;
   height: 32px;
   font-size: 11px;
 }
 :root app-root .sidebar .icon-button {
-  color: #c5d2e9;
-  background: #23334e;
+  color: #526987;
+  background: #edf2f9;
   width: 31px;
   height: 34px;
   border-radius: 8px;
@@ -153,12 +160,14 @@ textarea {
   text-transform: none;
 }
 :root app-root .workspace h1 {
+  font-family: Manrope, Inter, sans-serif;
   font-size: 28px;
   font-weight: 650;
   letter-spacing: -1px;
   color: #15243b;
 }
 :root app-root .workspace h2 {
+  font-family: Manrope, Inter, sans-serif;
   font-size: 17px;
   font-weight: 650;
   letter-spacing: -0.4px;
@@ -182,7 +191,7 @@ textarea {
   padding: 0 15px;
 }
 :root app-root .workspace .primary:hover {
-  background: #354fd2;
+  background: #1d4ed8;
 }
 :root app-root .workspace .secondary {
   background: #fff;
@@ -279,7 +288,7 @@ textarea {
   min-width: 180px;
 }
 :root app-root .workspace :is(button, input, select, textarea, summary, a):focus-visible {
-  outline: 3px solid #4661ec66;
+  outline: 3px solid #2463eb66;
   outline-offset: 3px;
 }
 :root app-root .workspace .pill,
@@ -485,7 +494,7 @@ textarea {
   width: 18px;
   height: 18px;
   border: 2px solid #e9edf8;
-  border-top-color: #4661ec;
+  border-top-color: #2463eb;
   border-radius: 50%;
   animation: acceso-girar 1s linear infinite;
 }
@@ -555,7 +564,7 @@ textarea {
     padding: 12px 18px;
     gap: 0;
     border-right: 0;
-    border-bottom: 1px solid #27354f;
+    border-bottom: 1px solid #dfe5ee;
   }
   :root app-root .sidebar .brand {
     min-height: 34px;
@@ -571,10 +580,10 @@ textarea {
     place-items: center;
     width: 32px;
     height: 32px;
-    border: 1px solid #34435c;
+    border: 1px solid #d9e2f0;
     border-radius: 8px;
-    background: #253550;
-    color: #d5e1f6;
+    background: #f2f5fa;
+    color: #506784;
     cursor: pointer;
   }
   :root app-root .sidebar .account {
@@ -627,7 +636,7 @@ textarea {
     font-weight: 650;
   }
   :root app-root .sidebar .nav button.activo svg {
-    color: #4661ec;
+    color: #2463eb;
   }
   :root app-root .sidebar .nav button:hover {
     background: #f0f3fa;

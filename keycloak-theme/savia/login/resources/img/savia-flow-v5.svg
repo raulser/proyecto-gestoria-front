@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 640" fill="none">
+<defs><linearGradient id="r" x1="100" y1="50" x2="490" y2="600" gradientUnits="userSpaceOnUse"><stop stop-color="#C5DAFF"/><stop offset="1" stop-color="#729CF1"/></linearGradient></defs>
+<g transform="translate(50 58) rotate(-12 230 260)">
+<path d="M160 70H330Q380 70 380 120V360Q380 410 330 410H160Q110 410 110 360V120Q110 70 160 70Z" stroke="#9CBDF7" stroke-opacity=".24"/>
+<path d="M70 120H260Q300 120 300 160V430Q300 470 260 470H70Q30 470 30 430V160Q30 120 70 120Z" fill="#FFFFFF" fill-opacity=".07" stroke="#A9C7FA" stroke-opacity=".36"/>
+<path d="M190 190H380Q420 190 420 230V500Q420 540 380 540H190Q150 540 150 500V230Q150 190 190 190Z" fill="url(#r)" fill-opacity=".15" stroke="#A9C7FA" stroke-opacity=".65"/>
+<path d="M150 255H300M150 385H300" stroke="#B8D3FF" stroke-opacity=".5"/>
+</g></svg>

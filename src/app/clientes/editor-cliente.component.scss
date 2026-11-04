@@ -2,7 +2,7 @@
   --tinta: #252638;
   --suave: #74758a;
   --linea: #e9eaf1;
-  --acento: #4862e7;
+  --acento: #2463eb;
   color: var(--tinta);
 }
 .fondo {
@@ -28,22 +28,17 @@
   max-height: 930px;
 }
 .cabecera {
-  padding: 28px 34px 22px;
+  padding: 22px 34px 18px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
-.eyebrow {
-  color: var(--acento);
-  font-size: 11px;
-  letter-spacing: 0.13em;
-  font-weight: 700;
-}
 h2 {
+  font-family: Manrope, Inter, sans-serif;
   font-size: 25px;
   font-weight: 650;
   letter-spacing: -0.8px;
-  margin: 8px 0;
+  margin: 0;
 }
 p {
   color: var(--suave);
@@ -213,7 +208,7 @@ input::placeholder {
 }
 input:focus,
 select:focus {
-  outline: 3px solid #4862e71c;
+  outline: 3px solid #2463eb1c;
   border-color: #9181e4;
 }
 input[type='checkbox'] {
@@ -415,16 +410,6 @@ button:disabled {
   max-width: 570px;
   margin: 8px auto;
 }
-.resumen-icono {
-  display: grid;
-  place-items: center;
-  margin: 0 auto 14px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #eff8f3;
-  color: #4b9276;
-}
 .resumen-alta > h3,
 .resumen-alta > p {
   text-align: center;
@@ -471,9 +456,6 @@ button:disabled {
   flex-shrink: 0;
 }
 @media (max-width: 700px) {
-  .cabecera p {
-    display: none;
-  }
   .alta {
     inset: 8px;
     border-radius: 14px;

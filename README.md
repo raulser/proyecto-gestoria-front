@@ -27,6 +27,10 @@ En móvil, la barra inferior mantiene cuatro destinos con etiquetas y agrupa las
 opciones secundarias en «Más». El área de contenido reserva el espacio de la barra
 y la zona segura del dispositivo. La marca comparte los mismos SVG en el portal
 y Keycloak; `scripts/generar-marca.ps1` permite regenerar sus contornos vectoriales.
+El generador usa `fonttools` como dependencia de desarrollo (`python -m pip install
+fonttools`). La tipografía [Manrope](https://github.com/google/fonts/tree/main/ofl/manrope)
+se sirve localmente con su licencia en `public/fonts/Manrope-OFL.txt`; el logo se
+exporta a contornos SVG y no necesita fuentes instaladas en el equipo.
 
 ## Vistas
 

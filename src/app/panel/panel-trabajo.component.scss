@@ -12,7 +12,7 @@ button {
 }
 button:focus-visible,
 select:focus-visible {
-  outline: 3px solid #4862e74d;
+  outline: 3px solid #2463eb4d;
   outline-offset: 3px;
 }
 .periodo {
@@ -802,7 +802,7 @@ select:focus-visible {
   font-size: 12px;
 }
 .archivos-cliente button:hover {
-  color: #4862e7;
+  color: #2463eb;
 }
 .archivos-cliente button > span {
   flex: 1;
