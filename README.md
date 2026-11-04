@@ -62,6 +62,14 @@ pnpm start -- --host 127.0.0.1 --port 4200
 
 La aplicación queda en `http://localhost:4200` y usa la API configurada en `public/config.js`. Para el recorrido integrado se recomienda arrancar toda la pila desde la raíz con `docker compose up --build` y acceder a `http://localhost:8090`. Keycloak utiliza `http://localhost:8091`.
 
+En Docker, `http://127.0.0.1:8090` redirige a `http://localhost:8090`, conservando
+la ruta, el puerto publicado y los parámetros del enlace. El acceso local usa
+`localhost` de forma consistente con las redirecciones autorizadas de Keycloak.
+Si la inicialización falla, se muestra un mensaje con reintento en lugar de dejar
+la pantalla vacía.
+El tema del acceso elimina los márgenes heredados del logo y compacta sus
+espaciados en ventanas de poca altura para mantener visible el botón de entrada.
+
 ## Calidad
 
 ```powershell

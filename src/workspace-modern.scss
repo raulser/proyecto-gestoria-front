@@ -749,3 +749,48 @@ textarea {
     animation: none;
   }
 }
+.estado-arranque {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  background: #fff;
+  color: #5e526e;
+  text-align: center;
+  font:
+    14px/1.6 Inter,
+    system-ui,
+    sans-serif;
+}
+.estado-arranque h1 {
+  margin: 8px 0 0;
+  font:
+    650 23px/1.3 Manrope,
+    Inter,
+    sans-serif;
+  color: #392b48;
+}
+.estado-arranque p {
+  margin: 0;
+  max-width: 380px;
+}
+.estado-arranque button {
+  border: 0;
+  border-radius: 9px;
+  padding: 0 18px;
+  min-height: 42px;
+  font:
+    600 13px Inter,
+    system-ui,
+    sans-serif;
+  color: white;
+  background: var(--brand-primary, #6b3fd1);
+  cursor: pointer;
+}
+.estado-arranque button:focus-visible {
+  outline: 3px solid #6b3fd166;
+  outline-offset: 3px;
+}

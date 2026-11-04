@@ -29,6 +29,18 @@ async function comprobarAccesibilidad(page: Page): Promise<void> {
   ).toEqual([]);
 }
 
+test('el login mantiene el formulario y el botón visibles en una ventana baja', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1366, height: 620 });
+  await page.goto('/');
+  await expect(page.getByLabel('Correo o usuario')).toBeInViewport({ ratio: 1 });
+  await expect(page.getByLabel('Contraseña', { exact: true })).toBeInViewport({ ratio: 1 });
+  await expect(page.getByRole('button', { name: 'Iniciar sesión', exact: true })).toBeInViewport({
+    ratio: 1,
+  });
+});
+
 test('administración: panel de trabajo e importación validada', async ({ page }) => {
   await iniciarSesion(page, 'admin');
   await expect(page.getByRole('heading', { name: 'Panel de trabajo' })).toBeVisible();

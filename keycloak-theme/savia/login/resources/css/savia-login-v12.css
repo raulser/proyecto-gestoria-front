@@ -1,0 +1,668 @@
+@font-face {
+  font-family: Manrope;
+  src: url('../fonts/Manrope.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  src: url('../fonts/Inter.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  --pf-v5-global--primary-color--100: #6b3fd1;
+  --pf-v5-global--link--Color: #6b3fd1;
+}
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #fff;
+  color: #202839;
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+* {
+  box-sizing: border-box;
+}
+body,
+#keycloak-bg {
+  background: #fff;
+}
+.pf-v5-c-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  padding: 24px;
+  background: #fff;
+}
+.pf-v5-c-login::before {
+  display: none;
+}
+.pf-v5-c-login__container {
+  display: grid;
+  grid-template-areas: none;
+  grid-template-rows: 1fr;
+  grid-template-columns: 44% minmax(0, 1fr);
+  width: 100%;
+  max-width: 1600px;
+  min-height: calc(100svh - 48px);
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+}
+.savia-identity {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  background: #f3e8f0 url('../img/savia-ribbon-v6.png') center / cover no-repeat;
+  border: 0;
+  border-radius: 24px;
+}
+.pf-v5-c-login__main {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 28px clamp(28px, 6vw, 100px);
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.pf-v5-c-login__main-header,
+.pf-v5-c-login__main-body,
+.pf-v5-c-login__header,
+.pf-v5-c-login__main-footer {
+  width: 100%;
+  max-width: 410px;
+  margin-inline: auto;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+.pf-v5-c-login__header {
+  position: static;
+  display: block;
+  margin-bottom: 34px;
+}
+#kc-header-wrapper {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  font-size: 0;
+  letter-spacing: 0;
+  background: none;
+  width: 168px;
+  height: 48px;
+}
+#kc-header-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left;
+}
+.pf-v5-c-login__main-header {
+  display: block;
+  margin-bottom: 34px;
+  border: 0;
+}
+#kc-page-title {
+  font-family: Manrope, Inter, sans-serif;
+  text-align: left;
+  margin: 0;
+  color: #392b48;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -1px;
+}
+.savia-login-caption {
+  font-size: 13px;
+  color: #71647f;
+  line-height: 1.7;
+  margin: 14px 0 0;
+}
+.savia-login-caption > span {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: #6b3fd1;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+#kc-form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.pf-v5-c-form__group {
+  gap: 8px;
+}
+.pf-v5-c-form__label,
+.pf-v5-c-form__label-text {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 550;
+  color: #525f75;
+  line-height: 1.5;
+}
+.pf-v5-c-form-control {
+  min-height: 52px;
+  box-shadow: none;
+  border-radius: 10px;
+  background: #fbfafc;
+  --pf-v5-c-form-control--before--BorderColor: #e5deed;
+  --pf-v5-c-form-control--before--BorderRadius: 10px;
+}
+.pf-v5-c-form-control::before {
+  border: 1px solid #e5deed;
+  border-radius: 10px;
+}
+.pf-v5-c-form-control::after {
+  display: none;
+}
+.pf-v5-c-form-control > input {
+  font:
+    400 15px/1.5 Inter,
+    system-ui,
+    sans-serif;
+  min-height: 52px;
+  padding: 13px 15px;
+  color: #27334a;
+  background: transparent;
+  border: 0;
+  outline: none;
+  border-radius: 10px;
+}
+.pf-v5-c-input-group {
+  border: 1px solid #e5deed;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fbfafc;
+  box-shadow: none;
+}
+.pf-v5-c-input-group .pf-v5-c-form-control {
+  background: transparent;
+}
+.pf-v5-c-input-group .pf-v5-c-form-control::before {
+  border: 0;
+}
+.pf-v5-c-input-group .pf-v5-c-button {
+  width: 48px;
+  min-height: 50px;
+  background: transparent;
+  border: 0;
+  color: #8e99ae;
+}
+.pf-v5-c-input-group .pf-v5-c-button::after {
+  border: 0;
+}
+.pf-v5-c-input-group .pf-v5-c-button:hover {
+  background: #f3eef8;
+  color: #7043b4;
+}
+.pf-v5-c-input-group:focus-within,
+.pf-v5-c-form__group > .pf-v5-c-form-control:focus-within {
+  outline: 3px solid #6b3fd11c;
+  outline-offset: 1px;
+  border-color: #b198db;
+}
+.pf-v5-c-form-control:focus-within::before {
+  border-color: #b198db;
+}
+.pf-v5-c-check {
+  align-items: center;
+  min-height: 28px;
+}
+.pf-v5-c-check__input {
+  width: 14px;
+  height: 14px;
+  accent-color: #6b3fd1;
+}
+.pf-v5-c-check__label {
+  font-size: 11px;
+  color: #78859a;
+  font-weight: 400;
+}
+.pf-v5-c-form__helper-text > .pf-v5-c-helper-text {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.pf-v5-c-helper-text__item,
+.pf-v5-c-helper-text__item a {
+  font-size: 11px;
+}
+.pf-v5-c-form__group > [id^='input-error-container-']:empty {
+  display: none;
+}
+#kc-login,
+.pf-v5-c-button.pf-m-primary {
+  background: #6b3fd1;
+  border: 1px solid #6b3fd1;
+  border-radius: 10px;
+  min-height: 50px;
+  font:
+    550 13px Inter,
+    system-ui,
+    sans-serif;
+  color: white;
+  box-shadow: 0 3px 5px #314a971a;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+#kc-login:hover,
+.pf-v5-c-button.pf-m-primary:hover {
+  background: #5932b6;
+  transform: translateY(-1px);
+}
+.pf-v5-c-button::after {
+  border-radius: 10px;
+}
+#kc-login:disabled {
+  background: #c2b0df;
+  cursor: wait;
+  transform: none;
+}
+a {
+  color: #7043b4;
+  text-decoration: none;
+  font-weight: 550;
+}
+a:hover {
+  text-decoration: underline;
+}
+button:focus-visible,
+input:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #6b3fd14d;
+  outline-offset: 3px;
+}
+.savia-demo-accounts {
+  margin-top: 32px;
+  border-top: 1px solid #edf0f6;
+  padding-top: 24px;
+}
+.savia-demo-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.savia-demo-heading h2 {
+  font-size: 11px;
+  font-weight: 550;
+  color: #7a879c;
+  margin: 0;
+}
+.savia-demo-heading > span {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #8b99b0;
+  border: 1px solid #e6ebf4;
+  padding: 4px 7px;
+  border-radius: 5px;
+}
+.savia-profiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 13px;
+}
+.savia-profiles button {
+  font:
+    500 11px Inter,
+    system-ui,
+    sans-serif;
+  color: #64728a;
+  border: 1px solid #e5deed;
+  background: white;
+  min-height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.savia-profiles button:hover {
+  background: #faf7fd;
+  border-color: #c4afe5;
+  color: #7043b4;
+}
+.savia-profiles button[aria-pressed='true'] {
+  background: #f0eafa;
+  border-color: #b198db;
+  color: #6238b7;
+}
+.savia-demo-status {
+  font-size: 10px;
+  color: #8e99ac;
+  line-height: 1.6;
+  margin: 12px 0 0;
+  min-height: 16px;
+}
+.savia-demo-accounts details {
+  font-size: 10px;
+  color: #8794a9;
+  margin-top: 10px;
+}
+.savia-demo-accounts summary {
+  display: inline-block;
+  cursor: pointer;
+  list-style: none;
+  padding: 4px 0;
+}
+.savia-demo-accounts summary::after {
+  content: ' +';
+  margin-left: 5px;
+}
+.savia-demo-accounts details[open] summary::after {
+  content: ' −';
+}
+.savia-credentials {
+  display: grid;
+  gap: 9px;
+  margin-top: 10px;
+  padding: 12px;
+  background: #faf7fd;
+  border-radius: 8px;
+}
+.savia-credentials > div {
+  display: grid;
+  gap: 4px;
+}
+.savia-credentials strong {
+  font-size: 10px;
+  font-weight: 600;
+  color: #52627e;
+}
+.savia-credentials code {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #7889a4;
+  overflow-wrap: anywhere;
+}
+.pf-v5-c-alert {
+  border-radius: 9px;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+.pf-v5-c-form-control.pf-m-error::before,
+.pf-v5-c-input-group:has(input[aria-invalid='true']) {
+  border-color: #d48191;
+}
+.pf-v5-c-login__main-footer:empty {
+  display: none;
+}
+.pf-v5-c-login__main-footer-band {
+  background: none;
+  border: 0;
+  padding-inline: 0;
+}
+.pf-v5-c-login__main-footer {
+  margin-top: 20px;
+}
+#kc-info {
+  padding: 0;
+  margin-top: 18px;
+  background: none;
+  border: 0;
+}
+#kc-info-wrapper {
+  padding: 0;
+  text-align: left;
+}
+#kc-info-wrapper > span {
+  font-size: 12px !important;
+  color: #8490a5 !important;
+  line-height: 1.7;
+}
+#kc-reset-password-form .pf-m-secondary {
+  border: 0;
+  background: none;
+  color: #7043b4;
+  min-height: 44px;
+  font-size: 12px;
+}
+#kc-reset-password-form .pf-m-secondary::after {
+  border: 0;
+}
+#kc-attempted-username {
+  overflow-wrap: anywhere;
+}
+#reset-login .kc-tooltip-text {
+  display: none;
+}
+#kc-form,
+#kc-form-wrapper,
+.pf-v5-c-form__group,
+.pf-v5-c-input-group__item {
+  min-width: 0;
+}
+@media (min-width: 1500px) {
+  .pf-v5-c-login__main {
+    padding-inline: 110px;
+  }
+  .savia-identity {
+    padding: 0;
+  }
+}
+@media (max-width: 950px) {
+  .pf-v5-c-login {
+    padding: 16px;
+  }
+  .pf-v5-c-login__container {
+    grid-template-columns: 40% minmax(0, 1fr);
+    min-height: calc(100svh - 32px);
+  }
+  .savia-identity {
+    padding: 0;
+    border-radius: 20px;
+  }
+  .pf-v5-c-login__main {
+    padding: 36px;
+  }
+  #kc-page-title {
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 30px;
+  }
+}
+@media (max-width: 700px) {
+  .pf-v5-c-login {
+    display: block;
+    padding: 0;
+  }
+  .pf-v5-c-login__container {
+    display: block;
+    min-height: 100svh;
+  }
+  .savia-identity {
+    display: none;
+  }
+  .pf-v5-c-login__main {
+    padding: 32px 28px 40px;
+    max-width: 480px;
+    margin: auto;
+  }
+  .pf-v5-c-login__header {
+    display: block;
+  }
+  .pf-v5-c-login__main-header {
+    margin-bottom: 30px;
+  }
+  #kc-header-wrapper {
+    width: 130px;
+    height: 40px;
+  }
+  #kc-page-title {
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 31px;
+  }
+  .pf-v5-c-form-control > input {
+    font-size: 16px;
+  }
+  .savia-demo-accounts {
+    margin-top: 28px;
+  }
+  .savia-profiles button {
+    min-height: 42px;
+  }
+  .savia-login-caption {
+    font-size: 12px;
+  }
+  .pf-v5-c-login__main-footer-band {
+    padding: 0;
+  }
+}
+@media (max-width: 360px) {
+  .pf-v5-c-login__main {
+    padding-inline: 22px;
+  }
+  .savia-profiles {
+    gap: 5px;
+  }
+  .savia-profiles button {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+/* Reset inherited Keycloak header spacing before adapting to viewport height. */
+#kc-header {
+  margin: 0 auto 28px;
+  padding: 0;
+  height: auto;
+}
+#kc-login {
+  margin: 0;
+  width: 100%;
+}
+.savia-demo-status:empty {
+  display: none;
+}
+.pf-v5-c-login__main-footer[hidden] {
+  display: none;
+}
+@media (min-width: 701px) and (max-height: 780px) {
+  .pf-v5-c-login {
+    padding: 12px;
+  }
+  .pf-v5-c-login__container {
+    min-height: calc(100svh - 24px);
+  }
+  .pf-v5-c-login__main {
+    padding-block: 16px;
+  }
+  #kc-header {
+    margin-bottom: 20px;
+  }
+  #kc-header-wrapper {
+    width: 148px;
+    height: 40px;
+  }
+  .pf-v5-c-login__main-header {
+    margin-bottom: 20px;
+  }
+  #kc-page-title {
+    font-size: 28px;
+  }
+  .savia-login-caption {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  #kc-form-login {
+    gap: 14px;
+  }
+  .pf-v5-c-form__group {
+    gap: 6px;
+  }
+  .pf-v5-c-form-control,
+  .pf-v5-c-form-control > input {
+    min-height: 44px;
+  }
+  .pf-v5-c-form-control > input {
+    padding-block: 10px;
+    font-size: 14px;
+  }
+  .pf-v5-c-input-group .pf-v5-c-button {
+    min-height: 42px;
+    width: 42px;
+  }
+  .pf-v5-c-check {
+    min-height: 24px;
+  }
+  #kc-login,
+  .pf-v5-c-button.pf-m-primary {
+    min-height: 44px;
+  }
+  .savia-demo-accounts {
+    margin-top: 20px;
+    padding-top: 14px;
+  }
+  .savia-profiles {
+    margin-top: 10px;
+  }
+  .savia-profiles button {
+    min-height: 34px;
+  }
+  .savia-demo-status {
+    margin-top: 8px;
+  }
+  .savia-demo-accounts details {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 700px) {
+  #kc-header {
+    margin-bottom: 24px;
+  }
+}
+@media (min-width: 701px) and (max-height: 540px) {
+  .pf-v5-c-login__main {
+    align-self: start;
+    padding-block: 12px;
+  }
+  #kc-header {
+    margin-bottom: 12px;
+  }
+  .pf-v5-c-login__main-header {
+    margin-bottom: 14px;
+  }
+  .savia-demo-accounts {
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+}
+@media (max-width: 700px) and (max-height: 780px) {
+  .pf-v5-c-login__main {
+    padding-block: 24px 32px;
+  }
+  .pf-v5-c-login__main-header {
+    margin-bottom: 24px;
+  }
+  .savia-demo-accounts {
+    margin-top: 24px;
+  }
+}
