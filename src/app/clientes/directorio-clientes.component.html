@@ -53,7 +53,7 @@
           [class.seleccionada]="seleccionado?.id === cliente.id"
           [attr.aria-pressed]="seleccionado?.id === cliente.id"
           [attr.aria-label]="'Ver ficha de ' + cliente.nombre"
-          (click)="seleccionadoId = cliente.id"
+          (click)="seleccionar(cliente.id)"
         >
           <span class="identidad"
             ><span class="avatar" [attr.data-color]="cliente.id % 4">{{
@@ -109,7 +109,7 @@
     <div class="importar"><ng-content /></div>
   </section>
   @if (seleccionado; as cliente) {
-    <aside class="ficha" aria-label="Ficha rápida del cliente">
+    <aside #ficha class="ficha" tabindex="-1" aria-label="Ficha rápida del cliente">
       <span class="sobre">VISTA RÁPIDA</span>
       <span class="avatar grande" [attr.data-color]="cliente.id % 4">{{
         iniciales(cliente.nombre)

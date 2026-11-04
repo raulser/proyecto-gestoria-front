@@ -238,6 +238,8 @@ export class Aplicacion implements OnInit {
   token = this.autenticacion.token;
   usuarioActual: RespuestaUsuario | null = null;
   vistaActiva: Vista = 'panel';
+  menuMovilAbierto = false;
+  readonly vistasMenuPrincipal: Vista[] = ['panel', 'clientes', 'solicitudes', 'documentos'];
   trimestreActivo = Math.floor(new Date().getMonth() / 3) + 1;
   anioSeleccionado = new Date().getFullYear();
   terminoBusqueda = '';
@@ -428,6 +430,7 @@ export class Aplicacion implements OnInit {
   }
 
   cambiarVista(vista: Vista): void {
+    this.menuMovilAbierto = false;
     this.vistaActiva = vista;
     if (vista === 'clientes' && !this.esCliente()) this.cerrarObligaciones();
     if (vista === 'clientes' && this.esCliente() && this.clientes[0]) {
@@ -2663,7 +2666,7 @@ export class Aplicacion implements OnInit {
 
   tituloVista(): string {
     const titulos: Record<Vista, string> = {
-      panel: this.esCliente() ? 'Mi espacio documental' : 'Tu espacio de trabajo',
+      panel: this.esCliente() ? 'Mi espacio documental' : 'Panel de trabajo',
       clientes: this.esCliente() ? 'Mis datos y fechas fiscales' : 'Clientes',
       documentos: this.esCliente() ? 'Mis archivos' : 'Repositorio documental',
       solicitudes: this.esCliente() ? 'Lo que debo entregar' : 'Peticiones de documentación',
@@ -2673,6 +2676,22 @@ export class Aplicacion implements OnInit {
       configuracion: 'Ayuda, seguridad y privacidad',
     };
     return titulos[this.vistaActiva];
+  }
+
+  elementosMenuSecundarios() {
+    return this.elementosMenuVisibles().filter(
+      (item) => !this.vistasMenuPrincipal.includes(item.view),
+    );
+  }
+
+  etiquetaMenuMovil(vista: Vista): string {
+    const etiquetas: Partial<Record<Vista, string>> = {
+      panel: 'Inicio',
+      clientes: this.esCliente() ? 'Expediente' : 'Clientes',
+      solicitudes: 'Entregas',
+      documentos: this.esCliente() ? 'Archivos' : 'Documentos',
+    };
+    return etiquetas[vista] ?? '';
   }
 
   nombrePersona(nombre: string): string {

@@ -39,9 +39,7 @@
           >{{ esCliente ? 'Documentos revisados' : 'Pendientes de revisión'
           }}<i class="ambar" aria-hidden="true">↗</i></span
         ><strong>{{
-          esCliente
-            ? (panel.totales.documentosRevisados ?? 0)
-            : (panel.totales.documentosRecibidos ?? 0)
+          esCliente ? panel.totales.documentosRevisados : panel.totales.documentosRecibidos
         }}</strong
         ><small>{{ esCliente ? 'Revisados por tu gestoría' : 'Documentación recibida' }}</small>
       </button>
@@ -256,16 +254,27 @@
               <h2>El ejercicio, de un vistazo</h2>
             </div>
           </header>
-          <div class="barras">
-            @for (t of [1, 2, 3, 4]; track t) {
-              <div>
-                <span>{{ trimestre(t) }}</span>
-                <div class="columna"><i [style.height.%]="Math.max(2, altura(t))"></i></div>
-                <small>T{{ t }}</small>
-              </div>
-            }
-          </div>
-          <p class="nota-grafico">Documentos aportados con periodo trimestral o mensual.</p>
+          @if (tieneActividadTrimestral) {
+            <div class="barras">
+              @for (t of [1, 2, 3, 4]; track t) {
+                <div>
+                  <span>{{ trimestre(t) }}</span>
+                  <div class="columna"><i [style.height.%]="Math.max(2, altura(t))"></i></div>
+                  <small>T{{ t }}</small>
+                </div>
+              }
+            </div>
+            <p class="nota-grafico">Documentos aportados con periodo trimestral o mensual.</p>
+          } @else {
+            <div class="actividad-vacia">
+              <div class="grafico-vacio" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <strong>Aún no hay actividad trimestral</strong>
+              <p>
+                Aquí verás la actividad cuando incorpores documentos con periodo mensual o
+                trimestral.
+              </p>
+            </div>
+          }
           <div class="facturas-resumen">
             <button type="button" (click)="facturas.emit('FACTURA_EMITIDA')">
               <span>Facturas emitidas</span><strong>{{ emitidas }} <i>↗</i></strong></button

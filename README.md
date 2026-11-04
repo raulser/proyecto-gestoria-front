@@ -23,6 +23,11 @@ El directorio tiene búsqueda por nombre, NIF o correo, filtros de estado y una
 ficha lateral con acceso a documentos, obligaciones y configuración. Las vistas
 de panel, directorio y alta se cargan cuando se necesitan.
 
+En móvil, la barra inferior mantiene cuatro destinos con etiquetas y agrupa las
+opciones secundarias en «Más». El área de contenido reserva el espacio de la barra
+y la zona segura del dispositivo. La marca comparte los mismos SVG en el portal
+y Keycloak; `scripts/generar-marca.ps1` permite regenerar sus contornos vectoriales.
+
 ## Vistas
 
 - Panel con métricas, notificaciones, agenda fiscal y estado trimestral.

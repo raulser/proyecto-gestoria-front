@@ -26,7 +26,7 @@
 
 @if (!usuarioActual) {
   <main class="acceso-puente" aria-live="polite">
-    <img src="savia-logo-v3.svg" width="156" height="48" alt="Savia" />
+    <img src="savia-logo-v4.svg" width="148" height="44" alt="Savia" />
     @if (error) {
       <p role="alert">{{ error }}</p>
       <button type="button" (click)="iniciarSesion()">Volver a intentar</button>
@@ -39,7 +39,7 @@
   <div class="shell" [attr.inert]="editorClienteAbierto ? '' : null">
     <aside class="sidebar">
       <div class="brand">
-        <img src="savia-logo-light-v3.svg" width="132" height="38" alt="Savia" />
+        <img src="savia-logo-light-v4.svg" width="126" height="38" alt="Savia" />
         <button
           type="button"
           class="salir-movil"
@@ -50,11 +50,13 @@
         </button>
       </div>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegación principal">
         @for (item of elementosMenuVisibles(); track item.view) {
           <button
             type="button"
             [class.activo]="vistaActiva === item.view"
+            [class.nav-secundaria]="!vistasMenuPrincipal.includes(item.view)"
+            [attr.aria-current]="vistaActiva === item.view ? 'page' : null"
             [attr.aria-label]="item.label"
             [attr.title]="item.label"
             (click)="cambiarVista(item.view)"
@@ -76,10 +78,52 @@
                 <svg lucideSettings size="18"></svg>
               }
             }
-            <span>{{ item.label }}</span>
+            <span class="nav-label">{{ item.label }}</span>
+            <span class="nav-mobile-label">{{ etiquetaMenuMovil(item.view) }}</span>
           </button>
         }
+        <button
+          type="button"
+          class="nav-mas"
+          aria-label="Más"
+          [class.activo]="menuMovilAbierto || !vistasMenuPrincipal.includes(vistaActiva)"
+          [attr.aria-expanded]="menuMovilAbierto"
+          aria-controls="menu-movil"
+          (click)="menuMovilAbierto = !menuMovilAbierto"
+        >
+          <svg lucideSettings size="18"></svg><span>Más</span>
+        </button>
       </nav>
+
+      @if (menuMovilAbierto) {
+        <section
+          class="menu-movil"
+          id="menu-movil"
+          aria-label="Más opciones"
+          (keydown.escape)="menuMovilAbierto = false"
+        >
+          <div>
+            <strong>Tu espacio</strong
+            ><button
+              type="button"
+              aria-label="Cerrar más opciones"
+              (click)="menuMovilAbierto = false"
+            >
+              Cerrar
+            </button>
+          </div>
+          @for (item of elementosMenuSecundarios(); track item.view) {
+            <button
+              type="button"
+              [class.actual]="vistaActiva === item.view"
+              (click)="cambiarVista(item.view)"
+            >
+              <span>{{ item.label }}</span
+              ><span aria-hidden="true">↗</span>
+            </button>
+          }
+        </section>
+      }
 
       <div class="account">
         <span class="avatar">{{ inicialesNombre(usuarioActual.nombre) }}</span>
@@ -106,7 +150,12 @@
         </div>
 
         <div class="topbar-actions" [hidden]="vistaActiva === 'clientes' && !esCliente()">
-          <button type="button" class="primary" (click)="cambiarVista('subir')">
+          <button
+            type="button"
+            class="primary"
+            [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
+            (click)="cambiarVista('subir')"
+          >
             <svg lucideFileUp size="17"></svg>
             <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
           </button>
@@ -219,15 +268,19 @@
         </details>
         @if (guiaVisible) {
           <details class="panel-secundario">
-            <summary>
+            <summary #resumenGuia>
               {{ esCliente() ? 'Cómo preparar tus entregas' : 'Configurar mi gestoría' }}
               <span>Guía de primeros pasos</span>
             </summary>
-            <app-guia-inicial
-              [rol]="usuarioActual.rol"
-              (cerrar)="cerrarGuia()"
-              (navegar)="irDesdeGuia($event)"
-            />
+            @defer (on interaction(resumenGuia)) {
+              <app-guia-inicial
+                [rol]="usuarioActual.rol"
+                (cerrar)="cerrarGuia()"
+                (navegar)="irDesdeGuia($event)"
+              />
+            } @error {
+              <p>No se pudo cargar la guía. <a href="/">Recargar Savia</a></p>
+            }
           </details>
         }
       }

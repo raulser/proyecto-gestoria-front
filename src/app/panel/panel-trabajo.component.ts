@@ -204,7 +204,7 @@ export class PanelTrabajoComponent {
     const max = Math.max(1, ...[1, 2, 3, 4].map((t) => this.trimestre(t)));
     return (this.trimestre(numero) * 100) / max;
   }
-  cambiarAnio(event: Event) {
-    this.anioChange.emit(Number((event.target as HTMLSelectElement).value));
+  get tieneActividadTrimestral(): boolean {
+    return [1, 2, 3, 4].some((t) => this.trimestre(t) > 0);
   }
 }

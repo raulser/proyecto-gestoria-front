@@ -224,6 +224,23 @@ describe('Aplicacion', () => {
     );
   });
 
+  it('conserva los permisos en Más y cierra el menú al navegar', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('CLIENTE');
+    expect(app.elementosMenuSecundarios().map((item) => item.view)).toEqual([
+      'subir',
+      'configuracion',
+    ]);
+    app.usuarioActual = usuario('ADMIN');
+    expect(app.elementosMenuSecundarios().map((item) => item.view)).toContain('equipo');
+    app.menuMovilAbierto = true;
+    vi.stubGlobal('scrollTo', vi.fn());
+    app.cambiarVista('plan');
+    expect(app.menuMovilAbierto).toBe(false);
+    expect(app.vistaActiva).toBe('plan');
+    vi.unstubAllGlobals();
+  });
+
   it('valida claves temporales con la politica de produccion', () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
 

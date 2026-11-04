@@ -3,6 +3,9 @@
   color: #202638;
   font-family: Inter, system-ui, sans-serif;
 }
+.ficha {
+  scroll-margin-top: 18px;
+}
 button,
 input {
   font: inherit;
@@ -41,7 +44,7 @@ button:disabled {
   font-size: 11px;
   font-weight: 650;
   letter-spacing: 0.12em;
-  color: #62718b;
+  color: #526582;
 }
 .cabecera h2 {
   font-size: 22px;
@@ -52,7 +55,7 @@ button:disabled {
 }
 .cabecera h2 > span {
   font-size: 11px;
-  font-weight: 550;
+  font-weight: 600;
   letter-spacing: 0;
   border: 1px solid #dfe4ec;
   background: white;
@@ -64,7 +67,7 @@ button:disabled {
 }
 .cabecera p {
   font-size: 13px;
-  color: #7a8395;
+  color: #5e6f88;
   margin: 0;
   line-height: 1.6;
 }
@@ -114,7 +117,7 @@ button:disabled {
 .herramientas nav button {
   background: none;
   border: 0;
-  color: #62718b;
+  color: #526582;
   font-size: 12px;
   padding: 8px 12px;
   border-radius: 7px;
@@ -137,7 +140,7 @@ button:disabled {
 .busqueda > span {
   font-size: 23px;
   line-height: 1;
-  color: #62718b;
+  color: #526582;
 }
 .busqueda input {
   width: 100%;
@@ -150,7 +153,7 @@ button:disabled {
   font-size: 12px;
 }
 .busqueda input::placeholder {
-  color: #62718b;
+  color: #526582;
 }
 .tabla {
   background: white;
@@ -171,7 +174,7 @@ button:disabled {
   font-size: 10px;
   font-weight: 650;
   letter-spacing: 0.07em;
-  color: #62718b;
+  color: #526582;
   min-height: 42px;
   background: #fcfcfd;
   border-bottom: 1px solid #edf0f5;
@@ -222,7 +225,7 @@ button:disabled {
 .identidad small {
   display: block;
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
   margin-top: 6px;
 }
 .avatar {
@@ -243,7 +246,7 @@ button:disabled {
 }
 .avatar[data-color='2'] {
   background: #eee8f9;
-  color: #62718b;
+  color: #526582;
 }
 .avatar[data-color='3'] {
   background: #fff0df;
@@ -254,14 +257,14 @@ button:disabled {
   color: #758097;
 }
 .entregas b {
-  font-weight: 550;
-  color: #62718b;
+  font-weight: 600;
+  color: #526582;
   background: #fff5e3;
   border-radius: 5px;
   padding: 5px 7px;
 }
 .muted {
-  color: #62718b;
+  color: #526582;
 }
 .estado {
   font-size: 11px;
@@ -277,7 +280,7 @@ button:disabled {
   background: currentColor;
 }
 .estado.archivado {
-  color: #62718b;
+  color: #526582;
 }
 .lista > footer {
   display: flex;
@@ -285,7 +288,7 @@ button:disabled {
   gap: 15px;
   padding: 14px 4px;
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
 }
 .importar {
   margin-top: 14px;
@@ -330,7 +333,7 @@ button:disabled {
 }
 .ficha > p {
   font-size: 12px;
-  color: #62718b;
+  color: #526582;
   line-height: 1.7;
   margin: 0;
 }
@@ -340,7 +343,7 @@ button:disabled {
   margin: 18px 0 22px;
 }
 .contacto a {
-  color: #6f7d95;
+  color: #526582;
   text-decoration: none;
   font-size: 12px;
   overflow-wrap: anywhere;
@@ -366,12 +369,12 @@ button:disabled {
 }
 .resumen strong {
   font-size: 24px;
-  font-weight: 550;
+  font-weight: 600;
   color: #3b4760;
 }
 .resumen span {
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
 }
 .accesos {
   display: grid;
@@ -395,12 +398,12 @@ button:disabled {
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: #43516a;
+  color: #2e4566;
 }
 .accesos small {
   display: block;
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
   margin-top: 5px;
 }
 .plan {
@@ -410,12 +413,12 @@ button:disabled {
 .plan > strong {
   display: block;
   font-size: 13px;
-  font-weight: 550;
+  font-weight: 600;
   margin: 10px 0 6px;
 }
 .plan p {
   font-size: 12px;
-  color: #62718b;
+  color: #526582;
   line-height: 1.7;
   margin: 0 0 14px;
 }
@@ -426,7 +429,7 @@ button:disabled {
 }
 .otras {
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
   margin-top: 20px;
 }
 .otras summary {

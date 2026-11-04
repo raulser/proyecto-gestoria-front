@@ -31,7 +31,7 @@ async function comprobarAccesibilidad(page: Page): Promise<void> {
 
 test('administración: panel de trabajo e importación validada', async ({ page }) => {
   await iniciarSesion(page, 'admin');
-  await expect(page.getByRole('heading', { name: 'Tu espacio de trabajo' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Panel de trabajo' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Almacenamiento' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Clientes', exact: true }).click();
@@ -86,11 +86,18 @@ test('cliente: entiende la entrega y conserva acceso a su expediente', async ({ 
   await comprobarAccesibilidad(page);
 });
 
-test('@mobile móvil: todos los iconos del menú y el cierre de sesión tienen nombre', async ({
+test('@mobile móvil: muestra etiquetas y mantiene las opciones secundarias accesibles', async ({
   page,
 }) => {
   await iniciarSesion(page, 'admin');
   await expect(page.getByRole('button', { name: 'Panel', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Documentos', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Cerrar sesión' })).toBeVisible();
+  await page.getByRole('button', { name: 'Más', exact: true }).click();
+  await page
+    .getByRole('region', { name: 'Más opciones' })
+    .getByRole('button', { name: 'Plan y uso' })
+    .click();
+  await expect(page.getByRole('heading', { name: 'Plan y consumo', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Más opciones' })).toHaveCount(0);
 });

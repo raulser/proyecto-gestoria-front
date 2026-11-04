@@ -23,14 +23,14 @@ select:focus-visible {
   margin: -9px 0 24px;
 }
 .periodo p {
-  color: #62718b;
+  color: #526582;
   font-size: 12px;
   line-height: 1.6;
   margin: 0;
 }
 .periodo label {
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -48,15 +48,15 @@ select:focus-visible {
 .indicadores {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 22px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 .indicadores > button {
   text-align: left;
   border: 1px solid #e1e7f1;
   border-radius: 11px;
   background: #fff;
-  padding: 18px 19px;
+  padding: 16px 18px;
   box-shadow: 0 2px 3px #22304a03;
   transition:
     border-color 0.15s,
@@ -65,7 +65,7 @@ select:focus-visible {
   min-width: 0;
 }
 .indicadores > button:hover {
-  border-color: #62718b;
+  border-color: #526582;
   transform: translateY(-2px);
 }
 .indicadores > button > span {
@@ -74,7 +74,7 @@ select:focus-visible {
   justify-content: space-between;
   gap: 8px;
   font-size: 12px;
-  color: #7d8ba3;
+  color: #50617c;
 }
 .indicadores i {
   font-size: 15px;
@@ -85,33 +85,33 @@ select:focus-visible {
   place-items: center;
   border-radius: 8px;
   background: #edf2ff;
-  color: #6889dc;
+  color: #4862d4;
 }
 .indicadores .violeta {
   background: #f2edfb;
-  color: #62718b;
+  color: #526582;
 }
 .indicadores .ambar {
   background: #fff3df;
-  color: #c79d63;
+  color: #95651d;
 }
 .indicadores .menta {
   background: #e9f6f0;
-  color: #73a88f;
+  color: #2f7d64;
 }
 .indicadores > button > strong {
   display: block;
-  font-size: 31px;
-  font-weight: 550;
+  font-size: 32px;
+  font-weight: 600;
   letter-spacing: -1px;
   margin: 9px 0 8px;
-  color: #374760;
+  color: #1e3150;
   line-height: 1.2;
 }
 .indicadores > button > small {
   display: block;
-  font-size: 10px;
-  color: #62718b;
+  font-size: 11px;
+  color: #526582;
   line-height: 1.6;
 }
 .indicadores b {
@@ -121,7 +121,7 @@ select:focus-visible {
 .contenido-panel {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
-  gap: 20px;
+  gap: 18px;
   align-items: stretch;
 }
 .tarjeta {
@@ -140,24 +140,24 @@ select:focus-visible {
   padding: 18px 22px 14px;
 }
 .sobre {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 650;
   letter-spacing: 0.11em;
-  color: #62718b;
+  color: #526582;
 }
 .tarjeta h2 {
-  font-size: 15px;
-  letter-spacing: -0.3px;
+  font-size: 17px;
+  letter-spacing: -0.4px;
   font-weight: 600;
   margin: 7px 0 0;
   line-height: 1.5;
-  color: #38475f;
+  color: #223651;
 }
 .tarjeta h2 > span {
   font-size: 10px;
-  font-weight: 550;
+  font-weight: 600;
   border: 1px solid #e4eaf5;
-  color: #62718b;
+  color: #526582;
   padding: 3px 6px;
   margin-left: 5px;
   border-radius: 5px;
@@ -167,8 +167,8 @@ select:focus-visible {
   border: 0;
   background: none;
   padding: 3px 0;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 550;
   color: #526bc1;
   white-space: nowrap;
 }
@@ -183,7 +183,7 @@ select:focus-visible {
   border-top: 1px solid #edf1f7;
   background: #fcfdff;
   font-size: 10px;
-  color: #62718b;
+  color: #526582;
 }
 .proximas {
   display: flex;
@@ -224,7 +224,7 @@ select:focus-visible {
 }
 .fecha strong {
   font-size: 15px;
-  font-weight: 550;
+  font-weight: 600;
   line-height: 1.2;
 }
 .fecha small {
@@ -243,15 +243,15 @@ select:focus-visible {
 .tarea-nombre strong {
   display: block;
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #506079;
+  color: #2c415f;
 }
 .tarea-nombre small {
   display: block;
-  color: #62718b;
+  color: #526582;
   font-size: 10px;
   line-height: 1.6;
   margin-top: 5px;
@@ -263,7 +263,7 @@ select:focus-visible {
 .plazo {
   font-size: 10px;
   white-space: nowrap;
-  color: #62718b;
+  color: #526582;
   background: #f3f6fb;
   padding: 4px 7px;
   border-radius: 5px;
@@ -274,7 +274,7 @@ select:focus-visible {
 }
 .flecha {
   font-size: 14px;
-  color: #62718b;
+  color: #526582;
   margin-left: 4px;
 }
 .vacio {
@@ -282,7 +282,7 @@ select:focus-visible {
   justify-items: center;
   text-align: center;
   align-content: center;
-  min-height: 230px;
+  min-height: 170px;
   padding: 25px;
 }
 .vacio-icono {
@@ -292,7 +292,7 @@ select:focus-visible {
   place-items: center;
   border: 1px solid #dfefe8;
   background: #f2faf6;
-  color: #62718b;
+  color: #526582;
   border-radius: 50%;
   font-size: 16px;
   margin-bottom: 13px;
@@ -300,17 +300,17 @@ select:focus-visible {
 .vacio strong {
   font-size: 12px;
   font-weight: 500;
-  color: #7687a2;
+  color: #425a7a;
 }
 .vacio p {
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
   line-height: 1.8;
   max-width: 290px;
   margin: 8px 0 12px;
 }
 .corto {
-  min-height: 160px;
+  min-height: 135px;
 }
 .punto {
   width: 6px;
@@ -328,7 +328,7 @@ select:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 24px;
-  padding: 8px 20px 16px;
+  padding: 8px 20px 14px;
   flex: 1;
 }
 .anillo {
@@ -354,19 +354,19 @@ select:focus-visible {
 }
 .anillo strong {
   font-size: 25px;
-  font-weight: 550;
+  font-weight: 600;
   letter-spacing: -0.7px;
   color: #455874;
 }
 .anillo strong small {
   font-size: 12px;
-  color: #62718b;
+  color: #526582;
   font-weight: 400;
   margin-left: 2px;
 }
 .anillo span {
   font-size: 9px;
-  color: #62718b;
+  color: #526582;
 }
 .capacidad {
   display: grid;
@@ -374,17 +374,17 @@ select:focus-visible {
 }
 .capacidad strong {
   font-size: 21px;
-  font-weight: 550;
+  font-weight: 600;
   letter-spacing: -0.6px;
   color: #4c607e;
 }
 .capacidad > span {
   font-size: 11px;
-  color: #62718b;
+  color: #526582;
 }
 .capacidad > small {
   font-size: 10px;
-  color: #62718b;
+  color: #526582;
   margin-top: 5px;
 }
 .plan-uso {
@@ -393,12 +393,12 @@ select:focus-visible {
   justify-content: space-between;
   gap: 10px;
   font-size: 10px;
-  color: #62718b;
+  color: #526582;
   margin: 0 24px 10px;
 }
 .plan-uso strong {
   font-weight: 500;
-  color: #62718b;
+  color: #526582;
 }
 .barra {
   height: 4px;
@@ -420,7 +420,7 @@ select:focus-visible {
 .uso-simple {
   display: grid;
   gap: 13px;
-  padding: 18px 24px 30px;
+  padding: 8px 24px 22px;
   flex: 1;
 }
 .uso-simple > strong {
@@ -432,7 +432,7 @@ select:focus-visible {
 .uso-simple p {
   font-size: 12px;
   line-height: 1.7;
-  color: #62718b;
+  color: #526582;
   max-width: 220px;
   margin: 0;
 }
@@ -445,10 +445,10 @@ select:focus-visible {
   padding: 0 22px;
 }
 .columnas {
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.04em;
-  color: #62718b;
-  font-weight: 550;
+  color: #526582;
+  font-weight: 600;
   min-height: 36px;
   background: #fbfcfe;
   border-block: 1px solid #edf1f7;
@@ -463,7 +463,7 @@ select:focus-visible {
   border: 0;
   border-top: 1px solid #f0f3f8;
   background: none;
-  color: #62718b;
+  color: #526582;
 }
 .fila-consumo:hover {
   background: #f8faff;
@@ -488,17 +488,17 @@ select:focus-visible {
 }
 .identidad strong {
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 600;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #5d708e;
+  color: #304969;
 }
 .identidad small {
   display: block;
   font-size: 9px;
-  color: #62718b;
+  color: #526582;
   margin-top: 5px;
 }
 .avatar {
@@ -511,15 +511,15 @@ select:focus-visible {
   background: #e8eefb;
   color: #7c98d2;
   font-size: 10px;
-  font-weight: 550;
+  font-weight: 600;
 }
 .avatar[data-color='1'] {
   background: #e4f3ed;
-  color: #62718b;
+  color: #526582;
 }
 .avatar[data-color='2'] {
   background: #eee9f8;
-  color: #62718b;
+  color: #526582;
 }
 .avatar[data-color='3'] {
   background: #fff0dc;
@@ -544,7 +544,7 @@ select:focus-visible {
 }
 .barras > div > span {
   font-size: 10px;
-  color: #62718b;
+  color: #526582;
 }
 .columna {
   height: 100%;
@@ -565,11 +565,11 @@ select:focus-visible {
 }
 .barras small {
   font-size: 10px;
-  color: #62718b;
+  color: #526582;
 }
 .nota-grafico {
   font-size: 9px;
-  color: #62718b;
+  color: #526582;
   margin: 17px 22px 20px;
   line-height: 1.7;
   text-align: center;
@@ -589,7 +589,7 @@ select:focus-visible {
   background: none;
   border: 0;
   padding: 12px 0;
-  color: #62718b;
+  color: #526582;
   font-size: 11px;
 }
 .facturas-resumen button + button {
@@ -598,18 +598,18 @@ select:focus-visible {
 .facturas-resumen strong {
   font-size: 13px;
   font-weight: 500;
-  color: #62718b;
+  color: #526582;
 }
 .facturas-resumen i {
   font-style: normal;
   font-size: 11px;
   margin-left: 5px;
-  color: #62718b;
+  color: #526582;
 }
 .estado-carga {
   padding: 50px 24px;
   text-align: center;
-  color: #62718b;
+  color: #526582;
   font-size: 12px;
   background: white;
   border: 1px solid #e3e9f3;
@@ -710,14 +710,14 @@ select:focus-visible {
     padding: 13px;
   }
   .indicadores > button > span {
-    font-size: 10px;
+    font-size: 11px;
     min-height: 26px;
   }
   .indicadores > button > strong {
     font-size: 27px;
   }
   .indicadores > button > small {
-    font-size: 9px;
+    font-size: 10px;
   }
   .indicadores i {
     width: 21px;
@@ -729,7 +729,7 @@ select:focus-visible {
     padding: 18px 16px;
   }
   .tarjeta h2 {
-    font-size: 14px;
+    font-size: 16px;
   }
   .tarjeta > header > .enlace {
     font-size: 10px;
@@ -742,7 +742,7 @@ select:focus-visible {
     gap: 9px;
   }
   .tarea-nombre strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .tarea-nombre small {
     font-size: 9px;
@@ -798,7 +798,7 @@ select:focus-visible {
   border-top: 1px solid #edf1f7;
   background: none;
   padding: 18px 0;
-  color: #62718b;
+  color: #526582;
   font-size: 12px;
 }
 .archivos-cliente button:hover {
@@ -809,8 +809,8 @@ select:focus-visible {
 }
 .archivos-cliente strong {
   display: block;
-  font-weight: 550;
-  color: #38475f;
+  font-weight: 600;
+  color: #223651;
 }
 .archivos-cliente small {
   display: block;
@@ -835,12 +835,142 @@ select:focus-visible {
   border: 0;
   border-top: 1px solid #edf1f7;
   background: none;
-  color: #62718b;
+  color: #526582;
 }
 .entrega-resumen strong {
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 600;
 }
 .entrega-resumen span {
   font-size: 10px;
+}
+
+/* A stronger focal point for capacity, with the same data at every size. */
+.almacenamiento {
+  background: #1c2d50;
+  border-color: #263d69;
+  box-shadow: 0 5px 18px #1a2e5114;
+}
+.almacenamiento h2,
+.almacenamiento .capacidad strong,
+.almacenamiento .uso-simple > strong {
+  color: #fff;
+}
+.almacenamiento .sobre,
+.almacenamiento .capacidad > span,
+.almacenamiento .capacidad > small,
+.almacenamiento .plan-uso,
+.almacenamiento .plan-uso strong,
+.almacenamiento .uso-simple p {
+  color: #c2cee5;
+}
+.almacenamiento .enlace {
+  color: #c1ceff;
+}
+.almacenamiento .punto {
+  background: #a8b9ff;
+}
+.anillo {
+  background: conic-gradient(#a3b3ff var(--porcentaje), #35496c 0);
+}
+.anillo > div {
+  background: #1c2d50;
+}
+.anillo strong {
+  color: #f6f8ff;
+}
+.anillo strong small,
+.anillo span {
+  color: #c2cee5;
+}
+.barra {
+  background: #35496c;
+}
+.barra i {
+  background: #a5b6ff;
+}
+.proximas {
+  min-height: 250px;
+}
+.actividad-vacia {
+  padding: 18px 22px 22px;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 10px;
+}
+.actividad-vacia strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3e5577;
+}
+.actividad-vacia p {
+  font-size: 11px;
+  color: #526582;
+  line-height: 1.7;
+  max-width: 260px;
+  margin: 0;
+}
+.grafico-vacio {
+  height: 42px;
+  display: flex;
+  align-items: end;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+.grafico-vacio i {
+  width: 13px;
+  height: 30px;
+  background: #e3e9f7;
+  border-radius: 4px;
+}
+.grafico-vacio i:nth-child(2) {
+  height: 42px;
+  background: #d7e0f6;
+}
+.grafico-vacio i:nth-child(3) {
+  height: 23px;
+}
+.grafico-vacio i:nth-child(4) {
+  height: 35px;
+  background: #d7e0f6;
+}
+@media (max-width: 600px) {
+  .proximas {
+    min-height: 0;
+  }
+  .tarjeta > header {
+    padding-block: 15px;
+  }
+  .tarjeta h2 {
+    font-size: 16px;
+  }
+  .tarjeta > header > .enlace {
+    font-size: 11px;
+  }
+  .identidad strong {
+    font-size: 12px;
+  }
+  .vacio {
+    min-height: 145px;
+    padding: 20px;
+  }
+  .uso-simple {
+    padding-block: 6px 18px;
+    gap: 8px;
+  }
+  .uso-simple > strong {
+    font-size: 29px;
+  }
+  .anillo {
+    width: 86px;
+    height: 86px;
+  }
+  .anillo > div {
+    width: 72px;
+    height: 72px;
+  }
+  .almacenamiento .uso {
+    padding: 4px 22px 15px;
+  }
 }

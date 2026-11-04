@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RespuestaCliente, RespuestaSolicitudDocumento } from '../modelos-aplicacion';
 import { tiposDeCliente } from './plantillas-documentales';
@@ -23,6 +23,20 @@ export class DirectorioClientesComponent {
   busqueda = '';
   filtro = 'ACTIVOS';
   seleccionadoId: number | null = null;
+  @ViewChild('ficha') private ficha?: ElementRef<HTMLElement>;
+
+  seleccionar(clienteId: number): void {
+    this.seleccionadoId = clienteId;
+    if (globalThis.matchMedia?.('(max-width: 1000px)').matches) {
+      this.ficha?.nativeElement.focus({ preventScroll: true });
+      this.ficha?.nativeElement.scrollIntoView({
+        block: 'start',
+        behavior: globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'instant'
+          : 'smooth',
+      });
+    }
+  }
 
   get activos(): number {
     return this.clientes.filter((c) => c.activo).length;

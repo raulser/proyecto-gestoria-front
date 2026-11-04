@@ -22,8 +22,12 @@
   box-shadow: 0 24px 64px -20px #27346030;
 }
 
-.login-panel .primary { background: #5850df; }
-.login-panel .primary:hover { background: #4840c6; }
+.login-panel .primary {
+  background: #5850df;
+}
+.login-panel .primary:hover {
+  background: #4840c6;
+}
 
 .login-brand {
   color: #17211d;
@@ -1091,10 +1095,9 @@ textarea {
 
 .table-row {
   display: grid;
-  grid-template-columns: minmax(260px, 1.45fr) minmax(260px, 1.35fr) minmax(130px, 0.65fr) minmax(
-      145px,
-      0.7fr
-    ) minmax(220px, 1fr);
+  grid-template-columns:
+    minmax(260px, 1.45fr) minmax(260px, 1.35fr) minmax(130px, 0.65fr) minmax(145px, 0.7fr)
+    minmax(220px, 1fr);
   min-width: 1100px;
 }
 
@@ -1627,10 +1630,6 @@ textarea {
 
   .nav button {
     justify-content: center;
-  }
-
-  .nav button span {
-    display: none;
   }
 
   .account {

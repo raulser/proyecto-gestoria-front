@@ -6,11 +6,11 @@
   font-display: swap;
 }
 :root {
-  --brand-primary: #4862e7;
+  --brand-primary: #4661ec;
 }
 html {
-  color: #263148;
-  background: #f6f8fc;
+  color: #1c2940;
+  background: #f3f5f9;
   -webkit-font-smoothing: antialiased;
 }
 body {
@@ -23,228 +23,264 @@ textarea {
   font-family: Inter, system-ui, sans-serif;
 }
 :root app-root .shell {
-  background: #f6f8fc;
-  color: #263148;
-  grid-template-columns: 232px minmax(0, 1fr);
+  background: #f3f5f9;
+  color: #1c2940;
+  grid-template-columns: 224px minmax(0, 1fr);
 }
 :root app-root .shell .sidebar {
-  background: #fff;
-  border-right: 1px solid #e9eaf2;
-  color: #37364c;
-  padding: 28px 16px;
-  gap: 32px;
+  background: #111a2a;
+  color: #b7c3d8;
+  border-right: 1px solid #253148;
+  padding: 24px 14px 18px;
+  gap: 26px;
 }
 :root app-root .sidebar .brand {
+  min-height: 42px;
   padding: 0 14px;
-  min-height: 44px;
 }
 :root app-root .sidebar .brand img {
-  max-width: 145px;
+  width: 126px;
   height: auto;
 }
 :root app-root .sidebar .nav {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 5px;
 }
 :root app-root .sidebar .nav button {
-  min-height: 44px;
+  min-height: 43px;
   border-radius: 9px;
-  padding: 0 14px;
-  color: #77788c;
-  font-size: 12px;
+  padding: 0 13px;
+  color: #b1bfd5;
+  font-size: 13px;
   font-weight: 500;
-  gap: 12px;
+  gap: 11px;
+  justify-content: flex-start;
+  border: 1px solid transparent;
   transition:
     background 0.15s,
     color 0.15s;
 }
 :root app-root .sidebar .nav button:hover {
-  background: #f1f4fc;
-  color: #4e68c8;
+  background: #1c2a42;
+  color: #fff;
 }
 :root app-root .sidebar .nav button.activo {
-  background: #ecf1ff;
-  color: #4862e7;
-  font-weight: 650;
+  background: #283a61;
+  border-color: #354c7a;
+  color: #fff;
+}
+:root app-root .sidebar .nav button.activo svg {
+  color: #a5b4ff;
 }
 :root app-root .sidebar .nav svg {
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+:root app-root .shell .sidebar .nav .nav-label {
+  display: block;
+}
+:root app-root .shell .sidebar .nav .nav-mobile-label,
+:root app-root .shell .sidebar .nav .nav-mas,
+:root app-root .sidebar .menu-movil,
+:root app-root .sidebar .salir-movil {
+  display: none;
 }
 :root app-root .sidebar .account {
-  border-top: 1px solid #ececf3;
-  padding: 20px 4px 0;
-  gap: 10px;
+  position: static;
+  border-color: #2a374e;
+  padding: 18px 2px 0;
+  gap: 9px;
+}
+:root app-root .sidebar .account > .avatar {
+  display: grid;
+}
+:root app-root .sidebar .account > div {
+  display: block;
+  flex: 1;
+  min-width: 0;
 }
 :root app-root .sidebar .account strong {
+  color: #f0f4fd;
   font-size: 12px;
-  font-weight: 600;
-  color: #424258;
+  font-weight: 550;
+  line-height: 1.5;
 }
 :root app-root .sidebar .account small {
-  color: #767588;
-  font-size: 12px;
+  color: #a4b4ce;
+  font-size: 11px;
   line-height: 1.5;
 }
 :root app-root .sidebar .avatar {
-  background: #e9effc;
-  color: #7088d3;
+  background: #2b3e62;
+  color: #d4e1ff;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 12px;
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
 }
 :root app-root .sidebar .icon-button {
-  color: #9996ac;
-  background: transparent;
+  color: #c5d2e9;
+  background: #23334e;
+  width: 31px;
+  height: 34px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+:root app-root .sidebar button:focus-visible {
+  outline: 2px solid #b0c1ff;
+  outline-offset: 3px;
 }
 :root app-root .shell .workspace {
-  padding: 32px clamp(22px, 3vw, 48px);
-  max-width: 1600px;
+  padding: 26px clamp(24px, 3vw, 46px) 34px;
+  max-width: 1800px;
 }
 :root app-root .workspace .topbar {
   align-items: center;
-  margin-bottom: 30px;
+  flex-direction: row;
+  border-bottom: 1px solid #dde3ed;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  min-height: 76px;
 }
 :root app-root .workspace .eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: #777287;
-  margin-bottom: 8px;
-  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.04em;
+  color: #5e6e87;
+  margin-bottom: 7px;
+  text-transform: none;
 }
 :root app-root .workspace h1 {
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 650;
   letter-spacing: -1px;
-  color: #263148;
+  color: #15243b;
 }
 :root app-root .workspace h2 {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  color: #36425b;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.4px;
+  color: #24344c;
 }
 :root app-root .workspace .panel-header p,
 :root app-root .workspace .panel-header small {
-  color: #767287;
-  font-size: 12px;
-  line-height: 1.7;
-  margin-top: 5px;
+  color: #5b6b82;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 6px;
 }
 :root app-root .workspace .primary {
   background: var(--brand-primary);
-  border-radius: 8px;
-  min-height: 39px;
-  font-size: 12px;
-  font-weight: 550;
-  box-shadow: 0 2px 3px #6250d01a;
-  padding: 0 14px;
-  color: white;
+  color: #fff;
+  border-radius: 9px;
+  min-height: 41px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 3px 7px #304cb624;
+  padding: 0 15px;
 }
 :root app-root .workspace .primary:hover {
-  filter: brightness(0.95);
+  background: #354fd2;
 }
 :root app-root .workspace .secondary {
   background: #fff;
-  border: 1px solid #e5e4ee;
-  color: #767388;
+  border: 1px solid #d8dfeb;
+  color: #3f526f;
   border-radius: 8px;
-  min-height: 37px;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 0 12px;
+  min-height: 39px;
+  font-size: 13px;
+  font-weight: 550;
+  padding: 0 13px;
 }
 :root app-root .workspace .secondary:hover {
-  border-color: #bfb6e9;
-  background: #fcfbff;
-  color: #5269bf;
+  border-color: #97a8d3;
+  background: #f5f7ff;
+  color: #344fc2;
 }
 :root app-root .workspace .icon-button {
-  background: #faf9fd;
-  color: #8d85a5;
+  background: #edf1f8;
+  color: #50617c;
   border-radius: 8px;
 }
 :root app-root .workspace .panel {
-  border: 1px solid #e9e9f1;
-  border-radius: 14px;
-  box-shadow: 0 3px 8px #2b244503;
-  padding: 24px;
+  border: 1px solid #dfe5ee;
+  border-radius: 13px;
+  box-shadow: 0 2px 4px #15243b03;
+  padding: 23px;
   background: #fff;
 }
 :root app-root .workspace .panel-header {
   margin-bottom: 20px;
 }
 :root app-root .workspace .metrics {
-  gap: 18px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 :root app-root .workspace .metric {
-  background: white;
-  border: 1px solid #e9e9f1;
-  border-radius: 13px;
-  padding: 21px 23px;
-  box-shadow: 0 3px 8px #2b244503;
+  background: #fff;
+  border: 1px solid #dfe5ee;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: none;
 }
 :root app-root .workspace .metric > span {
-  color: #9190a4;
+  color: #5c6c84;
   font-size: 12px;
   font-weight: 500;
 }
 :root app-root .workspace .metric > strong {
   display: block;
-  color: #39364f;
+  color: #263852;
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: -1px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 :root app-root .workspace .metric.warning {
-  border-top: 2px solid #eabf80;
+  border-top: 3px solid #c99237;
 }
 :root app-root .workspace .metric.exito {
-  border-top: 2px solid #a4cbb9;
+  border-top: 3px solid #47a085;
 }
 :root app-root .workspace input:not([type='checkbox']),
 :root app-root .workspace select,
 :root app-root .workspace textarea {
-  border-color: #e2e2ed;
+  border-color: #d6deeb;
   border-radius: 8px;
   background: #fff;
-  color: #4c495f;
-  font-size: 12px;
-  min-height: 39px;
+  color: #34455e;
+  font-size: 13px;
+  min-height: 40px;
 }
 :root app-root .workspace input::placeholder,
 :root app-root .workspace textarea::placeholder {
-  color: #b3afc1;
+  color: #78859b;
 }
 :root app-root .workspace label {
   font-size: 12px;
   font-weight: 550;
-  color: #6e6881;
+  color: #485b78;
 }
 :root app-root .workspace input[type='checkbox'] {
   accent-color: var(--brand-primary);
 }
 :root app-root .workspace .buscar {
-  background: #fafafe;
-  border: 1px solid #e9e7f1;
+  background: #fff;
+  border: 1px solid #d6deeb;
   border-radius: 8px;
   padding-inline: 10px;
-  color: #a6a0b7;
+  color: #687b98;
 }
 :root app-root .workspace .buscar input {
   background: transparent;
   border: 0;
   min-width: 180px;
 }
-:root app-root .workspace button:focus-visible,
-:root app-root .workspace input:focus-visible,
-:root app-root .workspace select:focus-visible,
-:root app-root .workspace textarea:focus-visible {
-  outline: 3px solid #9b8ae84d;
-  outline-offset: 2px;
+:root app-root .workspace :is(button, input, select, textarea, summary, a):focus-visible {
+  outline: 3px solid #4661ec66;
+  outline-offset: 3px;
 }
 :root app-root .workspace .pill,
 :root app-root .workspace .estado {
@@ -254,48 +290,52 @@ textarea {
   padding: 4px 8px;
   border: 0;
 }
+:root app-root .workspace .pill {
+  background: #eaf5ef;
+  color: #286148;
+}
 :root app-root .workspace .pill.off {
-  background: #f6f5f8;
-  color: #6f697b;
+  background: #eef1f5;
+  color: #56647b;
 }
 :root app-root .workspace .solicitud-card {
-  border-color: #e9e8f1;
+  border-color: #dfe5ee;
   border-radius: 13px;
-  box-shadow: 0 3px 10px #24203503;
-  background: white;
+  box-shadow: none;
+  background: #fff;
 }
 :root app-root .workspace .solicitud-heading h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #4d4660;
+  font-size: 15px;
+  font-weight: 650;
+  color: #283b57;
 }
 :root app-root .workspace table {
   font-size: 13px;
 }
 :root app-root .workspace th {
-  color: #746c83;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  font-weight: 600;
-  background: #fcfbfe;
+  color: #4d607e;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  font-weight: 650;
+  background: #f7f9fc;
 }
 :root app-root .workspace td {
-  border-color: #f0eef5;
-  padding-block: 15px;
-  color: #6d667e;
+  border-color: #eaf0f6;
+  padding-block: 14px;
+  color: #435673;
 }
 :root app-root .workspace .empty {
-  color: #787184;
-  background: #fbfafe;
-  border: 1px dashed #e8e3f1;
+  color: #5e6c82;
+  background: #f7f9fc;
+  border: 1px dashed #ccd6e5;
   border-radius: 10px;
-  font-size: 12px;
-  padding: 30px;
+  font-size: 13px;
+  padding: 26px;
   text-align: center;
 }
 :root app-root .workspace .ficha-tabs {
-  background: #f7f5fc;
-  border: 1px solid #ebe7f4;
+  background: #edf1f7;
+  border: 1px solid #dfe5ef;
   border-radius: 10px;
   padding: 5px;
   gap: 5px;
@@ -303,339 +343,77 @@ textarea {
 :root app-root .workspace .ficha-tabs button {
   font-size: 12px;
   background: transparent;
-  color: #8f859e;
+  color: #536580;
   border-radius: 7px;
-  font-weight: 500;
+  font-weight: 550;
 }
 :root app-root .workspace .ficha-tabs button.activo {
   background: #fff;
-  color: #4662c4;
-  box-shadow: 0 2px 6px #5e467a0d;
+  color: #3653c9;
+  box-shadow: 0 2px 5px #243e6c12;
 }
 :root app-root .workspace .ficha-tabs button span {
-  background: #eeeaf8;
-  color: #7c6bb6;
+  background: #e3eaff;
+  color: #425ac3;
 }
 :root app-root .workspace .dropzone {
-  border-color: #c7bde8;
-  background: #faf8ff;
-  color: #8a76bd;
+  border-color: #a7b8e9;
+  background: #f4f7ff;
+  color: #435dbe;
   border-radius: 13px;
-  padding: 38px 24px;
+  padding: 30px 22px;
 }
 :root app-root .workspace .dropzone span {
-  color: #a295b2;
+  color: #61749b;
 }
 :root app-root .workspace .segmented {
-  background: #f5f3fa;
+  background: #edf1f7;
   border-radius: 9px;
   padding: 4px;
   gap: 2px;
 }
 :root app-root .workspace .segmented button {
   border: 0;
-  color: #a499b2;
+  color: #586b88;
   font-size: 12px;
   background: transparent;
 }
 :root app-root .workspace .segmented button.active,
 :root app-root .workspace .segmented button.activo {
-  background: white;
-  color: #4862e7;
-  box-shadow: 0 2px 5px #49327812;
+  background: #fff;
+  color: #3c56cd;
+  box-shadow: 0 2px 5px #243e6c12;
 }
 :root app-root .workspace .importacion-clientes {
   border: 0;
   margin: 12px 0 0;
   padding: 0;
   font-size: 12px;
-  color: #7c7387;
+  color: #566c8c;
 }
 :root app-root .workspace .importacion-clientes summary {
   font-size: 12px;
-  color: #756780;
+  color: #526887;
 }
 :root app-root .workspace .importacion-clientes[open] {
-  background: #faf8fe;
+  background: #f4f7fc;
   padding: 14px;
   border-radius: 9px;
 }
 :root app-root .workspace .guia {
-  background: #faf8ff;
-  border-color: #e6dff6;
-  border-left: 3px solid #b5a5e4;
-}
-@media (max-width: 980px) {
-  :root app-root .shell {
-    grid-template-columns: 190px minmax(0, 1fr);
-  }
-  :root app-root .shell .workspace {
-    padding: 24px;
-  }
-  :root app-root .workspace .metrics {
-    gap: 10px;
-  }
-}
-@media (max-width: 760px) {
-  :root app-root .shell {
-    display: block;
-  }
-  :root app-root .shell .sidebar {
-    position: static;
-    height: auto;
-    gap: 14px;
-    padding: 16px;
-    border-right: 0;
-    border-bottom: 1px solid #ebe7f3;
-  }
-  :root app-root .sidebar .nav {
-    display: flex;
-    overflow: auto;
-    gap: 4px;
-    padding-bottom: 2px;
-  }
-  :root app-root .sidebar .nav button {
-    flex: 0 0 auto;
-    min-height: 36px;
-    padding-inline: 12px;
-    font-size: 12px;
-  }
-  :root app-root .sidebar .account {
-    display: none;
-  }
-  :root app-root .shell .workspace {
-    padding: 20px 16px;
-  }
-  :root app-root .workspace .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  :root app-root .workspace .topbar h1 {
-    font-size: 23px;
-  }
-  :root app-root .workspace .panel {
-    padding: 18px;
-  }
-  :root app-root .workspace .buscar input {
-    min-width: 0;
-    width: 130px;
-  }
-}
-:root app-root .login-shell {
-  background: radial-gradient(ellipse at 30% 0%, #e8e3fc 0, transparent 55%), #f6f8fc;
-}
-:root app-root .login-panel {
-  border-color: #e8e7f1;
-  border-radius: 20px;
-  box-shadow: 0 24px 70px -28px #30295830;
-}
-:root app-root .login-panel .primary {
-  background: #4862e7;
-}
-
-:root app-root .shell {
-  grid-template-columns: 216px minmax(0, 1fr);
-}
-:root app-root .shell .sidebar {
-  background: #151d2c;
-  color: #b2bed2;
-  border-right: 1px solid #243044;
-  padding: 28px 14px;
-  gap: 34px;
-}
-:root app-root .sidebar .nav button {
-  color: #98a8c2;
-  font-size: 12px;
-  border: 1px solid transparent;
-  border-radius: 9px;
-  padding-inline: 13px;
-}
-:root app-root .sidebar .nav button:hover {
-  background: #1e2b40;
-  color: #e3eaf8;
-}
-:root app-root .sidebar .nav button.activo {
-  background: #263653;
-  border-color: #314363;
-  color: #e6edff;
-  font-weight: 550;
-}
-:root app-root .sidebar .nav button.activo svg {
-  color: #94b0ff;
-}
-:root app-root .sidebar .account {
-  border-color: #29364b;
-  gap: 8px;
-  padding: 18px 2px 0;
-}
-:root app-root .sidebar .account strong {
-  color: #d6e1f3;
-  font-size: 11px;
-  font-weight: 500;
-}
-:root app-root .sidebar .account small {
-  color: #8295b3;
-  font-size: 10px;
-}
-:root app-root .sidebar .avatar {
-  background: #2b3e5a;
-  color: #a9c0e9;
-  width: 31px;
-  height: 31px;
-  font-size: 10px;
-}
-:root app-root .sidebar .icon-button {
-  background: #26354d;
-  color: #9bb2d6;
-}
-:root app-root .shell .workspace {
-  padding: 30px clamp(24px, 3vw, 46px);
-  max-width: 1800px;
-}
-:root app-root .workspace .topbar {
-  border-bottom: 1px solid #e6eaf2;
-  padding-bottom: 23px;
-  margin-bottom: 28px;
-  min-height: 78px;
-}
-:root app-root .workspace .eyebrow {
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: #939cae;
-  margin-bottom: 8px;
-}
-:root app-root .workspace h1 {
-  font-size: 27px;
-  font-weight: 600;
-  letter-spacing: -0.8px;
-}
-:root app-root .workspace .primary {
-  background: var(--brand-primary);
-  box-shadow: 0 2px 4px #213d7a12;
-}
-:root app-root .workspace .panel {
-  border-color: #e3e7ef;
-  box-shadow: none;
-  border-radius: 12px;
-}
-:root app-root .workspace .metric {
-  border: 1px solid #e3e8f1;
-  border-radius: 11px;
-  box-shadow: none;
-  padding: 20px;
-}
-:root app-root .workspace .metric > span {
-  font-size: 11px;
-  color: #8a95a8;
-}
-:root app-root .workspace .metric > strong {
-  font-size: 32px;
-  font-weight: 550;
-  color: #38465f;
-}
-:root app-root .workspace .metric.warning {
-  border-top: 1px solid #e3e8f1;
-  background: linear-gradient(135deg, #fff, #fffcf5);
-}
-:root app-root .workspace .metric.exito {
-  border-top: 1px solid #e3e8f1;
-  background: linear-gradient(135deg, #fff, #f6fcfa);
-}
-:root app-root .workspace .importacion-clientes {
-  font-size: 11px;
-  color: #8895a8;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-:root app-root .workspace .importacion-clientes summary {
-  font-size: 11px;
-  color: #8895a8;
-  font-weight: 400;
-}
-:root app-root .acceso-puente {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  background: white;
-  color: #8b98ae;
-  font-size: 12px;
-}
-:root app-root .acceso-puente p {
-  margin: 0;
-}
-.espera-acceso {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #e9edf8;
-  border-top-color: #5977df;
-  border-radius: 50%;
-  animation: acceso-girar 1s linear infinite;
-}
-@keyframes acceso-girar {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media (max-width: 1000px) {
-  :root app-root .shell {
-    grid-template-columns: 190px minmax(0, 1fr);
-  }
-  :root app-root .shell .workspace {
-    padding: 24px;
-  }
-}
-@media (max-width: 760px) {
-  :root app-root .shell {
-    display: block;
-  }
-  :root app-root .shell .sidebar {
-    position: static;
-    height: auto;
-    padding: 16px;
-    gap: 18px;
-  }
-  :root app-root .sidebar .brand {
-    min-height: 32px;
-  }
-  :root app-root .sidebar .brand img {
-    width: 112px;
-  }
-  :root app-root .sidebar .nav {
-    display: flex;
-    overflow: auto;
-  }
-  :root app-root .sidebar .nav button {
-    min-height: 38px;
-  }
-  :root app-root .sidebar .account {
-    display: none;
-  }
-  :root app-root .shell .workspace {
-    padding: 22px 16px;
-  }
-  :root app-root .workspace .topbar {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    min-height: 65px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .espera-acceso {
-    animation: none;
-  }
+  background: #f4f7ff;
+  border-color: #dce4fc;
+  border-left: 3px solid #8fa5ee;
 }
 :root app-root .workspace .topbar-actions[hidden] {
   display: none;
 }
 :root app-root .workspace .panel-secundario {
-  border: 1px solid #e2e8f2;
+  border: 1px solid #dfe5ee;
   background: #fff;
-  border-radius: 10px;
-  padding: 0 20px;
-  margin-top: 18px;
+  border-radius: 11px;
+  padding: 0 18px;
+  margin-top: 14px;
 }
 :root app-root .workspace .panel-secundario > summary {
   cursor: pointer;
@@ -643,21 +421,21 @@ textarea {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 0;
+  padding: 15px 0;
   font-size: 12px;
-  font-weight: 550;
-  color: #687b99;
+  font-weight: 600;
+  color: #405777;
 }
 :root app-root .workspace .panel-secundario > summary span {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
-  color: #a0acc1;
+  color: #647590;
 }
 :root app-root .workspace .panel-secundario > summary::after {
   content: '+';
   margin-left: auto;
-  color: #a1b0c8;
-  font-size: 16px;
+  color: #627698;
+  font-size: 18px;
   font-weight: 400;
 }
 :root app-root .workspace .panel-secundario[open] > summary::after {
@@ -674,20 +452,47 @@ textarea {
 }
 :root app-root .workspace .notificaciones-compactas button {
   border: 0;
-  border-top: 1px solid #f0f3f9;
+  border-top: 1px solid #eaf0f7;
   padding: 14px 0;
   background: transparent;
   text-align: left;
   display: grid;
   gap: 6px;
-  color: #8f9fba;
-  font-size: 11px;
+  color: #5a6e8d;
+  font-size: 12px;
   line-height: 1.6;
 }
 :root app-root .workspace .notificaciones-compactas button strong {
-  font-size: 12px;
-  color: #677f9f;
-  font-weight: 500;
+  font-size: 13px;
+  color: #324c71;
+  font-weight: 600;
+}
+:root app-root .acceso-puente {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: #fff;
+  color: #5b6c86;
+  font-size: 13px;
+}
+:root app-root .acceso-puente p {
+  margin: 0;
+}
+.espera-acceso {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e9edf8;
+  border-top-color: #4661ec;
+  border-radius: 50%;
+  animation: acceso-girar 1s linear infinite;
+}
+@keyframes acceso-girar {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .vista-no-disponible,
 .formulario-no-disponible {
@@ -695,14 +500,14 @@ textarea {
   gap: 14px;
   padding: 24px;
   background: #fff;
-  border: 1px solid #e3e8f1;
+  border: 1px solid #dfe5ee;
   border-radius: 12px;
-  color: #64748b;
+  color: #526581;
   font-size: 13px;
 }
 .vista-no-disponible a,
 .formulario-no-disponible a {
-  color: #4862e7;
+  color: #3a53cb;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -719,33 +524,217 @@ textarea {
   min-height: 38px;
   background: #f1f4fb;
   border: 1px solid #dce3f1;
-  color: #64748b;
+  color: #526581;
   border-radius: 8px;
   cursor: pointer;
 }
-:root app-root .sidebar .salir-movil {
-  display: none;
+@media (max-width: 1100px) {
+  :root app-root .shell {
+    grid-template-columns: 198px minmax(0, 1fr);
+  }
+  :root app-root .shell .workspace {
+    padding: 24px;
+  }
+  :root app-root .sidebar .brand {
+    padding-inline: 10px;
+  }
+}
+@media (min-width: 761px) and (max-width: 980px) {
+  :root app-root .shell .sidebar {
+    height: 100dvh;
+    padding-top: 24px;
+  }
 }
 @media (max-width: 760px) {
+  :root app-root .shell {
+    display: block;
+  }
+  :root app-root .shell .sidebar {
+    position: static;
+    height: auto;
+    padding: 12px 18px;
+    gap: 0;
+    border-right: 0;
+    border-bottom: 1px solid #27354f;
+  }
   :root app-root .sidebar .brand {
+    min-height: 34px;
     width: 100%;
-    justify-content: space-between;
     padding: 0;
+    justify-content: space-between;
+  }
+  :root app-root .sidebar .brand img {
+    width: 108px;
   }
   :root app-root .sidebar .salir-movil {
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid #31405b;
-    border-radius: 9px;
-    background: #26364e;
-    color: #b0c3e3;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #34435c;
+    border-radius: 8px;
+    background: #253550;
+    color: #d5e1f6;
     cursor: pointer;
   }
+  :root app-root .sidebar .account {
+    display: none;
+  }
+  :root app-root .sidebar .nav {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    overflow: visible;
+    padding: 7px 6px max(8px, env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid #dce3ef;
+    box-shadow: 0 -3px 18px #14264409;
+  }
+  :root app-root .sidebar .nav button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    min-height: 49px;
+    padding: 5px 1px;
+    font-size: 10px;
+    font-weight: 550;
+    border: 0;
+    border-radius: 9px;
+    color: #5b6d88;
+  }
+  :root app-root .shell .sidebar .nav .nav-label,
+  :root app-root .shell .sidebar .nav .nav-secundaria {
+    display: none;
+  }
+  :root app-root .shell .sidebar .nav .nav-mobile-label,
+  :root app-root .shell .sidebar .nav .nav-mas > span {
+    display: block;
+  }
+  :root app-root .shell .sidebar .nav .nav-mas {
+    display: flex;
+  }
+  :root app-root .sidebar .nav button.activo {
+    background: #edf1ff;
+    color: #3653cf;
+    border: 0;
+    font-weight: 650;
+  }
+  :root app-root .sidebar .nav button.activo svg {
+    color: #4661ec;
+  }
+  :root app-root .sidebar .nav button:hover {
+    background: #f0f3fa;
+    color: #344fc6;
+  }
+  :root app-root .sidebar .menu-movil {
+    display: grid;
+    position: fixed;
+    z-index: 101;
+    right: 12px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    width: min(320px, calc(100% - 24px));
+    padding: 8px 18px;
+    border: 1px solid #d9e2f0;
+    border-radius: 16px;
+    background: #fff;
+    color: #263b59;
+    box-shadow: 0 12px 50px #13213b26;
+  }
+  :root app-root .sidebar .menu-movil > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 14px;
+  }
+  :root app-root .sidebar .menu-movil button {
+    font: inherit;
+    cursor: pointer;
+    border: 0;
+    background: none;
+    color: #3e5475;
+    padding: 14px 0;
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    font-size: 13px;
+    border-top: 1px solid #edf1f7;
+  }
+  :root app-root .sidebar .menu-movil > div button {
+    border: 0;
+    padding: 4px;
+    color: #3c57cd;
+    font-size: 12px;
+  }
+  :root app-root .sidebar .menu-movil button.actual {
+    color: #3653cf;
+    font-weight: 650;
+  }
+  :root app-root .shell .workspace {
+    padding: 20px 16px calc(94px + env(safe-area-inset-bottom));
+  }
+  :root app-root .workspace .topbar {
+    margin-bottom: 20px;
+    min-height: 60px;
+    padding-bottom: 18px;
+    gap: 12px;
+    align-items: center;
+  }
+  :root app-root .workspace .topbar > div:first-child {
+    min-width: 0;
+  }
+  :root app-root .workspace .topbar h1 {
+    font-size: 23px;
+    letter-spacing: -0.7px;
+  }
+  :root app-root .workspace .eyebrow {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  :root app-root .workspace .topbar-actions {
+    flex-shrink: 0;
+  }
+  :root app-root .workspace .topbar-actions .primary {
+    width: 42px;
+    min-height: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+  :root app-root .workspace .topbar-actions .primary span {
+    display: none;
+  }
+  :root app-root .workspace .topbar-actions .primary svg {
+    width: 20px;
+    height: 20px;
+  }
+  :root app-root .workspace .panel {
+    padding: 18px;
+  }
+  :root app-root .workspace .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  :root app-root .workspace .buscar input {
+    min-width: 0;
+    width: 130px;
+  }
+  :root app-root .workspace .panel-secundario > summary {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  :root app-root .workspace .panel-secundario > summary span {
+    display: none;
+  }
 }
-
-:root app-root .workspace .pill {
-  background: #eef5f0;
-  color: #386b50;
+@media (prefers-reduced-motion: reduce) {
+  .espera-acceso {
+    animation: none;
+  }
 }
