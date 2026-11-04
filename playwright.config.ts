@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
-    baseURL: process.env['GESTORIA_E2E_URL'] ?? 'http://localhost:8080',
+    baseURL: process.env['GESTORIA_E2E_URL'] ?? 'http://localhost:8090',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

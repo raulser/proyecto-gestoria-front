@@ -7,6 +7,13 @@
     (cancelar)="cerrarEditorCliente()"
     (guardar)="guardarAltaCliente($event)"
   />
+} @error {
+  <div class="formulario-no-disponible" role="alert">
+    <strong>No se pudo abrir el formulario.</strong>
+    <p>Recarga la página para volver a intentarlo.</p>
+    <a href="/">Recargar Savia</a
+    ><button type="button" (click)="cerrarEditorCliente()">Cerrar</button>
+  </div>
 }
 <app-centro-feedback />
 <app-dialogo-accion />
@@ -18,56 +25,29 @@
 />
 
 @if (!usuarioActual) {
-  <main class="login-shell">
-    <section class="login-panel">
-      <div class="brand login-brand">
-        <img src="savia-logo-v2.svg" alt="Savia" width="168" height="48" />
-      </div>
-
-      <div class="form">
-        @if (error) {
-          <p class="alert error">{{ error }}</p>
-        }
-
-        <button type="button" class="primary" [disabled]="loading" (click)="iniciarSesion()">
-          <svg lucideCircleCheck size="17"></svg>
-          <span>{{ loading ? 'Abriendo acceso…' : 'Iniciar sesión' }}</span>
-        </button>
-      </div>
-
-      <div class="demo-usuarios">
-        <strong>Acceso a tu gestoría</strong>
-        <span>Utiliza la cuenta que te ha proporcionado tu gestoría.</span>
-        @if (showLocalDemoCredentials) {
-          <div class="demo-credentials">
-            <p><strong>Usuarios locales de demostración</strong></p>
-            <div>
-              <span>Administrador</span><code>admin@gestoria.local</code><code>Admin123!</code>
-            </div>
-            <div><span>Asesor</span><code>asesor@gestoria.local</code><code>Asesor123!</code></div>
-            <div>
-              <span>Cliente</span><code>cliente@gestoria.local</code><code>Cliente123!</code>
-            </div>
-          </div>
-        }
-      </div>
-      <p class="legal-login">
-        Soporte:
-        <a [href]="'mailto:' + configuracionPublica.emailSoporte">{{
-          configuracionPublica.emailSoporte
-        }}</a>
-        · Privacidad:
-        <a [href]="'mailto:' + configuracionPublica.emailPrivacidad">{{
-          configuracionPublica.emailPrivacidad
-        }}</a>
-      </p>
-    </section>
+  <main class="acceso-puente" aria-live="polite">
+    <img src="savia-logo-v3.svg" width="156" height="48" alt="Savia" />
+    @if (error) {
+      <p role="alert">{{ error }}</p>
+      <button type="button" (click)="iniciarSesion()">Volver a intentar</button>
+    } @else {
+      <span class="espera-acceso" aria-hidden="true"></span>
+      <p>Abriendo acceso…</p>
+    }
   </main>
 } @else {
   <div class="shell" [attr.inert]="editorClienteAbierto ? '' : null">
     <aside class="sidebar">
       <div class="brand">
-        <img src="savia-logo-v2.svg" width="132" height="38" alt="Savia" />
+        <img src="savia-logo-light-v3.svg" width="132" height="38" alt="Savia" />
+        <button
+          type="button"
+          class="salir-movil"
+          aria-label="Cerrar sesión"
+          (click)="cerrarSesion()"
+        >
+          <svg lucideLogOut size="18"></svg>
+        </button>
       </div>
 
       <nav class="nav">
@@ -102,9 +82,9 @@
       </nav>
 
       <div class="account">
-        <span class="avatar">{{ usuarioActual.nombre.slice(0, 2).toUpperCase() }}</span>
+        <span class="avatar">{{ inicialesNombre(usuarioActual.nombre) }}</span>
         <div>
-          <strong>{{ usuarioActual.nombre }}</strong>
+          <strong>{{ nombrePersona(usuarioActual.nombre) }}</strong>
           <small>{{ etiquetaRol(usuarioActual.rol) }}</small>
         </div>
         <button
@@ -125,7 +105,7 @@
           <h1>{{ tituloVista() }}</h1>
         </div>
 
-        <div class="topbar-actions">
+        <div class="topbar-actions" [hidden]="vistaActiva === 'clientes' && !esCliente()">
           <button type="button" class="primary" (click)="cambiarVista('subir')">
             <svg lucideFileUp size="17"></svg>
             <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
@@ -133,253 +113,123 @@
         </div>
       </header>
 
-      @if (guiaVisible && vistaActiva === 'panel') {
-        <app-guia-inicial
-          [rol]="usuarioActual.rol"
-          (cerrar)="cerrarGuia()"
-          (navegar)="irDesdeGuia($event)"
-        />
-      }
-
       @if (vistaActiva === 'panel') {
-        <section class="metrics">
-          <div class="metric">
-            <span>{{ esCliente() ? 'Documentos disponibles' : 'Clientes activos' }}</span>
-            <strong>{{ esCliente() ? totalDocumentos : cantidadClientesActivos() }}</strong>
+        @defer (on immediate) {
+          <app-panel-trabajo
+            [panel]="panel"
+            [plan]="plan"
+            [clientes]="clientes"
+            [agenda]="agendaFiscal"
+            [solicitudes]="solicitudes"
+            [anio]="anioSeleccionado"
+            [esCliente]="esCliente()"
+            [esAdmin]="puedeAdministrar()"
+            (navegar)="cambiarVista($event)"
+            (documentos)="abrirExpediente($event)"
+            (vencimiento)="abrirVencimientoAgenda($event)"
+            (solicitud)="abrirSolicitudPanel($event)"
+            (configurar)="editarCliente($event)"
+            (facturas)="abrirFacturasPanel($event)"
+            (anioChange)="anioSeleccionado = $event; cargarEspacioTrabajo()"
+          />
+        } @error {
+          <div class="vista-no-disponible" role="alert">
+            <strong>No se pudo cargar el panel.</strong><a href="/">Recargar Savia</a>
           </div>
-          <div class="metric">
-            <span>{{ esCliente() ? 'Archivos' : 'Documentos' }} T{{ trimestreActivo }}</span>
-            <strong>{{ totalDocumentosTrimestre }}</strong>
-          </div>
-          <div class="metric warning">
-            <span>{{ esCliente() ? 'Entregas por completar' : 'Pendiente de acción' }}</span>
-            <strong>{{ cantidadPendientes() }}</strong>
-          </div>
-          <div class="metric exito">
-            <span>{{ esCliente() ? 'Trimestres al día' : 'Trimestres revisados' }}</span>
-            <strong>{{ porcentajeCompletado() }}%</strong>
-          </div>
-        </section>
-
-        @if (puedeAdministrar()) {
-          <section class="panel carga-equipo">
-            <div class="panel-header">
-              <div>
-                <h2>Carga del equipo</h2>
-                <p>Prioriza vencimientos y entregas que esperan revisión</p>
-              </div>
-              <button type="button" class="secondary small" (click)="vistaActiva = 'equipo'">
-                {{ clientesSinAsesor() }} clientes sin asesor
-              </button>
-            </div>
-            <div class="carga-equipo-grid" role="table" aria-label="Carga de trabajo por asesor">
-              <div class="grid-head" role="columnheader">Asesor</div>
-              <div class="grid-head" role="columnheader">Clientes</div>
-              <div class="grid-head" role="columnheader">Esperando documentos</div>
-              <div class="grid-head" role="columnheader">Por revisar</div>
-              <div class="grid-head" role="columnheader">Vencidas</div>
-              @for (carga of cargaEquipo(); track carga.id) {
-                <strong role="cell">{{ carga.nombre }}</strong>
-                <span role="cell">{{ carga.clientes }}</span>
-                <span role="cell">{{ carga.abiertas }}</span>
-                <span role="cell" [class.carga-aviso]="carga.porRevisar > 0">{{
-                  carga.porRevisar
-                }}</span>
-                <span role="cell" [class.carga-peligro]="carga.vencidas > 0">{{
-                  carga.vencidas
-                }}</span>
-              } @empty {
-                <p class="empty carga-vacia">Crea al menos un asesor para repartir el trabajo.</p>
-              }
-            </div>
-          </section>
         }
-
-        @if (notificaciones.length > 0) {
-          <section class="panel notificacion-panel">
-            <div class="panel-header">
-              <div>
-                <h2>Notificaciones</h2>
-                <p>{{ notificacionesNoLeidas() }} sin leer</p>
-              </div>
-            </div>
-            <div class="documento-listar">
+        @if (notificaciones.length) {
+          <details class="panel-secundario">
+            <summary>
+              Avisos <span>{{ notificacionesNoLeidas() }} sin leer</span>
+            </summary>
+            <div class="notificaciones-compactas">
               @for (notificacion of notificaciones.slice(0, 5); track notificacion.id) {
                 <button
                   type="button"
-                  class="notificacion-row"
                   [class.unread]="!notificacion.leida"
                   (click)="marcarNotificacionLeida(notificacion)"
                 >
-                  <strong>{{ notificacion.titulo }}</strong>
-                  <span>{{ notificacion.cuerpo }}</span>
+                  <strong>{{ notificacion.titulo }}</strong
+                  ><span>{{ notificacion.cuerpo }}</span>
                 </button>
               }
             </div>
-          </section>
+          </details>
         }
-
-        <section class="panel agenda-fiscal">
-          <div class="panel-header">
-            <div>
-              <h2>{{ esCliente() ? 'Mis próximas fechas' : 'Agenda fiscal' }}</h2>
-              <p>
-                {{
-                  esCliente()
-                    ? 'Fechas que controla tu gestoría para este ejercicio'
-                    : 'Próximos vencimientos y tareas pendientes de ' + anioSeleccionado
-                }}
-              </p>
-            </div>
-            <div class="toolbar">
-              <span class="estado PENDIENTE_DOCUMENTACION"
-                >{{ agendaFiscalPendiente().length }}
-                {{ esCliente() ? 'fechas en seguimiento' : 'pendientes' }}</span
-              >
-              @if (!esCliente()) {
-                <button type="button" class="secondary small" (click)="generarAgendaFiscal()">
-                  Completar agenda
-                </button>
-              }
-            </div>
-          </div>
-          <div class="agenda-lista">
-            @for (cumplimiento of agendaFiscalPendiente().slice(0, 12); track cumplimiento.id) {
-              <button
-                type="button"
-                class="agenda-row"
-                [class.vencido]="cumplimiento.vencida"
-                (click)="abrirVencimientoAgenda(cumplimiento)"
-              >
-                <time>{{ cumplimiento.fechaLimite | date: 'dd/MM' }}</time>
-                <span>
-                  <strong
-                    >{{ cumplimiento.codigoObligacion }} · {{ cumplimiento.periodoClave }}</strong
-                  >
-                  <small
-                    >{{ cumplimiento.nombreCliente }} · {{ cumplimiento.nombreObligacion }}</small
-                  >
-                </span>
-                <span [ngClass]="['estado', cumplimiento.estado]">{{
-                  etiquetaEstadoCumplimiento(cumplimiento.estado)
-                }}</span>
-              </button>
-            } @empty {
-              <p class="empty">No hay tareas fiscales pendientes para este ejercicio.</p>
-            }
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>{{ esCliente() ? 'Situación de mis trimestres' : 'Estado por trimestre' }}</h2>
-              <p>
-                {{
-                  esCliente()
-                    ? 'Seguimiento documental; la presentación fiscal se confirma por separado'
-                    : anioSeleccionado
-                }}
-              </p>
-            </div>
-            <div class="toolbar">
-              <input
-                class="anio-input"
-                type="number"
-                [(ngModel)]="anioSeleccionado"
-                (change)="cargarEspacioTrabajo()"
-              />
-              <div class="segmented">
-                @for (trimestre of trimestres; track trimestre) {
-                  <button
-                    type="button"
-                    [class.activo]="trimestreActivo === trimestre"
-                    (click)="seleccionarTrimestre(trimestre)"
-                  >
-                    T{{ trimestre }}
-                  </button>
-                }
-              </div>
-              <button type="button" class="secondary" (click)="descargarZip()">
-                <svg lucideDownload size="17"></svg>
-                <span>{{ esCliente() ? 'Descargar trimestre' : 'ZIP' }}</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="estado-grid">
-            <div class="grid-head">Cliente</div>
-            @for (trimestre of trimestres; track trimestre) {
-              <div class="grid-head">T{{ trimestre }}</div>
-            }
-
-            @for (cliente of panel?.clientes ?? []; track cliente.clienteId) {
-              <div class="cliente-cell">
-                <strong>{{ cliente.nombreCliente }}</strong>
-                <span>{{ etiquetaTipoCliente(cliente.tipo) }}</span>
-              </div>
-              @for (trimestre of trimestres; track trimestre) {
-                <div class="trimestre-cell">
-                  <span class="estado" [class]="trimestreStatus(cliente.clienteId, trimestre)">
-                    {{ etiquetaEstadoTrimestre(trimestreStatus(cliente.clienteId, trimestre)) }}
-                  </span>
-                </div>
-              }
-            }
-          </div>
-        </section>
-
-        <section class="listar-section">
-          <div class="panel-header">
-            <div>
-              <h2>
-                {{ esCliente() ? 'Mis últimos archivos' : 'Actividad' }} T{{ trimestreActivo }}
-              </h2>
-              <p>
-                {{
-                  esCliente()
-                    ? 'Documentos que has aportado durante el trimestre'
-                    : 'Últimos documentos recibidos'
-                }}
-              </p>
-            </div>
-          </div>
-
-          <div class="documento-listar">
-            @for (documento of documentosDelTrimestre(); track documento.id) {
-              <article class="documento-row">
-                <div class="file-icon">
-                  <svg lucideFileText size="20"></svg>
-                </div>
-                <div>
-                  <strong>{{ documento.nombreArchivoOriginal }}</strong>
-                  <span
-                    >{{ documento.nombreCliente }} - {{ etiquetaTipoDocumento(documento.tipo) }} -
-                    {{ documento.creadoEn | date: 'dd/MM/yyyy' }}</span
-                  >
-                </div>
-                <span class="estado" [class]="documento.estado">{{
-                  etiquetaEstadoDocumento(documento.estado)
-                }}</span>
-              </article>
-            } @empty {
-              <div class="empty con-accion">
+        <details class="panel-secundario">
+          <summary>Seguimiento por trimestre <span>Estado de las obligaciones</span></summary>
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>{{ esCliente() ? 'Situación de mis trimestres' : 'Estado por trimestre' }}</h2>
                 <p>
                   {{
                     esCliente()
-                      ? 'Todavía no has añadido archivos para este trimestre.'
-                      : 'No hay documentos para este trimestre.'
+                      ? 'Seguimiento documental; la presentación fiscal se confirma por separado'
+                      : anioSeleccionado
                   }}
                 </p>
-                @if (esCliente()) {
-                  <button type="button" class="secondary small" (click)="vistaActiva = 'subir'">
-                    Añadir documentos
-                  </button>
-                }
               </div>
-            }
-          </div>
-        </section>
+              <div class="toolbar">
+                <input
+                  class="anio-input"
+                  type="number"
+                  [(ngModel)]="anioSeleccionado"
+                  (change)="cargarEspacioTrabajo()"
+                />
+                <div class="segmented">
+                  @for (trimestre of trimestres; track trimestre) {
+                    <button
+                      type="button"
+                      [class.activo]="trimestreActivo === trimestre"
+                      (click)="seleccionarTrimestre(trimestre)"
+                    >
+                      T{{ trimestre }}
+                    </button>
+                  }
+                </div>
+                <button type="button" class="secondary" (click)="descargarZip()">
+                  <svg lucideDownload size="17"></svg>
+                  <span>{{ esCliente() ? 'Descargar trimestre' : 'ZIP' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="estado-grid">
+              <div class="grid-head">Cliente</div>
+              @for (trimestre of trimestres; track trimestre) {
+                <div class="grid-head">T{{ trimestre }}</div>
+              }
+
+              @for (cliente of panel?.clientes ?? []; track cliente.clienteId) {
+                <div class="cliente-cell">
+                  <strong>{{ cliente.nombreCliente }}</strong>
+                  <span>{{ etiquetaTipoCliente(cliente.tipo) }}</span>
+                </div>
+                @for (trimestre of trimestres; track trimestre) {
+                  <div class="trimestre-cell">
+                    <span class="estado" [class]="trimestreStatus(cliente.clienteId, trimestre)">
+                      {{ etiquetaEstadoTrimestre(trimestreStatus(cliente.clienteId, trimestre)) }}
+                    </span>
+                  </div>
+                }
+              }
+            </div>
+          </section>
+        </details>
+        @if (guiaVisible) {
+          <details class="panel-secundario">
+            <summary>
+              {{ esCliente() ? 'Cómo preparar tus entregas' : 'Configurar mi gestoría' }}
+              <span>Guía de primeros pasos</span>
+            </summary>
+            <app-guia-inicial
+              [rol]="usuarioActual.rol"
+              (cerrar)="cerrarGuia()"
+              (navegar)="irDesdeGuia($event)"
+            />
+          </details>
+        }
       }
 
       @if (vistaActiva === 'clientes') {
@@ -389,27 +239,20 @@
             [etiquetaTipo]="clientes[0] ? etiquetaTipoCliente(clientes[0].tipo) : ''"
             (exportar)="exportarRgpd($event)"
           />
-        } @else {
-          <section class="directorio-clientes">
-            <div class="panel">
-              <div class="panel-header">
-                <div>
-                  <h2>Todos los clientes</h2>
-                  <p>
-                    {{ clientesFiltrados().length }}
-                    {{ clientesFiltrados().length === 1 ? 'cliente' : 'clientes' }}
-                  </p>
-                </div>
-                <div class="buscar">
-                  <svg lucideSearch size="17"></svg>
-                  <input [(ngModel)]="terminoBusqueda" placeholder="Buscar" />
-                </div>
-              </div>
-
+        } @else if (!clienteObligacionesSeleccionado) {
+          @defer (on immediate) {
+            <app-directorio-clientes
+              [clientes]="clientes"
+              [solicitudes]="solicitudes"
+              [puedeGestionar]="puedeGestionarClientes()"
+              (crear)="nuevoAltaCliente()"
+              (editar)="editarCliente($event)"
+              (documentos)="abrirExpediente($event)"
+              (fiscal)="abrirObligaciones($event)"
+              (archivar)="alternarCliente($event)"
+              (exportar)="exportarRgpd($event)"
+            >
               @if (puedeGestionarClientes()) {
-                <button type="button" class="primary" (click)="nuevoAltaCliente()">
-                  <svg lucidePlus size="17"></svg>Nuevo cliente
-                </button>
                 <details class="importacion-clientes">
                   <summary>Importar varios clientes desde CSV</summary>
                   <p>
@@ -460,75 +303,14 @@
                   }
                 </details>
               }
-              <div class="cliente-listar">
-                @for (cliente of clientesFiltrados(); track cliente.id) {
-                  <article class="cliente-card">
-                    <div>
-                      <strong>{{ cliente.nombre }}</strong>
-                      <span>{{ cliente.nif }} - {{ etiquetaTipoCliente(cliente.tipo) }}</span>
-                      @if (cliente.planDocumental) {
-                        <small class="cliente-plan"
-                          >Plan documental
-                          {{ cliente.planDocumental.automatico ? 'automático' : 'manual' }}</small
-                        >
-                      }
-                    </div>
-                    <div>
-                      <span>{{ cliente.email }}</span>
-                      <span>{{ cliente.telefono || '-' }}</span>
-                    </div>
-                    <span class="pill" [class.off]="!cliente.activo">{{
-                      cliente.activo ? 'Activo' : 'Inactivo'
-                    }}</span>
-                    <button type="button" class="primary small" (click)="abrirExpediente(cliente)">
-                      Ver documentos
-                    </button>
-                    <div class="cliente-acciones">
-                      <button
-                        type="button"
-                        class="secondary small"
-                        (click)="abrirObligaciones(cliente)"
-                      >
-                        Ficha fiscal
-                      </button>
-                      @if (puedeGestionarClientes()) {
-                        <button
-                          type="button"
-                          class="secondary small"
-                          (click)="editarCliente(cliente)"
-                        >
-                          Configurar cliente
-                        </button>
-                      }
-                      <details class="cliente-mas">
-                        <summary>Más opciones</summary>
-                        <div>
-                          @if (puedeGestionarClientes()) {
-                            <button
-                              type="button"
-                              class="secondary small"
-                              (click)="alternarCliente(cliente)"
-                            >
-                              {{ cliente.activo ? 'Archivar' : 'Reactivar' }}
-                            </button>
-                          }
-                          <button
-                            type="button"
-                            class="secondary small"
-                            (click)="exportarRgpd(cliente)"
-                          >
-                            Exportación RGPD
-                          </button>
-                        </div>
-                      </details>
-                    </div>
-                  </article>
-                } @empty {
-                  <p class="empty">No hay clientes.</p>
-                }
-              </div>
+            </app-directorio-clientes>
+          } @placeholder {
+            <p class="empty">Preparando tus clientes…</p>
+          } @error {
+            <div class="vista-no-disponible" role="alert">
+              <strong>No se pudo cargar el directorio.</strong><a href="/">Recargar Savia</a>
             </div>
-          </section>
+          }
         }
 
         @if (clienteObligacionesSeleccionado) {
@@ -549,7 +331,7 @@
               </div>
               @if (!esCliente()) {
                 <button type="button" class="secondary small" (click)="cerrarObligaciones()">
-                  Cerrar ficha
+                  Volver a clientes
                 </button>
               }
             </div>
@@ -1211,7 +993,7 @@
                   <p>{{ solicitud.descripcion || 'Sin instrucciones adicionales' }}</p>
                   <p class="estado-explicado">{{ descripcionEstadoSolicitud(solicitud) }}</p>
                   <small>
-                    {{ solicitud.nombreAsesorAsignado || 'Sin responsable' }} ·
+                    {{ nombrePersona(solicitud.nombreAsesorAsignado || 'Sin responsable') }} ·
                     {{ etiquetaRecurrencia(solicitud.recurrencia) }}
                   </small>
                   <div class="row-actions">
@@ -2024,7 +1806,7 @@
       @if (vistaActiva === 'equipo' && puedeAdministrar()) {
         <section class="configuracion-pasos" aria-label="Preparación del equipo">
           <div [class.completo]="asesores().length > 0">
-            <span>1</span><strong>Crear asesor</strong
+            <span>1</span><strong>Crear gestor</strong
             ><small>{{ asesores().length > 0 ? 'Preparado' : 'Pendiente' }}</small>
           </div>
           <div [class.completo]="asignaciones.length > 0">
@@ -2035,7 +1817,7 @@
           </div>
           <div>
             <span>3</span><strong>Comprobar acceso</strong
-            ><small>Revisión manual: el asesor solo debe ver sus clientes</small>
+            ><small>Revisión manual: el gestor solo debe ver sus clientes</small>
           </div>
         </section>
         <section class="two-column">
@@ -2072,7 +1854,7 @@
                 Perfil
                 <select name="userRole" [(ngModel)]="nuevoUsuario.rol">
                   <option value="ADMIN">Administrador</option>
-                  <option value="ASESOR">Asesor</option>
+                  <option value="ASESOR">Gestor</option>
                   <option value="CLIENTE">Cliente</option>
                 </select>
               </label>
@@ -2103,7 +1885,7 @@
                 <article class="documento-row">
                   <span class="avatar">{{ usuario.nombre.slice(0, 2).toUpperCase() }}</span>
                   <div>
-                    <strong>{{ usuario.nombre }}</strong>
+                    <strong>{{ nombrePersona(usuario.nombre) }}</strong>
                     <span>{{ usuario.email }} · {{ etiquetaRol(usuario.rol) }}</span>
                   </div>
                   <span class="pill" [class.off]="!usuario.activo">{{
@@ -2127,13 +1909,13 @@
           <div class="panel-header">
             <div>
               <h2>Asignación de clientes</h2>
-              <p>Cada asesor solo verá los clientes que tenga asignados</p>
+              <p>Cada gestor solo verá los clientes que tenga asignados</p>
             </div>
           </div>
           <form class="inline-form" (ngSubmit)="assignClient()">
             <select name="assignmentAdvisor" [(ngModel)]="formularioAsignacion.asesorId">
               @for (asesor of asesores(); track asesor.id) {
-                <option [ngValue]="asesor.id">{{ asesor.nombre }}</option>
+                <option [ngValue]="asesor.id">{{ nombrePersona(asesor.nombre) }}</option>
               }
             </select>
             <select name="assignmentClient" [(ngModel)]="formularioAsignacion.clienteId">
@@ -2147,7 +1929,7 @@
             @for (asignacion of asignaciones; track asignacion.id) {
               <article class="documento-row">
                 <div>
-                  <strong>{{ asignacion.nombreAsesor }}</strong>
+                  <strong>{{ nombrePersona(asignacion.nombreAsesor) }}</strong>
                   <span>{{ asignacion.nombreCliente }}</span>
                 </div>
                 <button

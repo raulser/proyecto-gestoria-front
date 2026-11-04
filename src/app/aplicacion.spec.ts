@@ -23,6 +23,14 @@ describe('Aplicacion', () => {
     expect(app).toBeTruthy();
   });
 
+  it('abre directamente el acceso cuando no hay sesión y muestra el perfil Gestor', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    const acceder = vi.spyOn(app, 'iniciarSesion').mockImplementation(() => {});
+    app.ngOnInit();
+    expect(acceder).toHaveBeenCalledOnce();
+    expect(app.etiquetaRol('ASESOR')).toBe('Gestor');
+  });
+
   it('marca como falta un tipo del checklist sin documentos activos', () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     app.documentos = [];

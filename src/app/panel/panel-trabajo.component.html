@@ -1,0 +1,282 @@
+@if (panel) {
+  <div class="panel-trabajo">
+    <div class="periodo">
+      <p>
+        {{
+          esCliente
+            ? 'Tu documentación y tus próximas entregas.'
+            : 'Lo que necesita tu atención, en un mismo lugar.'
+        }}
+      </p>
+      <label
+        >Ejercicio
+        <select
+          [ngModel]="anio"
+          (ngModelChange)="anioChange.emit($event)"
+          aria-label="Ejercicio del panel"
+        >
+          @for (year of anios; track year) {
+            <option [ngValue]="year">{{ year }}</option>
+          }
+        </select></label
+      >
+    </div>
+    <div class="indicadores">
+      <button type="button" (click)="navegar.emit(esCliente ? 'documentos' : 'clientes')">
+        <span
+          >{{ esCliente ? 'Mis documentos' : 'Clientes activos'
+          }}<i class="azul" aria-hidden="true">↗</i></span
+        ><strong>{{ esCliente ? documentosAnio : clientesActivos }}</strong
+        ><small>{{ esCliente ? 'Archivos del ejercicio' : 'En tu cartera de trabajo' }}</small>
+      </button>
+      <button type="button" (click)="facturas.emit('FACTURA_RECIBIDA')">
+        <span>Facturas del ejercicio<i class="violeta" aria-hidden="true">≡</i></span
+        ><strong>{{ emitidas + recibidas }}</strong
+        ><small>{{ emitidas }} emitidas <b>·</b> {{ recibidas }} recibidas</small>
+      </button>
+      <button type="button" (click)="navegar.emit('documentos')">
+        <span
+          >{{ esCliente ? 'Documentos revisados' : 'Pendientes de revisión'
+          }}<i class="ambar" aria-hidden="true">↗</i></span
+        ><strong>{{
+          esCliente
+            ? (panel.totales.documentosRevisados ?? 0)
+            : (panel.totales.documentosRecibidos ?? 0)
+        }}</strong
+        ><small>{{ esCliente ? 'Revisados por tu gestoría' : 'Documentación recibida' }}</small>
+      </button>
+      <button type="button" (click)="navegar.emit('solicitudes')">
+        <span>Entregas en curso<i class="menta" aria-hidden="true">↗</i></span
+        ><strong>{{ solicitudesAbiertas }}</strong
+        ><small>Solicitudes abiertas o en preparación</small>
+      </button>
+    </div>
+    <div class="contenido-panel">
+      <section class="tarjeta proximas">
+        <header>
+          <div>
+            <span class="sobre">TU AGENDA</span>
+            <h2>
+              Próximas tareas <span>{{ tareas.length }}</span>
+            </h2>
+          </div>
+          <button type="button" class="enlace" (click)="navegar.emit('clientes')">
+            {{ esCliente ? 'Mi expediente' : 'Ver clientes' }} ↗
+          </button>
+        </header>
+        <div class="tareas">
+          @for (tarea of tareas.slice(0, 5); track tarea.clave) {
+            <button type="button" class="tarea" (click)="abrir(tarea)">
+              <span class="fecha" [class.urgente]="dias(tarea.fecha) <= 3"
+                ><strong>{{ tarea.fecha | date: 'dd' }}</strong
+                ><small>{{ mesFecha(tarea.fecha) }}</small></span
+              ><span class="tarea-nombre"
+                ><strong>{{ tarea.titulo }}</strong
+                ><small>{{ tarea.cliente }} <b>·</b> {{ tarea.clase }}</small></span
+              ><span class="plazo" [class.vencida]="dias(tarea.fecha) < 0">{{
+                plazo(tarea.fecha)
+              }}</span
+              ><span class="flecha" aria-hidden="true">↗</span>
+            </button>
+          } @empty {
+            <div class="vacio">
+              <span class="vacio-icono">✓</span><strong>Sin tareas pendientes</strong>
+              <p>
+                {{
+                  esCliente
+                    ? 'Las entregas y fechas que prepare tu gestoría aparecerán aquí.'
+                    : 'Las obligaciones, entregas y fechas del plan documental aparecerán aquí.'
+                }}
+              </p>
+              <button type="button" class="enlace" (click)="navegar.emit('clientes')">
+                {{ esCliente ? 'Ver mi expediente' : 'Preparar expedientes' }} ↗
+              </button>
+            </div>
+          }
+        </div>
+        <footer>
+          <span>Obligaciones y entregas de {{ anio }}</span
+          ><span>Ordenadas por fecha</span>
+        </footer>
+      </section>
+      <section class="tarjeta almacenamiento">
+        <header>
+          <div>
+            <span class="sobre">ESPACIO DOCUMENTAL</span>
+            <h2>Almacenamiento</h2>
+          </div>
+          <span class="punto" aria-hidden="true"></span>
+        </header>
+        @if (esAdmin && plan) {
+          <div class="uso">
+            <div class="anillo" [style.--porcentaje]="porcentaje + '%'">
+              <div>
+                <strong>{{ porcentaje | number: '1.0-1' }}<small>%</small></strong
+                ><span>utilizado</span>
+              </div>
+            </div>
+            <div class="capacidad">
+              <strong>{{ bytesTexto(bytes) }}</strong
+              ><span>de {{ bytesTexto(plan.maxBytesAlmacenamiento) }}</span
+              ><small
+                >{{ bytesTexto(Math.max(0, plan.maxBytesAlmacenamiento - bytes)) }} libres</small
+              >
+            </div>
+          </div>
+          <div class="plan-uso">
+            <span>Plan {{ plan.nombre }}</span
+            ><strong>{{ plan.clientesActivos }} / {{ plan.maxClientesActivos }} clientes</strong>
+          </div>
+          <div class="barra">
+            <i
+              [style.width.%]="
+                Math.min(100, (plan.clientesActivos * 100) / Math.max(1, plan.maxClientesActivos))
+              "
+            ></i>
+          </div>
+          <button type="button" class="enlace" (click)="navegar.emit('plan')">
+            Ver plan y límites ↗
+          </button>
+        } @else {
+          <div class="uso-simple">
+            <span class="sobre">{{
+              esCliente ? 'TUS ARCHIVOS VISIBLES' : 'TUS CLIENTES ASIGNADOS'
+            }}</span
+            ><strong>{{ bytesTexto(bytes) }}</strong>
+            <p>Espacio ocupado por la documentación de tus expedientes.</p>
+          </div>
+          <button type="button" class="enlace" (click)="navegar.emit('documentos')">
+            Ver documentación ↗
+          </button>
+        }
+      </section>
+      <section class="tarjeta clientes">
+        <header>
+          <div>
+            <span class="sobre">{{ esCliente ? 'MI EXPEDIENTE' : 'CONSUMO POR CLIENTE' }}</span>
+            <h2>Documentación y facturas</h2>
+          </div>
+          <button type="button" class="enlace" (click)="navegar.emit('documentos')">
+            Ver documentos ↗
+          </button>
+        </header>
+        @if (esCliente) {
+          <div class="archivos-cliente">
+            <button type="button" (click)="facturas.emit('FACTURA_EMITIDA')">
+              <span
+                ><strong>Facturas emitidas</strong><small>Las facturas de tus ventas</small></span
+              ><b>{{ emitidas }}</b
+              ><i aria-hidden="true">↗</i>
+            </button>
+            <button type="button" (click)="facturas.emit('FACTURA_RECIBIDA')">
+              <span><strong>Facturas recibidas</strong><small>Proveedores y servicios</small></span
+              ><b>{{ recibidas }}</b
+              ><i aria-hidden="true">↗</i>
+            </button>
+            <button type="button" (click)="navegar.emit('documentos')">
+              <span
+                ><strong>Todos mis archivos</strong><small>Tu documentación disponible</small></span
+              ><b>{{ documentosAnio }}</b
+              ><i aria-hidden="true">↗</i>
+            </button>
+          </div>
+        } @else {
+          <div class="tabla-consumo">
+            <div class="columnas">
+              <span>CLIENTE</span><span>FACTURAS</span><span>ARCHIVOS</span
+              ><span>ESPACIO TOTAL</span>
+            </div>
+            @for (cliente of clientesConsumo.slice(0, 5); track cliente.id) {
+              <button type="button" class="fila-consumo" (click)="documentos.emit(cliente)">
+                <span class="identidad"
+                  ><span class="avatar" [attr.data-color]="cliente.id % 4">{{
+                    iniciales(cliente.nombre)
+                  }}</span
+                  ><span
+                    ><strong>{{ cliente.nombre }}</strong
+                    ><small>{{ cliente.nif }}</small></span
+                  ></span
+                ><span>{{
+                  (cliente.consumo?.facturasEmitidas ?? 0) +
+                    (cliente.consumo?.facturasRecibidas ?? 0)
+                }}</span
+                ><span>{{ cliente.consumo?.documentos ?? 0 }}</span
+                ><strong>{{ bytesTexto(cliente.consumo?.bytesAlmacenados ?? 0) }}</strong>
+              </button>
+            } @empty {
+              <div class="vacio corto">
+                <strong>Aún no hay clientes</strong>
+                <p>Su consumo aparecerá al preparar los expedientes.</p>
+                <button type="button" class="enlace" (click)="navegar.emit('clientes')">
+                  Añadir un cliente ↗
+                </button>
+              </div>
+            }
+          </div>
+        }
+        <footer>
+          <span>Facturas y archivos de {{ anio }}</span
+          ><span>Espacio: todos los ejercicios</span>
+        </footer>
+      </section>
+      @if (esCliente) {
+        <section class="tarjeta entregas-cliente">
+          <header>
+            <div>
+              <span class="sobre">SEGUIMIENTO</span>
+              <h2>Mis entregas</h2>
+            </div>
+            <button type="button" class="enlace" (click)="navegar.emit('solicitudes')">
+              Ver todas ↗
+            </button>
+          </header>
+          @for (entrega of ultimasSolicitudes; track entrega.id) {
+            <button type="button" class="entrega-resumen" (click)="solicitud.emit(entrega)">
+              <strong>{{ entrega.titulo }}</strong
+              ><span
+                >{{ estadoEntrega(entrega) }} ·
+                {{ entrega.fechaVencimiento | date: 'dd/MM/yyyy' }}</span
+              >
+            </button>
+          } @empty {
+            <div class="vacio corto">
+              <strong>Sin entregas todavía</strong>
+              <p>Tu gestoría te avisará aquí cuando necesite documentación.</p>
+              <button type="button" class="enlace" (click)="navegar.emit('solicitudes')">
+                Ir a mis entregas ↗
+              </button>
+            </div>
+          }
+        </section>
+      } @else {
+        <section class="tarjeta actividad">
+          <header>
+            <div>
+              <span class="sobre">ACTIVIDAD DOCUMENTAL</span>
+              <h2>El ejercicio, de un vistazo</h2>
+            </div>
+          </header>
+          <div class="barras">
+            @for (t of [1, 2, 3, 4]; track t) {
+              <div>
+                <span>{{ trimestre(t) }}</span>
+                <div class="columna"><i [style.height.%]="Math.max(2, altura(t))"></i></div>
+                <small>T{{ t }}</small>
+              </div>
+            }
+          </div>
+          <p class="nota-grafico">Documentos aportados con periodo trimestral o mensual.</p>
+          <div class="facturas-resumen">
+            <button type="button" (click)="facturas.emit('FACTURA_EMITIDA')">
+              <span>Facturas emitidas</span><strong>{{ emitidas }} <i>↗</i></strong></button
+            ><button type="button" (click)="facturas.emit('FACTURA_RECIBIDA')">
+              <span>Facturas recibidas</span><strong>{{ recibidas }} <i>↗</i></strong>
+            </button>
+          </div>
+        </section>
+      }
+    </div>
+  </div>
+} @else {
+  <section class="estado-carga" role="status">Consultando el resumen de tu espacio…</section>
+}

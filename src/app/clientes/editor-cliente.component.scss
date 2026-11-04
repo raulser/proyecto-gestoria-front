@@ -2,7 +2,7 @@
   --tinta: #252638;
   --suave: #74758a;
   --linea: #e9eaf1;
-  --acento: #6654d9;
+  --acento: #4862e7;
   color: var(--tinta);
 }
 .fondo {
@@ -148,9 +148,9 @@ h3 {
   background: #fcfbff;
 }
 .tipo.seleccionado {
-  border-color: #8574e1;
+  border-color: #7e95dd;
   background: #f7f5ff;
-  box-shadow: 0 0 0 1px #8574e1;
+  box-shadow: 0 0 0 1px #7e95dd;
 }
 .simbolo {
   grid-row: 1/3;
@@ -213,7 +213,7 @@ input::placeholder {
 }
 input:focus,
 select:focus {
-  outline: 3px solid #6654d91c;
+  outline: 3px solid #4862e71c;
   border-color: #9181e4;
 }
 input[type='checkbox'] {

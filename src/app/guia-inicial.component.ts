@@ -182,7 +182,7 @@ export class GuiaInicialComponent {
           texto: 'Cada persona recibirá su acceso y los perfiles internos configurarán MFA.',
         },
         {
-          titulo: 'Asigna clientes a cada asesor.',
+          titulo: 'Asigna clientes a cada gestor.',
           texto: 'Solo verá los expedientes que tenga asignados.',
         },
         {

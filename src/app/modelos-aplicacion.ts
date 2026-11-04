@@ -298,6 +298,7 @@ export interface RespuestaTrimestreCliente {
 export interface RespuestaPanel {
   anio: number;
   clientes: RespuestaTrimestreCliente[];
+  consumo?: ConsumoDocumentalCliente[];
   totales: {
     totalClientes: number;
     trimestresFaltantes: number;
@@ -305,6 +306,14 @@ export interface RespuestaPanel {
     documentosRevisados: number;
     documentosRechazados: number;
   };
+}
+export interface ConsumoDocumentalCliente {
+  clienteId: number;
+  nombreCliente: string;
+  bytesAlmacenados: number;
+  documentos: number;
+  facturasEmitidas: number;
+  facturasRecibidas: number;
 }
 export interface RespuestaAsignacion {
   id: number;

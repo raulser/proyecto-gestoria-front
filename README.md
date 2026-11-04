@@ -1,16 +1,27 @@
 # Proyecto Gestoría · Frontend
 
-Aplicación Angular 21 para administradores, asesores y clientes.
+Aplicación Angular 21 para administradores, gestores y clientes.
 
 Se continúa el desarrollo en `main`. La alternativa Flutter permanece conservada
 en `flutter-migration` y no se utiliza para construir ni arrancar esta rama.
 El acceso conserva el tema de Savia en `keycloak-theme/savia`, montado por Compose
 en `/opt/keycloak/themes/savia`. El realm debe usar `loginTheme: savia`.
 
-En el entorno local, la entrada y el formulario de identidad muestran las cuentas
-de demostración de administrador, asesor y cliente. El formulario permite rellenar
-la cuenta elegida y requiere pulsar **Iniciar sesión** para acceder. Estas ayudas
-solo se muestran cuando el host del navegador es loopback.
+Cuando no hay sesión, el portal abre directamente el formulario de Keycloak.
+El diseño del acceso y de recuperación comparte la identidad de Savia. En local,
+los botones Administrador, Gestor y Cliente rellenan los datos de demostración;
+«Ver usuarios y contraseñas» permite consultarlos. Es necesario pulsar **Iniciar
+sesión** para acceder. Estas ayudas solo se muestran en un host loopback.
+
+El panel presenta tareas fiscales, entregas y fechas configuradas en los planes
+documentales, junto con facturas del ejercicio y consumo de almacenamiento por
+cliente. La cuota del plan corresponde a la gestoría y se muestra a sus
+administradores; el consumo conserva las versiones retenidas. Los clientes ven
+únicamente los agregados de sus archivos visibles.
+
+El directorio tiene búsqueda por nombre, NIF o correo, filtros de estado y una
+ficha lateral con acceso a documentos, obligaciones y configuración. Las vistas
+de panel, directorio y alta se cargan cuando se necesitan.
 
 ## Vistas
 

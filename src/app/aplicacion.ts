@@ -10,8 +10,6 @@ import {
   LucideFileUp,
   LucideLayoutDashboard,
   LucideLogOut,
-  LucidePlus,
-  LucideSearch,
   LucideSettings,
   LucideUpload,
   LucideUsers,
@@ -35,6 +33,8 @@ import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
 import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.component';
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
+import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
+import { DirectorioClientesComponent } from './clientes/directorio-clientes.component';
 import { EditorClienteComponent } from './clientes/editor-cliente.component';
 import { FormularioCliente } from './modelos-aplicacion';
 import {
@@ -76,6 +76,8 @@ import {
   selector: 'app-root',
   imports: [
     EditorClienteComponent,
+    DirectorioClientesComponent,
+    PanelTrabajoComponent,
     CommonModule,
     FormsModule,
     LucideCalendarDays,
@@ -85,8 +87,6 @@ import {
     LucideFileUp,
     LucideLayoutDashboard,
     LucideLogOut,
-    LucidePlus,
-    LucideSearch,
     LucideSettings,
     LucideUpload,
     LucideUsers,
@@ -398,6 +398,8 @@ export class Aplicacion implements OnInit {
     if (this.autenticacion.autenticado) {
       this.token = this.autenticacion.token;
       this.cargarSesion();
+    } else if (!this.usuarioActual) {
+      this.iniciarSesion();
     }
   }
 
@@ -427,6 +429,7 @@ export class Aplicacion implements OnInit {
 
   cambiarVista(vista: Vista): void {
     this.vistaActiva = vista;
+    if (vista === 'clientes' && !this.esCliente()) this.cerrarObligaciones();
     if (vista === 'clientes' && this.esCliente() && this.clientes[0]) {
       this.abrirObligaciones(this.clientes[0]);
     }
@@ -650,7 +653,10 @@ export class Aplicacion implements OnInit {
       >(`${this.urlBaseApi}/api/usuarios`, { headers: this.cabecerasAutenticacion() })
       .subscribe({
         next: (respuesta) => {
-          this.usuarios = respuesta.datos;
+          this.usuarios = respuesta.datos.map((u) => ({
+            ...u,
+            nombre: this.nombrePersona(u.nombre),
+          }));
           const firstAdvisor = this.asesores()[0];
           if (!this.formularioAsignacion.asesorId && firstAdvisor) {
             this.formularioAsignacion.asesorId = firstAdvisor.id;
@@ -979,7 +985,12 @@ export class Aplicacion implements OnInit {
         `${this.urlBaseApi}/api/clientes/${clienteId}/perfil-fiscal`,
         { headers: this.cabecerasAutenticacion() },
       )
-      .pipe(finalize(() => (this.cargandoPerfilFiscal = false)))
+      .pipe(
+        finalize(() => {
+          this.cargandoPerfilFiscal = false;
+          this.detectorCambios.markForCheck();
+        }),
+      )
       .subscribe({
         next: (respuesta) => {
           this.perfilFiscalCliente = respuesta.datos;
@@ -1872,7 +1883,7 @@ export class Aplicacion implements OnInit {
 
   assignClient(): void {
     if (!this.formularioAsignacion.asesorId || !this.formularioAsignacion.clienteId) {
-      this.error = 'Selecciona asesor y cliente';
+      this.error = 'Selecciona gestor y cliente';
       return;
     }
     this.http
@@ -2586,6 +2597,31 @@ export class Aplicacion implements OnInit {
     this.cargarDocumentos();
   }
 
+  abrirSolicitudPanel(solicitud: RespuestaSolicitudDocumento): void {
+    if (this.esCliente() && solicitud.estado !== 'ENVIADA') {
+      this.usarSolicitudParaSubida(solicitud);
+      return;
+    }
+    if (solicitud.estado === 'ENVIADA') {
+      this.abrirDocumentosSolicitud(solicitud);
+      return;
+    }
+    this.vistaActiva = 'solicitudes';
+  }
+  abrirFacturasPanel(tipo: TipoDocumento): void {
+    this.filtroClienteDocumento = null;
+    this.filtroSolicitudDocumento = null;
+    this.filtroOrigenDocumento = '';
+    this.filtroEstadoDocumento = '';
+    this.filtroPeriodoDocumento = '';
+    this.filtroVisibilidadDocumento = '';
+    this.terminoBusquedaDocumentos = '';
+    this.vistaActiva = 'documentos';
+    this.filtroTipoDocumento = tipo;
+    this.filtroAnioDocumento = this.anioSeleccionado;
+    this.cargarPaginaDocumentos(0);
+  }
+
   abrirExpediente(cliente: RespuestaCliente): void {
     this.filtroClienteDocumento = cliente.id;
     this.filtroSolicitudDocumento = null;
@@ -2627,7 +2663,7 @@ export class Aplicacion implements OnInit {
 
   tituloVista(): string {
     const titulos: Record<Vista, string> = {
-      panel: this.esCliente() ? 'Mi espacio documental' : 'Panel de asesoría',
+      panel: this.esCliente() ? 'Mi espacio documental' : 'Tu espacio de trabajo',
       clientes: this.esCliente() ? 'Mis datos y fechas fiscales' : 'Clientes',
       documentos: this.esCliente() ? 'Mis archivos' : 'Repositorio documental',
       solicitudes: this.esCliente() ? 'Lo que debo entregar' : 'Peticiones de documentación',
@@ -2639,11 +2675,25 @@ export class Aplicacion implements OnInit {
     return titulos[this.vistaActiva];
   }
 
+  nombrePersona(nombre: string): string {
+    return nombre === 'Asesor Demo' ? 'Gestor Demo' : nombre;
+  }
+
+  inicialesNombre(nombre: string): string {
+    return this.nombrePersona(nombre)
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((parte) => parte[0])
+      .join('')
+      .toUpperCase();
+  }
+
   etiquetaRol(rol: Rol): string {
     const etiquetas: Record<Rol, string> = {
       ADMIN_PLATAFORMA: 'Administración de plataforma',
       ADMIN: 'Administración de la gestoría',
-      ASESOR: 'Asesoría',
+      ASESOR: 'Gestor',
       CLIENTE: 'Cliente',
     };
     return etiquetas[rol];
@@ -2685,7 +2735,7 @@ export class Aplicacion implements OnInit {
         );
         return {
           id: asesor.id,
-          nombre: asesor.nombre,
+          nombre: this.nombrePersona(asesor.nombre),
           clientes: clientes.size,
           abiertas: solicitudes.filter(
             (solicitud) => solicitud.estado === 'ABIERTA' || solicitud.estado === 'PARCIAL',
@@ -2941,7 +2991,7 @@ export class Aplicacion implements OnInit {
       JUSTIFICANTE_PRESENTACION: 'Justificante de presentación',
       LIQUIDACION: 'Liquidación',
       COMUNICACION_ADMINISTRACION: 'Comunicación de la Administración',
-      INFORME_ASESORIA: 'Informe de la asesoría',
+      INFORME_ASESORIA: 'Informe de la gestoría',
       OTRO: 'Otro',
     };
     return labels[tipo];
@@ -3103,7 +3153,7 @@ export class Aplicacion implements OnInit {
   private aplicarMarca(color: string | null): void {
     globalThis.document.documentElement.style.setProperty(
       '--brand-primary',
-      !color || color.toLowerCase() === '#226b3b' ? '#6654d9' : color,
+      !color || color.toLowerCase() === '#226b3b' ? '#4862e7' : color,
     );
   }
 
