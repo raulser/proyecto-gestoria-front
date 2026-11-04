@@ -1,0 +1,43 @@
+services:
+  keycloak:
+    environment:
+      KC_HOSTNAME_ADMIN: http://localhost:8091
+
+  lan:
+    image: nginx:1.29-alpine
+    environment:
+      SAVIA_LAN_IP: ${SAVIA_LAN_IP:?Ejecuta iniciar.ps1}
+      SAVIA_LAN_HTTPS_PORT: ${SAVIA_LAN_HTTPS_PORT:-8090}
+      NGINX_ENVSUBST_FILTER: ^SAVIA_LAN_
+    ports:
+      - "${SAVIA_LAN_IP}:${SAVIA_LAN_HTTPS_PORT:-8090}:443"
+      - "${SAVIA_LAN_IP}:${SAVIA_LAN_SETUP_PORT:-8092}:80"
+    volumes:
+      - type: bind
+        source: ./proyecto-gestoria-front/ops/lan/nginx.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+      - type: bind
+        source: ./proyecto-gestoria-front/ops/lan/proxy-auth.conf
+        target: /etc/nginx/proxy-auth.conf
+        read_only: true
+      - type: bind
+        source: ${SAVIA_LAN_ROOT}/tls
+        target: /etc/savia/tls
+        read_only: true
+      - type: bind
+        source: ${SAVIA_LAN_ROOT}/public
+        target: /usr/share/nginx/html
+        read_only: true
+    depends_on:
+      web:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks: [application]
+    healthcheck:
+      test: [CMD-SHELL, "wget -qO- http://127.0.0.1/nginx-health | grep -q '^ok$'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped

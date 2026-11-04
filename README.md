@@ -70,6 +70,74 @@ la pantalla vacía.
 El tema del acceso elimina los márgenes heredados del logo y compacta sus
 espaciados en ventanas de poca altura para mantener visible el botón de entrada.
 
+## Acceso desde la misma red
+
+Con Docker Desktop arrancado y PowerShell 7, desde este repositorio:
+
+```powershell
+./ops/lan/iniciar.ps1
+# Para seleccionar la tarjeta de red o cambiar los puertos:
+./ops/lan/iniciar.ps1 -Ip 192.168.1.43 -Puerto 8090 -PuertoCertificado 8092
+```
+
+El script imprime la dirección HTTPS de la aplicación y la dirección HTTP de
+preparación de Android. Esta segunda página permite descargar únicamente el
+certificado público e incluye los pasos de instalación. El móvil debe estar en
+la misma Wi-Fi. El PC y Docker deben permanecer encendidos. La configuración es
+de desarrollo; no abre puertos del router ni configura acceso desde Internet.
+
+El acceso local del PC sigue en `http://localhost:8090`. En la IP de la red se
+utiliza HTTPS, aunque coincida el número de puerto: el navegador considera
+`localhost` un contexto seguro especial, pero no una IP LAN por HTTP. El adaptador
+Keycloak necesita Web Crypto para el flujo con PKCE. Véanse los
+[contextos seguros del navegador](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts)
+y la [configuración del hostname de Keycloak](https://www.keycloak.org/server/hostname).
+
+El override `ops/lan/compose.lan.yaml` añade un proxy Nginx publicado exclusivamente
+en la IP elegida. La base de datos, MinIO y la administración de Keycloak mantienen
+sus enlaces a loopback. El proxy solo publica el realm `gestoria` y sus recursos;
+los endpoints administrativos, el realm `master` y la salud de Keycloak no se
+publican. Se autorizan en el cliente OIDC solo la URL exacta de este entorno y
+sus rutas, conservando las redirecciones locales existentes y PKCE S256.
+
+La CA y la clave del servidor se generan localmente. La clave de la CA no es
+exportable y permanece en el almacén del usuario de Windows. Los PEM del servidor,
+el entorno generado y los metadatos se guardan en `../storage/lan`, fuera de este
+repositorio y con permisos restringidos. El certificado público de la CA se
+instala en las raíces del usuario de Windows y, una vez, en el Android de prueba.
+La página muestra su huella SHA-256. Se puede retirar después desde los almacenes
+de confianza de ambos dispositivos. Las instrucciones de Android pueden variar
+según el fabricante: [ayuda oficial de Google](https://support.google.com/pixelphone/answer/2844832?hl=es).
+
+Si Windows bloquea el acceso de Docker y no existe una regla de entrada para
+Docker Desktop, ejecutar en PowerShell **como administrador**:
+
+```powershell
+./ops/lan/iniciar.ps1 -ConfigurarFirewall
+```
+
+Ese parámetro añade reglas solo para los dos puertos, la IP, la interfaz y la
+subred local. No desactiva el firewall ni modifica las reglas previas de Docker.
+Una Wi-Fi de invitados puede aislar los dispositivos aunque compartan el router.
+Si cambia la IP del PC, repetir `iniciar.ps1` y utilizar la nueva dirección;
+mantiene la misma CA mientras siga vigente, y renueva el certificado del servidor.
+
+Mientras se use LAN, arrancar con este script para conservar las URLs públicas
+coherentes entre Keycloak, la API y Angular. No modifica el `.env` base ni los
+datos. `./ops/lan/verificar.ps1` comprueba TLS, las URLs OIDC, la protección de la
+API, los bloqueos de rutas internas y el certificado descargable.
+Para volver al arranque exclusivamente local:
+
+```powershell
+./ops/lan/parar.ps1
+```
+
+El script retira la URL LAN del cliente OIDC, elimina el proxy LAN y restaura la
+configuración local de los servicios. Si se crearon reglas de firewall con el
+parámetro anterior, ejecutar también la parada como administrador. Conserva los
+certificados para reutilizarlos. Al cambiar entre ambos modos habrá que iniciar
+sesión de nuevo.
+
 ## Calidad
 
 ```powershell

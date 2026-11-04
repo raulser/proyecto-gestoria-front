@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Savia · Acceso desde Android</title>
+<style>
+  :root{font-family:system-ui,sans-serif;color:#252338;background:#f6f5fa;color-scheme:light}
+  *{box-sizing:border-box}body{margin:0;padding:32px 20px}main{max-width:650px;margin:auto;background:white;border:1px solid #e5e1ef;border-radius:24px;padding:clamp(24px,6vw,48px)}
+  .marca{color:#7140d1;font-size:26px;font-weight:700;margin:0 0 32px}h1{font-size:28px;line-height:1.2;letter-spacing:-.8px;margin:0 0 16px}p,li{font-size:15px;line-height:1.65;color:#625d74}ol{padding-left:20px}li{padding-left:5px;margin:16px 0}a{color:#6b37c8}a.boton{display:block;padding:14px 20px;border-radius:12px;background:#7140d1;color:white;text-decoration:none;font-size:15px;font-weight:600;text-align:center;margin:24px 0}small{color:#797184;line-height:1.6;display:block}.huella{overflow-wrap:anywhere;font:11px/1.6 monospace;background:#f6f5fa;border-radius:8px;padding:12px}strong{color:#363044}
+</style>
+<main>
+  <p class="marca">savia</p>
+  <h1>Accede desde tu Android</h1>
+  <p>Conecta el móvil a la misma Wi‑Fi que el PC. Instala este certificado local una vez para poder iniciar sesión con una conexión segura.</p>
+  <a class="boton" href="/savia-local-ca.crt" download>Descargar certificado local</a>
+  <ol>
+    <li>Abre los <strong>Ajustes de Android</strong> y busca <strong>Instalar certificado</strong>. Según el fabricante, está en Seguridad → Cifrado y credenciales → Instalar un certificado.</li>
+    <li>Elige <strong>Certificado de CA</strong> y selecciona <strong>savia-local-ca.crt</strong> en Descargas. Android puede pedir el PIN de desbloqueo.</li>
+    <li>Abre Savia con el botón de abajo e inicia sesión con tu usuario habitual.</li>
+  </ol>
+  <a class="boton" href="{{ORIGEN}}">Abrir Savia</a>
+  <small>{{ORIGEN}} · El PC y Docker deben permanecer encendidos.</small>
+  <details style="margin-top:24px"><summary>Identificar el certificado</summary><p>Nombre: Savia LAN desarrollo. Huella SHA‑256:</p><p class="huella">{{HUELLA}}</p><small>Puedes retirarlo después desde Ajustes → Credenciales de confianza → Usuario. Es exclusivo de este entorno de desarrollo.</small></details>
+</main>
+</html>

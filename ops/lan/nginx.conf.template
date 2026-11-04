@@ -1,0 +1,65 @@
+# Solo la página de instalación y el certificado público se sirven por HTTP.
+server {
+    listen 80;
+    server_name ${SAVIA_LAN_IP};
+    server_tokens off;
+    root /usr/share/nginx/html;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Cache-Control no-store always;
+    location = /nginx-health { access_log off; return 200 "ok\n"; }
+    location = / { try_files /index.html =404; }
+    location = /savia-local-ca.crt {
+        default_type application/x-x509-ca-cert;
+        add_header Content-Disposition 'attachment; filename="savia-local-ca.crt"';
+        try_files $uri =404;
+    }
+    location / { return 404; }
+}
+
+server {
+    listen 443 ssl;
+    server_name ${SAVIA_LAN_IP};
+    server_tokens off;
+    if ($host != "${SAVIA_LAN_IP}") { return 444; }
+    set $savia_public_port ${SAVIA_LAN_HTTPS_PORT};
+    ssl_certificate /etc/savia/tls/server.crt;
+    ssl_certificate_key /etc/savia/tls/server.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_tickets off;
+    # Si se escribe solo IP:puerto en el navegador, pasar al protocolo seguro.
+    error_page 497 =308 https://${SAVIA_LAN_IP}:${SAVIA_LAN_HTTPS_PORT}$request_uri;
+    client_max_body_size 30m;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+    # Se publica únicamente el realm de Savia y los recursos del formulario.
+    location ^~ /auth/realms/gestoria/ {
+        proxy_pass http://keycloak:8080/realms/gestoria/;
+        include /etc/nginx/proxy-auth.conf;
+    }
+    location ^~ /auth/resources/ {
+        proxy_pass http://keycloak:8080/resources/;
+        include /etc/nginx/proxy-auth.conf;
+    }
+    location /auth/ { return 404; }
+    location /api/ {
+        proxy_pass http://api:8080;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Port ${SAVIA_LAN_HTTPS_PORT};
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_request_buffering off;
+    }
+    location / {
+        proxy_pass http://web:8080;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Port ${SAVIA_LAN_HTTPS_PORT};
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+}
