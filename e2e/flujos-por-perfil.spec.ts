@@ -65,7 +65,7 @@ test('gestor: distingue petición documental de obligación fiscal', async ({ pa
   await page.getByRole('button', { name: 'Solicitudes', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Peticiones de documentación' })).toBeVisible();
   await expect(
-    page.getByText('Petición documental y obligación fiscal son cosas distintas'),
+    page.getByRole('button', { name: 'Ayuda con los estados', exact: true }),
   ).toBeVisible();
   await expect(page.getByRole('button', { name: 'Equipo', exact: true })).toHaveCount(0);
 
@@ -93,9 +93,37 @@ test('cliente: entiende la entrega y conserva acceso a su expediente', async ({ 
   await expect(page.getByPlaceholder('Buscar por nombre, NIF o email')).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Lo que debo entregar', exact: true }).click();
-  await expect(page.getByText('Puedes añadir tantas facturas como necesites')).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Ayuda con los estados', exact: true }),
+  ).toBeVisible();
   await expect(page.getByRole('button', { name: 'Equipo' })).toHaveCount(0);
   await comprobarAccesibilidad(page);
+});
+
+test('la sesión perdida ofrece recuperar el acceso sin una cascada de errores', async ({
+  page,
+  context,
+}) => {
+  await iniciarSesion(page, 'admin');
+  const otraPestana = await context.newPage();
+  await otraPestana.goto('/');
+  await expect(
+    otraPestana.getByRole('heading', { name: 'Panel de trabajo', exact: true }),
+  ).toBeVisible();
+  await otraPestana.getByRole('button', { name: 'Cerrar sesión', exact: true }).click();
+
+  const mensajes = page.locator('.centro-feedback');
+  await expect(mensajes.getByText('Tu sesión ha caducado', { exact: true })).toBeVisible({
+    timeout: 20000,
+  });
+  await expect(mensajes.locator('.mensaje')).toHaveCount(1);
+  await mensajes.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
+  await page.getByLabel('Correo o usuario').fill(usuarios.admin.usuario);
+  await page.getByLabel('Contraseña', { exact: true }).fill(usuarios.admin.clave);
+  await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Panel de trabajo', exact: true })).toBeVisible();
+  await expect(page.locator('.centro-feedback .mensaje')).toHaveCount(0);
+  await otraPestana.close();
 });
 
 test('@mobile móvil: muestra etiquetas y mantiene las opciones secundarias accesibles', async ({

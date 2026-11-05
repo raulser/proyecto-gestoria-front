@@ -17,12 +17,16 @@
 }
 <app-centro-feedback />
 <app-dialogo-accion />
-<app-asociar-documento
-  [documento]="documentoAsociando"
-  [solicitudes]="solicitudesCompatiblesDocumento(documentoAsociando)"
-  (asociar)="asociarDocumentoSolicitud($event)"
-  (cancelar)="documentoAsociando = null"
-/>
+@defer (when documentoAsociando !== null) {
+  <app-asociar-documento
+    [documento]="documentoAsociando"
+    [solicitudes]="solicitudesCompatiblesDocumento(documentoAsociando)"
+    (asociar)="asociarDocumentoSolicitud($event)"
+    (cancelar)="documentoAsociando = null"
+  />
+} @error {
+  <p role="alert">No se pudo abrir la clasificación. <a href="/">Recargar Savia</a></p>
+}
 
 @if (!usuarioActual) {
   <main class="acceso-puente" aria-live="polite">

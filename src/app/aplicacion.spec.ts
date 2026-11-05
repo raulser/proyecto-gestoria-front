@@ -1,6 +1,9 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Aplicacion } from './aplicacion';
+import { throwError } from 'rxjs';
+import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
+import { ServicioFeedback } from './infraestructura/servicio-feedback';
 import {
   RespuestaCliente,
   RespuestaCumplimientoObligacion,
@@ -21,6 +24,41 @@ describe('Aplicacion', () => {
     const fixture = TestBed.createComponent(Aplicacion);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('un fallo de conexión al cargar la cuenta no invalida la sesión', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    const peticion = vi
+      .spyOn(TestBed.inject(HttpClient), 'get')
+      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 0 })));
+    const salir = vi.spyOn(TestBed.inject(ServicioAutenticacionKeycloak), 'cerrarSesion');
+    try {
+      app.cargarSesion();
+      expect(salir).not.toHaveBeenCalled();
+      expect(app.error).toContain('No se pudo cargar tu cuenta');
+    } finally {
+      peticion.mockRestore();
+      salir.mockRestore();
+    }
+  });
+
+  it('la cuenta caducada conserva un único aviso para volver a entrar', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    const autenticacion = TestBed.inject(ServicioAutenticacionKeycloak);
+    const caducidad = autenticacion.notificarSesionCaducada();
+    const peticion = vi
+      .spyOn(TestBed.inject(HttpClient), 'get')
+      .mockReturnValue(throwError(() => caducidad));
+    const salir = vi.spyOn(autenticacion, 'cerrarSesion');
+    try {
+      app.cargarSesion();
+      expect(salir).not.toHaveBeenCalled();
+      expect(app.error).toContain('Tu sesión ha caducado');
+      expect(TestBed.inject(ServicioFeedback).mensajes()).toHaveLength(1);
+    } finally {
+      peticion.mockRestore();
+      salir.mockRestore();
+    }
   });
 
   it('abre directamente el acceso cuando no hay sesión y muestra el perfil Gestor', () => {

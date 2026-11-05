@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { LucideCircleCheck, LucideCircleX, LucideInfo, LucideX } from '@lucide/angular';
 import { ServicioFeedback } from './servicio-feedback';
+import { ServicioAutenticacionKeycloak } from '../servicio-autenticacion-keycloak';
 
 @Component({
   selector: 'app-centro-feedback',
@@ -16,14 +17,27 @@ import { ServicioFeedback } from './servicio-feedback';
         >
           <span class="icono" aria-hidden="true">
             @switch (mensaje.tipo) {
-              @case ('exito') { <svg lucideCircleCheck size="20"></svg> }
-              @case ('error') { <svg lucideCircleX size="20"></svg> }
-              @default { <svg lucideInfo size="20"></svg> }
+              @case ('exito') {
+                <svg lucideCircleCheck size="20"></svg>
+              }
+              @case ('error') {
+                <svg lucideCircleX size="20"></svg>
+              }
+              @default {
+                <svg lucideInfo size="20"></svg>
+              }
             }
           </span>
           <div>
             <strong>{{ mensaje.titulo }}</strong>
-            @if (mensaje.detalle) { <p>{{ mensaje.detalle }}</p> }
+            @if (mensaje.detalle) {
+              <p>{{ mensaje.detalle }}</p>
+            }
+            @if (mensaje.accion) {
+              <button class="accion-recuperar" type="button" (click)="recuperar(mensaje.accion)">
+                {{ mensaje.accion === 'recargar' ? 'Recargar Savia' : 'Iniciar sesión' }}
+              </button>
+            }
           </div>
           <button type="button" (click)="feedback.cerrar(mensaje.id)" aria-label="Cerrar mensaje">
             <svg lucideX size="18"></svg>
@@ -58,14 +72,34 @@ import { ServicioFeedback } from './servicio-feedback';
         box-shadow: 0 16px 40px rgb(22 40 31 / 18%);
         pointer-events: auto;
       }
-      .mensaje.error { border-left-color: #b42318; }
-      .mensaje.exito { border-left-color: #23864b; }
-      .mensaje.info { border-left-color: #356aa0; }
-      .mensaje.error .icono { color: #b42318; }
-      .mensaje.exito .icono { color: #23864b; }
-      .mensaje.info .icono { color: #356aa0; }
-      strong { display: block; line-height: 1.3; }
-      p { margin: 4px 0 0; color: #5b6962; font-size: 13px; line-height: 1.4; }
+      .mensaje.error {
+        border-left-color: #b42318;
+      }
+      .mensaje.exito {
+        border-left-color: #23864b;
+      }
+      .mensaje.info {
+        border-left-color: #356aa0;
+      }
+      .mensaje.error .icono {
+        color: #b42318;
+      }
+      .mensaje.exito .icono {
+        color: #23864b;
+      }
+      .mensaje.info .icono {
+        color: #356aa0;
+      }
+      strong {
+        display: block;
+        line-height: 1.3;
+      }
+      p {
+        margin: 4px 0 0;
+        color: #5b6962;
+        font-size: 13px;
+        line-height: 1.4;
+      }
       button {
         display: grid;
         place-items: center;
@@ -78,13 +112,47 @@ import { ServicioFeedback } from './servicio-feedback';
         color: #596760;
         cursor: pointer;
       }
-      button:hover { background: #edf2ef; }
+      button:hover {
+        background: #edf2ef;
+      }
+      button.accion-recuperar {
+        display: inline-flex;
+        width: auto;
+        height: auto;
+        min-height: 36px;
+        padding: 7px 12px;
+        margin-top: 10px;
+        background: #6b3fd1;
+        color: white;
+        font: inherit;
+        font-size: 13px;
+        border-radius: 8px;
+      }
       @media (max-width: 680px) {
-        .centro-feedback { top: 10px; right: 10px; width: calc(100vw - 20px); }
+        .centro-feedback {
+          top: 10px;
+          right: 10px;
+          width: calc(100vw - 20px);
+        }
       }
     `,
   ],
 })
 export class CentroFeedbackComponent {
   readonly feedback = inject(ServicioFeedback);
+  private readonly autenticacion = inject(ServicioAutenticacionKeycloak);
+  recuperar(accion: 'iniciar-sesion' | 'recargar'): void {
+    if (accion === 'recargar') {
+      window.location.reload();
+      return;
+    }
+    void this.autenticacion
+      .iniciarSesion()
+      .catch(() =>
+        this.feedback.error(
+          'No se pudo abrir el acceso',
+          'Revisa la conexión y vuelve a intentarlo.',
+        ),
+      );
+  }
 }

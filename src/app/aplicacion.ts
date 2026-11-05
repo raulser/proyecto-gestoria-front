@@ -15,6 +15,7 @@ import {
   LucideUsers,
 } from '@lucide/angular';
 import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
+import { ErrorConexionSesion, ErrorSesionCaducada } from './error-sesion';
 import { configuracionEjecucion } from './configuracion-ejecucion';
 import { catchError, concatMap, filter, finalize, from, map, of, tap, toArray } from 'rxjs';
 import { VisorDocumentoComponent } from './visor-documento.component';
@@ -459,7 +460,12 @@ export class Aplicacion implements OnInit {
           this.cargarEspacioTrabajo();
           this.detectorCambios.markForCheck();
         },
-        error: () => this.cerrarSesion(),
+        error: (error) => {
+          this.loading = false;
+          if (error instanceof ErrorSesionCaducada) this._error = error.message;
+          else this.error = this.obtenerErrorApi(error, 'No se pudo cargar tu cuenta. Vuelve a intentarlo.');
+          this.detectorCambios.markForCheck();
+        },
       });
   }
 
@@ -3185,6 +3191,9 @@ export class Aplicacion implements OnInit {
   }
 
   private obtenerErrorApi(error: unknown, fallback: string): string {
+    // La caducidad se comunica una sola vez desde el centro de mensajes.
+    if (error instanceof ErrorSesionCaducada) return '';
+    if (error instanceof ErrorConexionSesion) return error.message;
     if (typeof error === 'object' && error !== null && 'error' in error) {
       const cuerpo = (error as { error?: RespuestaApi<unknown> }).error;
       return cuerpo?.mensaje ?? fallback;

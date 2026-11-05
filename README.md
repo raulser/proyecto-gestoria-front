@@ -140,6 +140,13 @@ sesión de nuevo.
 
 ## Manual de usuario
 
+La sesión se renueva antes de las peticiones protegidas. Si Keycloak rechaza la
+renovación o la API devuelve 401, el portal muestra un único aviso con «Iniciar
+sesión» y bloquea nuevos envíos hasta recuperar el acceso. No repite operaciones
+automáticamente. Un fallo de red permite reintentar y no cierra la sesión; la
+comprobación pública de salud funciona sin enviar credenciales. El token solo se
+adjunta a la ruta y al origen configurados para la API.
+
 Ayuda muestra un manual adaptado al perfil: cliente, gestor o administrador
 (incluye administración de plataforma). El lector permite buscar sin acentos,
 cambiar de capítulo y volver al flujo de trabajo desde su acceso directo.

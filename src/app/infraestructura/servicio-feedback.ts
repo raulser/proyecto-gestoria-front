@@ -7,6 +7,7 @@ export interface MensajeFeedback {
   tipo: TipoFeedback;
   titulo: string;
   detalle?: string;
+  accion?: 'iniciar-sesion' | 'recargar';
 }
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,10 @@ export class ServicioFeedback {
     this.publicar('info', titulo, detalle, 8000);
   }
 
+  conAccion(titulo: string, detalle: string, accion: MensajeFeedback['accion']): void {
+    this.publicar('info', titulo, detalle, undefined, accion);
+  }
+
   cerrar(id: number): void {
     this.mensajes.update((mensajes) => mensajes.filter((mensaje) => mensaje.id !== id));
   }
@@ -35,13 +40,19 @@ export class ServicioFeedback {
     titulo: string,
     detalle?: string,
     duracion?: number,
+    accion?: MensajeFeedback['accion'],
   ): void {
     const texto = titulo.trim();
     if (!texto) return;
+    if (
+      accion &&
+      this.mensajes().some((mensaje) => mensaje.titulo === texto && mensaje.accion === accion)
+    )
+      return;
     const id = ++this.secuencia;
     this.mensajes.update((mensajes) => [
       ...mensajes.filter((mensaje) => mensaje.titulo !== texto || mensaje.tipo !== tipo),
-      { id, tipo, titulo: texto, detalle },
+      { id, tipo, titulo: texto, detalle, accion },
     ]);
     if (duracion) globalThis.setTimeout(() => this.cerrar(id), duracion);
   }
