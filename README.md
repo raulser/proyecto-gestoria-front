@@ -138,14 +138,32 @@ parámetro anterior, ejecutar también la parada como administrador. Conserva lo
 certificados para reutilizarlos. Al cambiar entre ambos modos habrá que iniciar
 sesión de nuevo.
 
-## Manual de usuario
+## Sesiones
 
-La sesión se renueva antes de las peticiones protegidas. Si Keycloak rechaza la
-renovación o la API devuelve 401, el portal muestra un único aviso con «Iniciar
-sesión» y bloquea nuevos envíos hasta recuperar el acceso. No repite operaciones
-automáticamente. Un fallo de red permite reintentar y no cierra la sesión; la
-comprobación pública de salud funciona sin enviar credenciales. El token solo se
-adjunta a la ruta y al origen configurados para la API.
+Escribir, pulsar o desplazarse solo registra actividad en memoria: no provoca
+peticiones de renovación. Mientras hay actividad y la pestaña está visible, cada
+30 segundos se comprueba localmente la caducidad del token. Se renueva únicamente
+cuando queda un minuto o menos. También se comprueba antes de las peticiones
+protegidas y al volver del segundo plano o recuperar la conexión. Las peticiones
+simultáneas comparten una misma renovación.
+
+Keycloak mantiene la sesión durante 2 horas de inactividad, con un máximo de
+24 horas desde el acceso; los tokens de acceso duran 5 minutos. La política está
+versionada en `ops/politica-sesion.json`. Para aplicarla a Keycloak y a la semilla
+de instalaciones nuevas, con el servicio arrancado:
+
+```powershell
+./ops/configurar-sesion.ps1
+```
+
+Si Keycloak rechaza la renovación o la API devuelve 401, se bloquean nuevos
+envíos y se abre directamente el login con «Se ha perdido la sesión. Inicia
+sesión de nuevo.». No se abre un modal ni se repiten operaciones automáticamente.
+Un fallo de red permite reintentar y no cierra la sesión; la comprobación pública
+de salud funciona sin enviar credenciales. El token solo se adjunta a la ruta y
+al origen configurados para la API.
+
+## Manual de usuario
 
 Ayuda muestra un manual adaptado al perfil: cliente, gestor o administrador
 (incluye administración de plataforma). El lector permite buscar sin acentos,

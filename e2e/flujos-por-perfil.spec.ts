@@ -100,7 +100,7 @@ test('cliente: entiende la entrega y conserva acceso a su expediente', async ({ 
   await comprobarAccesibilidad(page);
 });
 
-test('la sesión perdida ofrece recuperar el acceso sin una cascada de errores', async ({
+test('la sesión perdida redirige al login y explica el motivo sin modales', async ({
   page,
   context,
 }) => {
@@ -112,16 +112,17 @@ test('la sesión perdida ofrece recuperar el acceso sin una cascada de errores',
   ).toBeVisible();
   await otraPestana.getByRole('button', { name: 'Cerrar sesión', exact: true }).click();
 
-  const mensajes = page.locator('.centro-feedback');
-  await expect(mensajes.getByText('Tu sesión ha caducado', { exact: true })).toBeVisible({
+  await expect(
+    page.getByText('Se ha perdido la sesión. Inicia sesión de nuevo.', { exact: true }),
+  ).toBeVisible({
     timeout: 20000,
   });
-  await expect(mensajes.locator('.mensaje')).toHaveCount(1);
-  await mensajes.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.getByLabel('Correo o usuario').fill(usuarios.admin.usuario);
   await page.getByLabel('Contraseña', { exact: true }).fill(usuarios.admin.clave);
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Panel de trabajo', exact: true })).toBeVisible();
+  expect(new URL(page.url()).searchParams.has('sesion')).toBe(false);
   await expect(page.locator('.centro-feedback .mensaje')).toHaveCount(0);
   await otraPestana.close();
 });

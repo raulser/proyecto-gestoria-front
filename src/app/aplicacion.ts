@@ -164,6 +164,8 @@ export class Aplicacion implements OnInit {
   }
   private readonly http = inject(HttpClient);
   private readonly autenticacion = inject(ServicioAutenticacionKeycloak);
+  readonly redireccionandoAlLogin = this.autenticacion.redireccionandoAlLogin;
+  readonly errorRedireccion = this.autenticacion.errorRedireccion;
   private readonly detectorCambios = inject(ChangeDetectorRef);
   private readonly feedback = inject(ServicioFeedback);
   private readonly dialogos = inject(ServicioDialogos);
@@ -401,6 +403,7 @@ export class Aplicacion implements OnInit {
   };
 
   ngOnInit(): void {
+    if (this.redireccionandoAlLogin()) return;
     if (this.autenticacion.autenticado) {
       this.token = this.autenticacion.token;
       this.cargarSesion();

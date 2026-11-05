@@ -42,9 +42,10 @@ describe('Aplicacion', () => {
     }
   });
 
-  it('la cuenta caducada conserva un único aviso para volver a entrar', () => {
+  it('la cuenta caducada redirige sin avisos ni un cierre adicional de sesión', () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     const autenticacion = TestBed.inject(ServicioAutenticacionKeycloak);
+    const acceder = vi.spyOn(autenticacion, 'iniciarSesion').mockResolvedValue(undefined);
     const caducidad = autenticacion.notificarSesionCaducada();
     const peticion = vi
       .spyOn(TestBed.inject(HttpClient), 'get')
@@ -54,10 +55,12 @@ describe('Aplicacion', () => {
       app.cargarSesion();
       expect(salir).not.toHaveBeenCalled();
       expect(app.error).toContain('Tu sesión ha caducado');
-      expect(TestBed.inject(ServicioFeedback).mensajes()).toHaveLength(1);
+      expect(TestBed.inject(ServicioFeedback).mensajes()).toHaveLength(0);
+      expect(acceder).toHaveBeenCalledOnce();
     } finally {
       peticion.mockRestore();
       salir.mockRestore();
+      acceder.mockRestore();
     }
   });
 

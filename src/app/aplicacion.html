@@ -28,10 +28,13 @@
   <p role="alert">No se pudo abrir la clasificación. <a href="/">Recargar Savia</a></p>
 }
 
-@if (!usuarioActual) {
+@if (!usuarioActual || redireccionandoAlLogin()) {
   <main class="acceso-puente" aria-live="polite">
     <img src="savia-logo-v6.svg" width="148" height="44" alt="Savia" />
-    @if (error) {
+    @if (errorRedireccion()) {
+      <p role="alert">{{ errorRedireccion() }}</p>
+      <button type="button" (click)="iniciarSesion()">Volver a intentar</button>
+    } @else if (error) {
       <p role="alert">{{ error }}</p>
       <button type="button" (click)="iniciarSesion()">Volver a intentar</button>
     } @else {

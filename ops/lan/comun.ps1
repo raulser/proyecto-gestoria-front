@@ -37,10 +37,19 @@ config=$(mktemp)
 trap 'rm -f "$config"' EXIT
 kcadm=/opt/keycloak/bin/kcadm.sh
 "$kcadm" config credentials --config "$config" --server http://127.0.0.1:8080 --realm master --user "$KC_BOOTSTRAP_ADMIN_USERNAME" --password "$KC_BOOTSTRAP_ADMIN_PASSWORD" >/dev/null
-"$kcadm" get clients --config "$config" -r gestoria -q clientId=gestoria-web --fields id,redirectUris,webOrigins,attributes
+id=$("$kcadm" get clients --config "$config" -r gestoria -q clientId=gestoria-web --fields id --format csv --noquotes)
+test -n "$id"
+"$kcadm" get "clients/$id" --config "$config" -r gestoria
 '@
     $respuesta = Invoke-SaviaCompose -Argumentos @('exec', '-T', 'keycloak', 'sh', '-ec', $leerCliente)
-    $cliente = @((($respuesta -join "`n") | ConvertFrom-Json -AsHashtable))[0]
+    $completo = ($respuesta -join "`n") | ConvertFrom-Json -AsHashtable
+    # --fields attributes omite los valores del mapa; conservarlos desde la respuesta completa.
+    $cliente = @{
+        id = $completo.id
+        redirectUris = $completo.redirectUris
+        webOrigins = $completo.webOrigins
+        attributes = $completo.attributes ?? @{}
+    }
     if (-not $cliente.id) { throw 'No se encuentra el cliente gestoria-web en Keycloak.' }
     $cliente.redirectUris = @($cliente.redirectUris | Where-Object { $_ -ne "$OrigenAnterior/*" })
     $cliente.webOrigins = @($cliente.webOrigins | Where-Object { $_ -ne $OrigenAnterior })
