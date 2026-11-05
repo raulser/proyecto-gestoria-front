@@ -138,6 +138,34 @@ parámetro anterior, ejecutar también la parada como administrador. Conserva lo
 certificados para reutilizarlos. Al cambiar entre ambos modos habrá que iniciar
 sesión de nuevo.
 
+## Manual de usuario
+
+Ayuda muestra un manual adaptado al perfil: cliente, gestor o administrador
+(incluye administración de plataforma). El lector permite buscar sin acentos,
+cambiar de capítulo y volver al flujo de trabajo desde su acceso directo.
+«Ayuda con los estados» en Solicitudes abre el capítulo correspondiente.
+Cuenta, soporte y privacidad quedan disponibles en un desplegable separado.
+
+«Ver PDF» permite visualizarlo dentro de Ayuda con PDF.js, navegación por páginas
+y ampliación; también se puede abrir en otra pestaña o descargar. El motor y su
+worker se sirven desde la aplicación y se cargan al abrir el visor. El lector HTML
+permanece disponible para buscar y leer por capítulos. Los tres documentos incluyen índice enlazado y
+marcadores. El contenido de ambas versiones sale de
+`src/app/ayuda/manuales.json`; al modificarlo, regenerar los PDF:
+
+```powershell
+python scripts/generar-manuales.py
+```
+
+El generador requiere `reportlab` y `pypdf`, y usa Segoe UI en Windows. En otros
+sistemas se puede indicar `--fuentes /ruta/familia`, con `Regular.ttf` y
+`Bold.ttf`. Los archivos se publican desde `public/manuales`. Revisar sus páginas
+renderizadas antes de publicar cambios en el contenido o la maquetación.
+
+El selector de cuentas de prueba del login se habilita en loopback o mediante
+`SAVIA_DEMO_ACCOUNTS=true` en Keycloak. El override LAN activa esta opción para
+las pruebas desde otros dispositivos; la configuración base no la activa.
+
 ## Calidad
 
 ```powershell

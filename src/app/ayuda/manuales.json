@@ -1,0 +1,449 @@
+{
+  "version": "2026.11",
+  "perfiles": {
+    "cliente": {
+      "nombre": "Cliente",
+      "descripcion": "Entregas, archivos y seguimiento con tu gestoría.",
+      "capitulos": [
+        "inicio-cliente",
+        "entregas-cliente",
+        "archivos-cliente",
+        "expediente-cliente",
+        "estados-solicitudes",
+        "estados-archivos-cliente",
+        "incidencias",
+        "cuenta"
+      ]
+    },
+    "gestor": {
+      "nombre": "Gestor",
+      "descripcion": "Clientes, documentación y seguimiento del trabajo diario.",
+      "capitulos": [
+        "inicio-gestor",
+        "clientes",
+        "fiscal",
+        "solicitudes",
+        "documentos",
+        "cumplimiento",
+        "estados-solicitudes",
+        "estados-archivos",
+        "incidencias",
+        "cuenta"
+      ]
+    },
+    "administrador": {
+      "nombre": "Administrador",
+      "descripcion": "Operativa documental, equipo, accesos y configuración de la gestoría.",
+      "capitulos": [
+        "inicio-gestor",
+        "equipo",
+        "clientes",
+        "fiscal",
+        "solicitudes",
+        "documentos",
+        "cumplimiento",
+        "estados-solicitudes",
+        "estados-archivos",
+        "plan",
+        "incidencias",
+        "cuenta"
+      ]
+    }
+  },
+  "secciones": {
+    "inicio-cliente": {
+      "titulo": "Tu espacio y el primer acceso",
+      "resumen": "Qué encontrarás y cómo orientarte.",
+      "parrafos": [
+        "Tu gestoría crea tu cuenta y la vincula a tu expediente. No necesitas registrarte por tu cuenta. Utiliza el correo y las indicaciones de acceso que te hayan facilitado.",
+        "Mi panel reúne entregas, próximos vencimientos y actividad. Pulsa una tarea para ir a su contexto. Una cifra de archivos o facturas no indica por sí sola que una obligación esté presentada.",
+        "Mi expediente muestra tus datos y las obligaciones que gestiona la gestoría. Lo que debo entregar reúne las peticiones documentales; Mis archivos contiene tus documentos y los que la gestoría haya publicado para ti.",
+        "En el móvil encontrarás las opciones secundarias, como Añadir documentos y Ayuda, dentro de Más. El menú se adapta a tu perfil; solo ves la información a la que tienes acceso."
+      ],
+      "pasos": [
+        "Inicia sesión con tu cuenta.",
+        "Consulta Mi panel y entra en la entrega que debas preparar.",
+        "Utiliza Añadir documentos para subir archivos; comprueba el resultado antes de salir.",
+        "Cierra sesión al terminar si el dispositivo es compartido."
+      ],
+      "destino": "panel",
+      "accion": "Ir a mi panel"
+    },
+    "entregas-cliente": {
+      "titulo": "Preparar y enviar una entrega",
+      "resumen": "Subir archivos y finalizar la entrega son pasos diferentes.",
+      "parrafos": [
+        "En Lo que debo entregar, cada tarjeta indica qué necesitas aportar, su fecha límite y los tipos de documento esperados. Ver documentos abre los archivos de esa petición; Conversación permite consultar y escribir mensajes relacionados con ella.",
+        "Puedes añadir varios archivos y continuar otro día mientras la entrega esté abierta o en curso. Subir el primer archivo no significa que hayas terminado de enviar toda la documentación.",
+        "Al pulsar He terminado: enviar, la petición pasa a revisión y deja de admitir nuevas aportaciones. Si olvidaste un archivo, utiliza Me falta añadir documentación y explica el motivo. Espera a que la gestoría apruebe la reapertura.",
+        "Revisado por la gestoría indica que la petición documental se ha cerrado. La obligación fiscal asociada se sigue por separado; ese cierre no equivale a presentar un impuesto."
+      ],
+      "pasos": [
+        "Abre una petición y lee sus instrucciones.",
+        "Pulsa Añadir documentos y comprueba la entrega asociada.",
+        "Elige el tipo y el periodo correctos, selecciona los archivos y pulsa Subir documento.",
+        "Espera a la confirmación y comprueba los documentos de la petición.",
+        "Cuando hayas aportado todo, vuelve a la petición y pulsa He terminado: enviar."
+      ],
+      "destino": "solicitudes",
+      "accion": "Ver mis entregas"
+    },
+    "archivos-cliente": {
+      "titulo": "Organizar y consultar tus archivos",
+      "resumen": "Facturas, periodos, documentos publicados y descargas.",
+      "parrafos": [
+        "Clasifica como Factura emitida las facturas que tú emites a tus clientes y como Factura recibida las de tus proveedores. Los tickets, nóminas, contratos y extractos tienen su propio tipo. Elige Otro cuando ninguno encaje.",
+        "El periodo puede ser mensual, trimestral, anual o puntual. Indica el año y, cuando corresponda, el mes o trimestre. Un documento anual o puntual no necesita trimestre; no lo sitúes en un trimestre solo para completar el formulario.",
+        "Si el documento responde a una petición, selecciónala en ¿A qué entrega pertenece? Al llegar desde la petición, revisa el contexto que aparece preparado. Para un archivo independiente, utiliza No corresponde a ninguna entrega.",
+        "Mis archivos permite buscar y filtrar. Consulta la información de origen, periodo y petición para localizar el documento correcto. Vista previa abre los formatos compatibles; Descargar permite conservar una copia.",
+        "Los modelos, justificantes o informes preparados por tu gestoría aparecen cuando se publican para ti. Los borradores internos de la gestoría no forman parte de tus archivos visibles."
+      ],
+      "pasos": [
+        "Abre Mis archivos y utiliza la búsqueda o los filtros.",
+        "Comprueba nombre, tipo, periodo y estado antes de descargar.",
+        "Si un documento necesita corrección, lee las indicaciones de la gestoría y aporta la versión correcta en el contexto correspondiente.",
+        "Si no encuentras un archivo, limpia los filtros y comprueba que no estás viendo solo una petición o un periodo."
+      ],
+      "destino": "documentos",
+      "accion": "Abrir mis archivos"
+    },
+    "expediente-cliente": {
+      "titulo": "Consultar tu expediente y obligaciones",
+      "resumen": "Distinguir la entrega de documentos del trabajo de la gestoría.",
+      "parrafos": [
+        "Mi expediente contiene tu ficha y las obligaciones configuradas para ti. Revisa el ejercicio y el periodo para interpretar cada vencimiento. La periodicidad depende de tu caso: puede ser mensual, trimestral, anual o puntual.",
+        "Los documentos aportados a una solicitud sirven para que la gestoría prepare su trabajo. El seguimiento de la obligación indica en qué fase está ese trabajo; se actualiza de forma independiente de la petición documental.",
+        "Consulta los documentos vinculados cuando estén disponibles. Si tus datos o una obligación no parecen correctos, comunícalo a tu gestoría; el perfil cliente no configura las obligaciones fiscales."
+      ],
+      "estados": [
+        {
+          "estado": "Falta documentación",
+          "descripcion": "Todavía se necesita información para preparar la obligación."
+        },
+        {
+          "estado": "Documentación recibida / En preparación",
+          "descripcion": "La gestoría dispone de la documentación o está trabajando con ella."
+        },
+        {
+          "estado": "Pendiente de revisión",
+          "descripcion": "El trabajo espera la revisión interna de la gestoría."
+        },
+        {
+          "estado": "Presentada",
+          "descripcion": "La gestoría ha registrado la presentación en el seguimiento de esa obligación."
+        },
+        {
+          "estado": "Aplazada / No aplica",
+          "descripcion": "Consulta el detalle o pregunta a tu gestoría para conocer el motivo registrado."
+        }
+      ],
+      "destino": "clientes",
+      "accion": "Ver mi expediente"
+    },
+    "inicio-gestor": {
+      "titulo": "Panel y organización del trabajo",
+      "resumen": "Identificar lo próximo y entrar en su contexto.",
+      "parrafos": [
+        "Panel reúne clientes activos, facturas del ejercicio, documentos pendientes de revisión, entregas abiertas y próximas tareas. Selecciona el ejercicio para interpretar los datos del periodo que estás consultando.",
+        "La agenda permite abrir el cliente, vencimiento o petición relacionado. Desde los accesos a documentos puedes continuar con la revisión sin buscar de nuevo el contexto.",
+        "El consumo documental por cliente muestra archivos, facturas y espacio utilizado. El espacio refleja el almacenamiento acumulado; los recuentos ligados al ejercicio pueden tener un alcance distinto, indicado en pantalla.",
+        "El gestor trabaja con sus clientes asignados. El administrador dispone además de Equipo, Plan y uso y configuración de la gestoría. En el móvil, Más agrupa los destinos secundarios."
+      ],
+      "pasos": [
+        "Comprueba el ejercicio seleccionado.",
+        "Revisa Próximas tareas y Pendientes de revisión.",
+        "Entra en el cliente, la petición o los documentos desde su acceso directo.",
+        "Actualiza el seguimiento de la obligación cuando avances en el trabajo."
+      ],
+      "destino": "panel",
+      "accion": "Abrir el panel"
+    },
+    "clientes": {
+      "titulo": "Alta de clientes y plan documental",
+      "resumen": "Adaptar los documentos y sus fechas a cada cliente.",
+      "parrafos": [
+        "Clientes permite buscar, abrir el expediente y, según tus permisos, crear o editar una ficha. El alta recorre datos del cliente, plan documental y revisión antes de guardar.",
+        "Elige el tipo de cliente que corresponda. Otro permite darle un nombre propio y preparar una selección personalizada. La propuesta de documentos es un punto de partida: activa, desactiva o añade lo que proceda para ese cliente.",
+        "Cada pauta documental admite su periodicidad, apertura, fecha límite y recordatorio. La documentación permanente o sin vencimiento no debe convertirse en una entrega trimestral. Las fechas de recogida documental y las de presentación de una obligación tienen funciones diferentes.",
+        "Las modificaciones del plan se guardan en la ficha de ese cliente. Comprueba la automatización, las fechas y la cuenta vinculada antes de esperar recordatorios o entregas automáticas.",
+        "Crear la ficha de un cliente no crea por sí solo sus credenciales de acceso. Un administrador debe crear el usuario de perfil Cliente y vincularlo a la ficha correspondiente."
+      ],
+      "pasos": [
+        "Abre Clientes y utiliza Nuevo cliente o Editar.",
+        "Completa los datos e indica el tipo.",
+        "Revisa el plan documental: selección, periodicidad, fechas y avisos.",
+        "Comprueba el resumen y guarda.",
+        "Abre el expediente para revisar obligaciones y documentos; si necesita acceder al portal, solicita al administrador su cuenta vinculada."
+      ],
+      "destino": "clientes",
+      "accion": "Abrir clientes"
+    },
+    "fiscal": {
+      "titulo": "Perfil fiscal y obligaciones",
+      "resumen": "Revisar las propuestas antes de incorporarlas al cliente.",
+      "parrafos": [
+        "El tipo de cliente no determina por sí solo todas sus obligaciones. La ficha fiscal recoge territorio, regímenes y circunstancias de actividad. Utiliza Pendiente cuando falte confirmar un dato.",
+        "Las recomendaciones explican por qué se propone una obligación y señalan datos pendientes. Revísalas y confirma, descarta o marca como no aplicable con el criterio que corresponda al caso. La propuesta de la aplicación no sustituye la revisión profesional.",
+        "También puedes añadir o editar una obligación manualmente con su código, nombre, categoría, periodicidad, meses, día límite, documentos esperados y observaciones. Verifica cada fecha y excepción antes de utilizarla como plazo de trabajo.",
+        "El plan documental define qué reunir del cliente. La obligación define qué se debe preparar o tramitar y su seguimiento por ejercicio y periodo. Mantén ambos coherentes sin tratar el cierre de una petición como una presentación automática."
+      ],
+      "pasos": [
+        "Abre el expediente del cliente y revisa su ficha fiscal.",
+        "Completa los datos conocidos y señala los que falten.",
+        "Revisa cada recomendación y registra la decisión.",
+        "Comprueba o ajusta las obligaciones y sus fechas.",
+        "Consulta el ejercicio y periodo correctos para iniciar su seguimiento."
+      ],
+      "destino": "clientes",
+      "accion": "Ir a los expedientes"
+    },
+    "solicitudes": {
+      "titulo": "Pedir documentación y revisar entregas",
+      "resumen": "Crear peticiones claras y mantener su conversación y archivos juntos.",
+      "parrafos": [
+        "En Solicitudes, Pedir documentación permite indicar cliente, título, instrucciones, vencimiento, recurrencia y tipos esperados. La asignación del responsable depende de tus permisos. Revisa el contexto antes de guardar.",
+        "Editar carga la petición en el formulario de edición. Guarda los cambios o cancela para volver a una nueva petición. Ver documentos abre su repositorio filtrado; Conversación mantiene los mensajes junto a la entrega.",
+        "El cliente puede aportar archivos en varias sesiones y pulsa He terminado: enviar al acabar. Mientras está en Entrega en curso, no debe interpretarse como una entrega finalizada.",
+        "En Pendiente de revisión, comprueba los archivos y su checklist. Si falta documentación, reabre la petición o resuelve la solicitud de reapertura del cliente indicando el motivo. Cerrar petición documental confirma la revisión de esa petición; no registra la presentación fiscal.",
+        "Los avisos y sus enlaces requieren que el cliente tenga una cuenta activa y que el correo esté configurado. Si un mensaje no llega, pide al administrador que revise el destinatario y el envío; no crees una petición duplicada para intentar resolverlo."
+      ],
+      "pasos": [
+        "Crea la petición con instrucciones concretas y una fecha revisada.",
+        "Consulta la entrega y los mensajes en Seguimiento.",
+        "Cuando esté enviada, abre Ver documentos y revisa los archivos.",
+        "Reabre si falta algo o cierra la petición documental cuando la revisión termine.",
+        "Continúa por separado el seguimiento de la obligación asociada."
+      ],
+      "destino": "solicitudes",
+      "accion": "Abrir solicitudes"
+    },
+    "documentos": {
+      "titulo": "Repositorio, subida y publicación",
+      "resumen": "Separar lo aportado por el cliente de lo preparado por la gestoría.",
+      "parrafos": [
+        "El repositorio muestra cliente, origen, tipo, periodo, estado y vinculación con la petición u obligación. Busca o combina filtros; al llegar desde una petición o un expediente, comprueba el contexto activo antes de interpretar la lista.",
+        "En Subir, selecciona el cliente y el espacio documental. Aportaciones del cliente reúne facturas emitidas, recibidas y otros justificantes. La documentación preparada por la gestoría tiene título, descripción, referencia y opciones de publicación.",
+        "Una factura emitida por tu cliente se clasifica como Factura emitida; una factura de sus proveedores, como Factura recibida. La factura que la propia gestoría cobra a ese cliente es un gasto del cliente: clasifícala como recibida y utiliza un título o referencia que identifique su origen. No la confundas con un modelo presentado.",
+        "Para modelos, justificantes, liquidaciones, libros e informes utiliza el tipo correspondiente de documentación preparada por la gestoría. Elige el periodo real: mensual, trimestral, anual o puntual. No todos los documentos pertenecen a un trimestre.",
+        "Guardar como borrador interno mantiene el documento dentro de la gestoría. Publicar al cliente al subir o Publicar al cliente lo hace visible en su portal. Comprueba el destinatario y la clasificación antes de publicar.",
+        "Clasificar permite asociar una aportación libre a una petición compatible. Vista previa y Descargar sirven para revisar el archivo. Las opciones de revisar, rechazar, sustituir o retirar aparecen según el origen, el estado y tus permisos. Cuando se pida un motivo, deja una explicación útil para el seguimiento."
+      ],
+      "pasos": [
+        "Selecciona cliente, origen, tipo y periodo.",
+        "Asocia la petición o el contexto disponible cuando corresponda.",
+        "Para documentación de la gestoría, revisa título, referencia y visibilidad.",
+        "Selecciona los archivos, sube y espera la confirmación de cada uno.",
+        "Comprueba el documento en el repositorio y publica solo cuando proceda."
+      ],
+      "destino": "documentos",
+      "accion": "Abrir el repositorio"
+    },
+    "cumplimiento": {
+      "titulo": "Seguimiento de una obligación",
+      "resumen": "Registrar el trabajo y la presentación, además de reunir documentos.",
+      "parrafos": [
+        "Abre la obligación en el expediente y elige ejercicio y periodo. Revisa la documentación vinculada y las peticiones relacionadas antes de actualizar el seguimiento.",
+        "Cuando registres una presentación, completa los campos disponibles, como fecha, referencia, resultado, importe y observaciones, y aporta los documentos que correspondan al cliente. Marcar Presentada registra lo realizado; ese botón no envía por sí mismo una declaración a la Administración.",
+        "Los resultados A ingresar, A devolver, A compensar o Cuota cero describen el resultado registrado. No equivalen al estado de la documentación ni al de su pago."
+      ],
+      "estados": [
+        {
+          "estado": "Falta documentación",
+          "descripcion": "Todavía faltan archivos o información necesarios."
+        },
+        {
+          "estado": "Documentación recibida",
+          "descripcion": "Se ha recibido la documentación para continuar el trabajo."
+        },
+        { "estado": "En preparación", "descripcion": "La obligación se está preparando." },
+        {
+          "estado": "Pendiente de revisión",
+          "descripcion": "La preparación espera revisión interna."
+        },
+        {
+          "estado": "Presentada",
+          "descripcion": "Se ha registrado su presentación para ese ejercicio y periodo."
+        },
+        {
+          "estado": "Aplazada",
+          "descripcion": "Se ha registrado un aplazamiento; consulta fecha, referencia y observaciones."
+        },
+        {
+          "estado": "No aplica",
+          "descripcion": "Se ha indicado que no procede en ese contexto. Deja el motivo en las observaciones."
+        }
+      ],
+      "destino": "clientes",
+      "accion": "Ver obligaciones de un cliente"
+    },
+    "estados-solicitudes": {
+      "titulo": "Estados de las peticiones documentales",
+      "resumen": "Qué significa cada estado y cuál es el siguiente paso.",
+      "parrafos": [
+        "Una petición reúne y permite revisar documentación. Su estado es independiente del estado de los archivos y del seguimiento de una obligación fiscal. El mismo paso puede tener una etiqueta distinta para el cliente y para el equipo."
+      ],
+      "estados": [
+        {
+          "estado": "Abierta / Pendiente de documentos",
+          "descripcion": "Todavía no se han aportado documentos. El cliente puede iniciar la entrega."
+        },
+        {
+          "estado": "Entrega en curso",
+          "descripcion": "Ya hay archivos, pero pueden añadirse más. El cliente pulsa He terminado: enviar solo cuando haya completado su aportación."
+        },
+        {
+          "estado": "Pendiente de revisión / Enviado a la gestoría",
+          "descripcion": "La entrega se ha finalizado y espera revisión. Para añadir más documentación debe reabrirse."
+        },
+        {
+          "estado": "Revisada y cerrada / Revisado por la gestoría",
+          "descripcion": "La revisión documental ha terminado. No significa que la obligación fiscal esté presentada."
+        },
+        {
+          "estado": "Cancelada",
+          "descripcion": "La petición se ha cancelado y no admite nuevas aportaciones."
+        },
+        {
+          "estado": "Reapertura solicitada",
+          "descripcion": "Es un aviso adicional sobre una entrega enviada. El cliente ha pedido aportar más documentación y espera la decisión del gestor."
+        }
+      ],
+      "destino": "solicitudes",
+      "accion": "Volver a las entregas"
+    },
+    "estados-archivos-cliente": {
+      "titulo": "Estados de tus documentos",
+      "resumen": "Distinguir recepción, revisión y corrección.",
+      "parrafos": [
+        "Que un archivo se haya subido correctamente no indica que la gestoría lo haya revisado. Consulta su estado y los comentarios relacionados."
+      ],
+      "estados": [
+        {
+          "estado": "Pendiente",
+          "descripcion": "Todavía está pendiente en el circuito documental. Consulta la entrega y las indicaciones asociadas."
+        },
+        {
+          "estado": "Recibido por la gestoría",
+          "descripcion": "El archivo está disponible para que lo revisen."
+        },
+        {
+          "estado": "Revisado",
+          "descripcion": "La gestoría ha revisado ese archivo; la petición y la obligación se siguen por separado."
+        },
+        {
+          "estado": "Necesita corrección",
+          "descripcion": "La gestoría ha rechazado el archivo. Lee el motivo o pregunta en la conversación y aporta la corrección."
+        },
+        {
+          "estado": "Publicado al cliente",
+          "descripcion": "La gestoría ha compartido el documento contigo."
+        },
+        {
+          "estado": "Retirado / Sustituido",
+          "descripcion": "El documento se ha retirado o tiene una versión posterior. Revisa el motivo y utiliza la versión vigente."
+        }
+      ],
+      "destino": "documentos",
+      "accion": "Ver mis archivos"
+    },
+    "estados-archivos": {
+      "titulo": "Estados y visibilidad de los documentos",
+      "resumen": "Revisión del archivo y publicación al cliente.",
+      "parrafos": [
+        "El estado del documento, su origen y su visibilidad son datos distintos. Revisa los tres antes de compartirlo o modificarlo. Ningún estado del archivo registra por sí solo una presentación fiscal."
+      ],
+      "estados": [
+        {
+          "estado": "Pendiente",
+          "descripcion": "Documento pendiente dentro del circuito documental."
+        },
+        {
+          "estado": "Pendiente de revisión (recibido)",
+          "descripcion": "Aportación recibida, pendiente de revisar."
+        },
+        { "estado": "Revisado", "descripcion": "Aportación revisada por el equipo." },
+        {
+          "estado": "Rechazado",
+          "descripcion": "Aportación que necesita corrección. Indica el motivo al cliente."
+        },
+        {
+          "estado": "Borrador interno",
+          "descripcion": "Documento preparado por la gestoría todavía sin publicar al cliente."
+        },
+        {
+          "estado": "Publicado al cliente",
+          "descripcion": "Documento de la gestoría compartido con el cliente."
+        },
+        {
+          "estado": "Retirado",
+          "descripcion": "Documento retirado del circuito de uso, con el motivo registrado."
+        },
+        {
+          "estado": "Sustituido",
+          "descripcion": "Documento con una versión posterior; utiliza la vigente."
+        },
+        {
+          "estado": "Solo gestoría / Visible para el cliente",
+          "descripcion": "Indican la visibilidad, además del estado. Confirma la publicación antes de dar por hecho que el cliente lo ve."
+        }
+      ],
+      "destino": "documentos",
+      "accion": "Revisar documentos"
+    },
+    "equipo": {
+      "titulo": "Equipo, cuentas y asignaciones",
+      "resumen": "Crear accesos y decidir quién trabaja con cada cliente.",
+      "parrafos": [
+        "Equipo permite crear usuarios, seleccionar su perfil y activar o desactivar accesos. Revisa el nombre y el correo para identificar a cada persona antes de cambiar su acceso.",
+        "Administrador gestiona equipo, asignaciones y configuración; Gestor trabaja con los clientes que tenga asignados; Cliente accede al expediente al que está vinculado. Crear una ficha de cliente y crear su usuario de acceso son operaciones distintas.",
+        "La clave temporal del alta debe cumplir la política indicada en el formulario. Facilita el acceso por un canal adecuado y comprueba que la persona cambia su clave y configura la seguridad de su cuenta según las indicaciones del portal.",
+        "Asignación de clientes vincula cada gestor con sus expedientes. Si alguien no ve un cliente, comprueba la cuenta activa, su perfil y esa asignación antes de crear un duplicado."
+      ],
+      "pasos": [
+        "Abre Equipo y completa Alta de usuario.",
+        "Selecciona el perfil. Si es Cliente, elige la ficha de cliente correcta.",
+        "Crea el usuario y comprueba que figura activo en Equipo y accesos.",
+        "Para un gestor, añade las asignaciones de clientes necesarias.",
+        "Comprueba el acceso con la cuenta correspondiente y confirma que ve los expedientes previstos."
+      ],
+      "destino": "equipo",
+      "accion": "Abrir equipo"
+    },
+    "plan": {
+      "titulo": "Plan, consumo y configuración",
+      "resumen": "Controlar capacidad, actividad e identidad de la gestoría.",
+      "parrafos": [
+        "Plan y uso muestra el plan y los límites disponibles, junto con el consumo. Consulta en el panel el espacio por cliente para localizar los expedientes que más almacenamiento utilizan.",
+        "Actividad reciente permite revisar los eventos registrados con su actor y fecha. Ejecutar recordatorios lanza el proceso disponible; comprueba que las fechas, destinatarios y servicio de correo estén correctamente configurados antes de esperar avisos.",
+        "En Ayuda, dentro de Cuenta, soporte y privacidad, Identidad de la gestoría permite ajustar el email de facturación, el nombre comercial y el color principal. Guarda los cambios y comprueba su aplicación en el portal.",
+        "La información del plan y del consumo no sustituye una factura de honorarios. Si publicas una factura a un cliente, clasifícala y compártela en su contexto documental."
+      ],
+      "destino": "plan",
+      "accion": "Ver plan y uso"
+    },
+    "incidencias": {
+      "titulo": "Subidas, errores y dudas frecuentes",
+      "resumen": "Qué comprobar antes de repetir una operación.",
+      "parrafos": [
+        "Durante una subida, espera a que termine el progreso. Una selección de archivos no significa que se hayan guardado. Consulta el resultado de cada archivo y la confirmación; si algunos fallan, vuelve a intentar solo los que no se hayan incorporado.",
+        "El formulario admite los formatos indicados en pantalla, como PDF, JPEG y PNG. Los documentos pasan por validaciones y análisis antivirus. Si se rechaza el archivo, revisa el mensaje; cambiarle la extensión no convierte su formato ni resuelve el problema.",
+        "Si no puedes añadir archivos a una petición enviada, pide o tramita su reapertura. No crees otra petición o una subida libre para eludir el cierre sin revisar antes el contexto.",
+        "Si falta un documento en una lista, limpia los filtros y revisa cliente, periodo, petición y visibilidad. Si el acceso ha caducado o la aplicación no consigue arrancar, vuelve a iniciar sesión o utiliza el reintento que aparece.",
+        "Para pedir ayuda, indica la acción que intentabas hacer, el cliente o la petición afectados y el mensaje exacto. No compartas tu contraseña. Utiliza la conversación de la petición para dudas documentales y el canal de soporte para incidencias del portal."
+      ],
+      "destino": "subir",
+      "accion": "Ir a la subida de documentos"
+    },
+    "cuenta": {
+      "titulo": "Cuenta, seguridad y ayuda",
+      "resumen": "Gestionar tu acceso y localizar soporte.",
+      "parrafos": [
+        "Ayuda incluye este manual adaptado a tu perfil. Puedes buscar un tema, leer sus capítulos o usar Ver PDF y Descargar PDF para consultar una copia completa. Si tu navegador no muestra el PDF integrado, utiliza Abrir PDF en otra pestaña o vuelve a Leer manual.",
+        "Dentro de Cuenta, soporte y privacidad encontrarás tu usuario, perfil, el acceso a la gestión de contraseña y segundo factor, los datos de soporte y la información de privacidad disponible.",
+        "La gestión de la cuenta se abre en una pestaña aparte. Sigue allí las indicaciones para contraseña, segundo factor y sesiones. Cierra sesión cuando termines de trabajar en un dispositivo compartido.",
+        "Si no recuerdas tu contraseña, utiliza ¿Olvidaste la contraseña? en el acceso y sigue las instrucciones. Si el correo de recuperación no llega, contacta con la gestoría para que revise tu cuenta y el destinatario.",
+        "Tu cuenta es personal. Si necesitas acceder a otro expediente o función, pide a la gestoría que revise tus permisos. No utilices la cuenta de otra persona."
+      ]
+    }
+  }
+}

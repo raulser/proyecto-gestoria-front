@@ -794,3 +794,31 @@ textarea {
   outline: 3px solid #6b3fd166;
   outline-offset: 3px;
 }
+.acceso-manual-contextual {
+  display: flex;
+  justify-content: flex-end;
+  margin: -8px 0 18px;
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 0;
+    background: none;
+    color: #8053b2;
+    padding: 8px 0;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+.ajustes-ayuda {
+  border-top: 1px solid #e4dcec;
+  padding-top: 20px;
+  > summary {
+    padding: 10px 0 22px;
+    font-size: 14px;
+    color: #786887;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}

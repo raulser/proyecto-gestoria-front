@@ -1,0 +1,140 @@
+<section class="manual" aria-label="Manual de usuario">
+  <header class="cabecera-manual">
+    <div class="identidad-manual">
+      <span class="icono-manual" aria-hidden="true"
+        ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 5v15M12 5C9 2 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-2-9 1Z" /></svg
+      ></span>
+      <div>
+        <span class="perfil-manual">{{ manual.nombre }}</span>
+        <h2>Manual de usuario</h2>
+        <p>{{ manual.descripcion }}</p>
+      </div>
+    </div>
+    <a
+      class="descargar-manual"
+      [href]="urlPdf"
+      [attr.download]="'manual-savia-' + manual.perfil + '.pdf'"
+      >Descargar PDF <span aria-hidden="true">↓</span></a
+    >
+  </header>
+  <div class="opciones-manual">
+    <div class="modos" role="group" aria-label="Formato del manual">
+      <button type="button" [attr.aria-pressed]="vista === 'lectura'" (click)="vista = 'lectura'">
+        Leer manual
+      </button>
+      <button type="button" [attr.aria-pressed]="vista === 'pdf'" (click)="vista = 'pdf'">
+        Ver PDF
+      </button>
+    </div>
+    <small>Versión {{ manual.version }} · {{ manual.capitulos.length }} capítulos</small>
+  </div>
+  @if (vista === 'pdf') {
+    <div class="alternativa-pdf">
+      <p>Consulta el documento completo con los controles de página y ampliación.</p>
+      <a [href]="urlPdf" target="_blank" rel="noopener">Abrir PDF en otra pestaña ↗</a>
+    </div>
+    @defer (on immediate) {
+      <app-visor-manual-pdf [url]="urlPdf" [nombre]="'Manual de Savia - ' + manual.nombre" />
+    } @placeholder {
+      <p role="status">Preparando el visor PDF…</p>
+    } @error {
+      <p role="alert">
+        No se pudo cargar el visor. Puedes abrir o descargar el PDF desde los enlaces de arriba.
+      </p>
+    }
+  } @else {
+    <div class="lector-manual">
+      <aside class="indice-manual">
+        <label for="buscar-manual">Buscar en el manual</label>
+        <div class="busqueda-manual">
+          <input
+            id="buscar-manual"
+            type="search"
+            placeholder="Por ejemplo: estados"
+            [ngModel]="consulta"
+            (ngModelChange)="buscar($event)"
+            autocomplete="off"
+          />
+        </div>
+        <p class="resultados-manual" role="status">
+          {{ consulta ? resultados.length + ' capítulos encontrados' : 'Contenido' }}
+        </p>
+        <nav aria-label="Capítulos del manual">
+          @for (capitulo of resultados; track capitulo.id) {
+            <button
+              type="button"
+              [attr.aria-current]="seccionActiva === capitulo.id ? 'page' : null"
+              (click)="seleccionar(capitulo.id)"
+            >
+              {{ capitulo.titulo }}<span aria-hidden="true">›</span>
+            </button>
+          }
+        </nav>
+        @if (resultados.length) {
+          <label class="selector-movil" for="capitulo-manual">Capítulo</label>
+          <select
+            class="selector-movil"
+            id="capitulo-manual"
+            [ngModel]="seccionActiva"
+            (ngModelChange)="seleccionar($event)"
+          >
+            @for (capitulo of resultados; track capitulo.id) {
+              <option [value]="capitulo.id">{{ capitulo.titulo }}</option>
+            }
+          </select>
+        }
+      </aside>
+      <article class="contenido-manual" #contenido tabindex="-1" aria-labelledby="titulo-capitulo">
+        @if (capitulo; as actual) {
+          <span class="numero-capitulo">Capítulo {{ numeroCapitulo }}</span>
+          <h3 id="titulo-capitulo">{{ actual.titulo }}</h3>
+          <p class="resumen-capitulo">{{ actual.resumen }}</p>
+          @for (parrafo of actual.parrafos; track $index) {
+            <p>{{ parrafo }}</p>
+          }
+          @if (actual.pasos?.length) {
+            <h4>Paso a paso</h4>
+            <ol>
+              @for (paso of actual.pasos; track $index) {
+                <li>{{ paso }}</li>
+              }
+            </ol>
+          }
+          @if (actual.estados?.length) {
+            <dl class="estados-manual">
+              @for (estado of actual.estados; track estado.estado) {
+                <div>
+                  <dt>{{ estado.estado }}</dt>
+                  <dd>{{ estado.descripcion }}</dd>
+                </div>
+              }
+            </dl>
+          }
+          @if (actual.destino && actual.accion) {
+            <button class="ir-seccion" type="button" (click)="navegar.emit(actual.destino)">
+              {{ actual.accion }} <span aria-hidden="true">↗</span>
+            </button>
+          }
+          <footer class="paginacion-manual">
+            <button type="button" (click)="avanzar(-1)" [disabled]="indice <= 0">← Anterior</button
+            ><span>{{ indice + 1 }} de {{ resultados.length }}</span
+            ><button
+              type="button"
+              (click)="avanzar(1)"
+              [disabled]="indice >= resultados.length - 1"
+            >
+              Siguiente →
+            </button>
+          </footer>
+        } @else {
+          <h3 id="titulo-capitulo">No encontramos ese tema</h3>
+          <p>Prueba con otra palabra o vuelve al índice completo.</p>
+          <button class="ir-seccion" type="button" (click)="buscar('')">
+            Ver todos los capítulos
+          </button>
+        }
+      </article>
+    </div>
+  }
+</section>

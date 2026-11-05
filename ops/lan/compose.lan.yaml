@@ -2,6 +2,7 @@ services:
   keycloak:
     environment:
       KC_HOSTNAME_ADMIN: http://localhost:8091
+      SAVIA_DEMO_ACCOUNTS: "true"
 
   lan:
     image: nginx:1.29-alpine

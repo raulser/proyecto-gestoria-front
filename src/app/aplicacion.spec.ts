@@ -553,7 +553,10 @@ describe('Aplicacion', () => {
     fixture.detectChanges();
 
     const texto = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(texto).toContain('Puedes añadir tantas facturas como necesites');
+    expect(texto).toContain('Ayuda con los estados');
+    expect(texto).toContain(
+      'Puedes seguir añadiendo archivos. Envíala solo cuando hayas terminado.',
+    );
     expect(texto).toContain('He terminado: enviar');
     expect(texto).toContain('Entrega en curso');
     const opcionMenu = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(

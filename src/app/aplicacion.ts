@@ -36,6 +36,7 @@ import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fis
 import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
 import { DirectorioClientesComponent } from './clientes/directorio-clientes.component';
 import { EditorClienteComponent } from './clientes/editor-cliente.component';
+import { ManualUsuarioComponent } from './ayuda/manual-usuario.component';
 import { FormularioCliente } from './modelos-aplicacion';
 import {
   EstadoDocumento,
@@ -75,6 +76,7 @@ import {
 @Component({
   selector: 'app-root',
   imports: [
+    ManualUsuarioComponent,
     EditorClienteComponent,
     DirectorioClientesComponent,
     PanelTrabajoComponent,
@@ -183,7 +185,7 @@ export class Aplicacion implements OnInit {
     { view: 'subir', label: 'Subir', icon: 'subir' },
     { view: 'equipo', label: 'Equipo', icon: 'usuarios' },
     { view: 'plan', label: 'Plan y uso', icon: 'configuracion' },
-    { view: 'configuracion', label: 'Ayuda y privacidad', icon: 'configuracion' },
+    { view: 'configuracion', label: 'Ayuda', icon: 'configuracion' },
   ];
   readonly trimestres = [1, 2, 3, 4];
   readonly meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -238,6 +240,7 @@ export class Aplicacion implements OnInit {
   token = this.autenticacion.token;
   usuarioActual: RespuestaUsuario | null = null;
   vistaActiva: Vista = 'panel';
+  seccionManual = '';
   menuMovilAbierto = false;
   readonly vistasMenuPrincipal: Vista[] = ['panel', 'clientes', 'solicitudes', 'documentos'];
   trimestreActivo = Math.floor(new Date().getMonth() / 3) + 1;
@@ -2673,7 +2676,7 @@ export class Aplicacion implements OnInit {
       subir: this.esCliente() ? 'Añadir documentos' : 'Subida de documentos',
       equipo: 'Equipo y asignaciones',
       plan: 'Plan y consumo',
-      configuracion: 'Ayuda, seguridad y privacidad',
+      configuracion: 'Centro de ayuda',
     };
     return titulos[this.vistaActiva];
   }
@@ -2922,6 +2925,11 @@ export class Aplicacion implements OnInit {
 
   abrirGuia(): void {
     this.guiaVisible = true;
+  }
+
+  abrirManual(seccion: string): void {
+    this.seccionManual = seccion;
+    this.cambiarVista('configuracion');
   }
 
   cerrarGuia(): void {

@@ -149,7 +149,10 @@
           <h1>{{ tituloVista() }}</h1>
         </div>
 
-        <div class="topbar-actions" [hidden]="vistaActiva === 'clientes' && !esCliente()">
+        <div
+          class="topbar-actions"
+          [hidden]="(vistaActiva === 'clientes' && !esCliente()) || vistaActiva === 'configuracion'"
+        >
           <button
             type="button"
             class="primary"
@@ -964,46 +967,11 @@
       }
 
       @if (vistaActiva === 'solicitudes') {
-        <section class="ayuda-contextual" [class.cliente]="esCliente()">
-          <div>
-            <strong>{{
-              esCliente()
-                ? 'Aquí preparas cada entrega'
-                : 'Petición documental y obligación fiscal son cosas distintas'
-            }}</strong>
-            <p>
-              @if (esCliente()) {
-                Puedes añadir tantas facturas como necesites y volver otro día. Pulsa “He terminado:
-                enviar” únicamente cuando hayas acabado. Tu gestoría seguirá trabajando después con
-                la obligación fiscal.
-              } @else {
-                La petición sirve para reunir archivos del cliente. Cerrarla confirma que la
-                documentación se ha revisado, pero la obligación continúa hasta quedar presentada,
-                aplazada o marcada como no aplicable.
-              }
-            </p>
-          </div>
-          <details>
-            <summary>Ver significado de los estados</summary>
-            <ul>
-              <li><strong>Abierta:</strong> aún no hay documentos.</li>
-              <li>
-                <strong>Entrega en curso:</strong> se han añadido archivos, pero todavía pueden
-                añadirse más.
-              </li>
-              <li>
-                <strong
-                  >{{ esCliente() ? 'Enviado a la gestoría' : 'Pendiente de revisión' }}:</strong
-                >
-                la entrega está cerrada temporalmente mientras se revisa.
-              </li>
-              <li>
-                <strong>Revisada y cerrada:</strong> finaliza la petición documental, no la
-                presentación fiscal.
-              </li>
-            </ul>
-          </details>
-        </section>
+        <div class="acceso-manual-contextual">
+          <button type="button" (click)="abrirManual('estados-solicitudes')">
+            <svg lucideFileText size="15"></svg> Ayuda con los estados
+          </button>
+        </div>
         <section class="two-column">
           @if (puedeGestionarClientes()) {
             <app-editor-solicitud
@@ -2071,188 +2039,200 @@
       }
 
       @if (vistaActiva === 'configuracion') {
-        <div class="acciones-ayuda">
-          <button type="button" class="secondary" (click)="abrirGuia()">
-            Ver guía de primeros pasos
-          </button>
-        </div>
-        <section class="two-column">
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Seguridad de la cuenta</h2>
-                <p>Contraseña, segundo factor y sesiones activas</p>
-              </div>
-            </div>
-
-            <div class="configuracion-listar">
-              <div>
-                <span>Usuario</span>
-                <strong>{{ usuarioActual.email }}</strong>
-              </div>
-              <div>
-                <span>Perfil</span>
-                <strong>{{ etiquetaRol(usuarioActual.rol) }}</strong>
-              </div>
-              <div>
-                <span>Segundo factor</span>
-                <strong>{{
-                  esCliente() ? 'Recomendado' : 'Obligatorio para perfiles internos'
-                }}</strong>
-              </div>
-              <a
-                class="secondary enlace-boton"
-                [href]="urlCuentaIdentidad"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Gestionar contraseña y segundo factor
-              </a>
-            </div>
+        @defer (on immediate) {
+          <app-manual-usuario
+            [rol]="usuarioActual.rol"
+            [seccionInicial]="seccionManual"
+            (navegar)="cambiarVista($event)"
+          />
+        } @placeholder {
+          <p role="status">Preparando el manual…</p>
+        } @error {
+          <div role="alert">
+            <p>No se pudo cargar el manual. Recarga Savia y vuelve a Ayuda.</p>
+            <a href="/">Recargar Savia</a>
           </div>
+        }
+        <details class="ajustes-ayuda">
+          <summary>Cuenta, soporte y privacidad</summary>
+          <section class="two-column">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Seguridad de la cuenta</h2>
+                  <p>Contraseña, segundo factor y sesiones activas</p>
+                </div>
+              </div>
 
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Soporte</h2>
-                <p>Canal de ayuda e incidencias</p>
+              <div class="configuracion-listar">
+                <div>
+                  <span>Usuario</span>
+                  <strong>{{ usuarioActual.email }}</strong>
+                </div>
+                <div>
+                  <span>Perfil</span>
+                  <strong>{{ etiquetaRol(usuarioActual.rol) }}</strong>
+                </div>
+                <div>
+                  <span>Segundo factor</span>
+                  <strong>{{
+                    esCliente() ? 'Recomendado' : 'Obligatorio para perfiles internos'
+                  }}</strong>
+                </div>
+                <a
+                  class="secondary enlace-boton"
+                  [href]="urlCuentaIdentidad"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Gestionar contraseña y segundo factor
+                </a>
               </div>
             </div>
 
-            <div class="configuracion-listar">
-              <div>
-                <span>Email</span><strong>{{ configuracionPublica.emailSoporte }}</strong>
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Soporte</h2>
+                  <p>Canal de ayuda e incidencias</p>
+                </div>
               </div>
-              <div>
-                <span>Horario ordinario</span
-                ><strong>{{ configuracionPublica.horarioSoporte }}</strong>
-              </div>
-              <div>
-                <span>Incidente de seguridad</span
-                ><strong>{{ configuracionPublica.emailPrivacidad }}</strong>
-              </div>
-              <a
-                class="secondary enlace-boton"
-                [href]="'mailto:' + configuracionPublica.emailSoporte"
-                >Contactar con soporte</a
-              >
-            </div>
-          </div>
-        </section>
 
-        <section class="panel legal-panel">
-          <div class="panel-header">
-            <div>
-              <h2>Privacidad y tratamiento de datos</h2>
-              <p>
-                Información esencial del portal · versión
-                {{ configuracionPublica.versionPrivacidad }}
-              </p>
-            </div>
-          </div>
-          <div class="legal-grid">
-            <div>
-              <strong>Proveedor del servicio</strong>
-              <span
-                >{{ configuracionPublica.nombreProveedor }} ·
-                {{ configuracionPublica.nifProveedor }}</span
-              >
-            </div>
-            <div>
-              <strong>Finalidad</strong>
-              <span
-                >Gestionar usuarios, solicitudes, obligaciones y documentación compartida con la
-                gestoría.</span
-              >
-            </div>
-            <div>
-              <strong>Responsabilidades</strong>
-              <span
-                >La gestoría determina el uso profesional de los documentos; el proveedor trata los
-                datos para prestar y proteger el servicio.</span
-              >
-            </div>
-            <div>
-              <strong>Derechos y consultas</strong>
-              <span
-                >Solicita acceso, rectificación, supresión, limitación u oposición en
-                {{ configuracionPublica.emailPrivacidad }}.</span
-              >
-            </div>
-            <div>
-              <strong>Conservación</strong>
-              <span
-                >Los plazos los define la gestoría según sus obligaciones legales y el contrato. La
-                baja activa un proceso controlado de devolución y eliminación.</span
-              >
-            </div>
-            <div>
-              <strong>Seguridad</strong>
-              <span
-                >Acceso por roles, aislamiento por gestoría, trazabilidad, antivirus, cifrado en
-                tránsito y copias verificables.</span
-              >
-            </div>
-          </div>
-        </section>
-
-        @if (showLocalDemoCredentials && puedeAdministrar()) {
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Herramientas de desarrollo local</h2>
-                <p>No se muestran en producción</p>
+              <div class="configuracion-listar">
+                <div>
+                  <span>Email</span><strong>{{ configuracionPublica.emailSoporte }}</strong>
+                </div>
+                <div>
+                  <span>Horario ordinario</span
+                  ><strong>{{ configuracionPublica.horarioSoporte }}</strong>
+                </div>
+                <div>
+                  <span>Incidente de seguridad</span
+                  ><strong>{{ configuracionPublica.emailPrivacidad }}</strong>
+                </div>
+                <a
+                  class="secondary enlace-boton"
+                  [href]="'mailto:' + configuracionPublica.emailSoporte"
+                  >Contactar con soporte</a
+                >
               </div>
-            </div>
-            <div class="configuracion-listar">
-              <div>
-                <span>Base URL</span><strong>{{ urlBaseApiVisible }}</strong>
-              </div>
-              <div>
-                <span>OpenAPI local</span><strong>{{ urlOpenApiLocal }}</strong>
-              </div>
-              <div>
-                <span>Estado</span><strong>{{ estadoApi }}</strong>
-              </div>
-              <button type="button" class="secondary" (click)="comprobarApi()">
-                Comprobar conexión
-              </button>
             </div>
           </section>
-        }
-        @if (puedeAdministrar()) {
-          <section class="panel">
+
+          <section class="panel legal-panel">
             <div class="panel-header">
               <div>
-                <h2>Identidad de la gestoría</h2>
-                <p>Datos comerciales y personalización del portal</p>
+                <h2>Privacidad y tratamiento de datos</h2>
+                <p>
+                  Información esencial del portal · versión
+                  {{ configuracionPublica.versionPrivacidad }}
+                </p>
               </div>
             </div>
-            <form class="form configuracion-form" (ngSubmit)="guardarConfiguracionEmpresa()">
-              <label>
-                Email de facturación
-                <input
-                  name="correoFacturacion"
-                  type="email"
-                  [(ngModel)]="formularioEmpresa.correoFacturacion"
-                />
-              </label>
-              <label>
-                Nombre comercial
-                <input name="nombreMarca" [(ngModel)]="formularioEmpresa.nombreMarca" />
-              </label>
-              <label>
-                Color principal
-                <input
-                  name="brandColor"
-                  type="color"
-                  [(ngModel)]="formularioEmpresa.colorPrincipalMarca"
-                />
-              </label>
-              <button type="submit" class="primary">Guardar configuración</button>
-            </form>
+            <div class="legal-grid">
+              <div>
+                <strong>Proveedor del servicio</strong>
+                <span
+                  >{{ configuracionPublica.nombreProveedor }} ·
+                  {{ configuracionPublica.nifProveedor }}</span
+                >
+              </div>
+              <div>
+                <strong>Finalidad</strong>
+                <span
+                  >Gestionar usuarios, solicitudes, obligaciones y documentación compartida con la
+                  gestoría.</span
+                >
+              </div>
+              <div>
+                <strong>Responsabilidades</strong>
+                <span
+                  >La gestoría determina el uso profesional de los documentos; el proveedor trata
+                  los datos para prestar y proteger el servicio.</span
+                >
+              </div>
+              <div>
+                <strong>Derechos y consultas</strong>
+                <span
+                  >Solicita acceso, rectificación, supresión, limitación u oposición en
+                  {{ configuracionPublica.emailPrivacidad }}.</span
+                >
+              </div>
+              <div>
+                <strong>Conservación</strong>
+                <span
+                  >Los plazos los define la gestoría según sus obligaciones legales y el contrato.
+                  La baja activa un proceso controlado de devolución y eliminación.</span
+                >
+              </div>
+              <div>
+                <strong>Seguridad</strong>
+                <span
+                  >Acceso por roles, aislamiento por gestoría, trazabilidad, antivirus, cifrado en
+                  tránsito y copias verificables.</span
+                >
+              </div>
+            </div>
           </section>
-        }
+
+          @if (showLocalDemoCredentials && puedeAdministrar()) {
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Herramientas de desarrollo local</h2>
+                  <p>No se muestran en producción</p>
+                </div>
+              </div>
+              <div class="configuracion-listar">
+                <div>
+                  <span>Base URL</span><strong>{{ urlBaseApiVisible }}</strong>
+                </div>
+                <div>
+                  <span>OpenAPI local</span><strong>{{ urlOpenApiLocal }}</strong>
+                </div>
+                <div>
+                  <span>Estado</span><strong>{{ estadoApi }}</strong>
+                </div>
+                <button type="button" class="secondary" (click)="comprobarApi()">
+                  Comprobar conexión
+                </button>
+              </div>
+            </section>
+          }
+          @if (puedeAdministrar()) {
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Identidad de la gestoría</h2>
+                  <p>Datos comerciales y personalización del portal</p>
+                </div>
+              </div>
+              <form class="form configuracion-form" (ngSubmit)="guardarConfiguracionEmpresa()">
+                <label>
+                  Email de facturación
+                  <input
+                    name="correoFacturacion"
+                    type="email"
+                    [(ngModel)]="formularioEmpresa.correoFacturacion"
+                  />
+                </label>
+                <label>
+                  Nombre comercial
+                  <input name="nombreMarca" [(ngModel)]="formularioEmpresa.nombreMarca" />
+                </label>
+                <label>
+                  Color principal
+                  <input
+                    name="brandColor"
+                    type="color"
+                    [(ngModel)]="formularioEmpresa.colorPrincipalMarca"
+                  />
+                </label>
+                <button type="submit" class="primary">Guardar configuración</button>
+              </form>
+            </section>
+          }
+        </details>
       }
     </main>
   </div>
