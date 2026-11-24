@@ -1,0 +1,294 @@
+<section class="repositorio" aria-label="Documentos">
+  <div class="cabecera-filtros">
+    <app-filtros-documentos
+      [esCliente]="esCliente"
+      [filtros]="filtros"
+      [clientes]="clientes"
+      [anios]="anios"
+      [opcionesTipo]="opcionesTipo"
+      (cambiar)="filtrar.emit($event)"
+      (limpiar)="limpiar.emit()"
+    />
+  </div>
+  @if (peticion; as solicitudActiva) {
+    <div class="peticion-activa">
+      <span
+        >Petición: <strong>{{ solicitudActiva.titulo }}</strong></span
+      ><button
+        type="button"
+        aria-label="Quitar filtro de petición"
+        (click)="filtrar.emit({ solicitudId: null })"
+      >
+        <svg lucideX size="15"></svg>
+      </button>
+    </div>
+  }
+  <div class="resultados">
+    <div class="resultado-total" role="status">
+      {{ cargando ? 'Buscando documentos…' : total + (total === 1 ? ' documento' : ' documentos') }}
+    </div>
+    <div class="chips">
+      @for (chip of filtrosOcultos; track chip.texto) {
+        <button
+          type="button"
+          [attr.aria-label]="'Quitar filtro: ' + chip.texto"
+          (click)="filtrar.emit(chip.quitar)"
+        >
+          {{ chip.texto }}<svg lucideX size="12"></svg>
+        </button>
+      }
+    </div>
+    <div class="herramientas">
+      @if (hayFiltros) {
+        <button type="button" (click)="limpiar.emit()">Quitar filtros</button>
+      }
+      <button type="button" (click)="ayuda.emit()">Ayuda</button>
+    </div>
+  </div>
+  @if (puedeRevisar && seleccionados.size > 0) {
+    <div class="seleccion" aria-label="Acciones sobre los documentos seleccionados">
+      <strong>{{ seleccionados.size }} seleccionados</strong
+      ><button type="button" (click)="masiva.emit('REVISAR')">Marcar revisados</button
+      ><button type="button" (click)="masiva.emit('PUBLICAR')">Compartir con el cliente</button
+      ><button
+        type="button"
+        class="cerrar-seleccion"
+        aria-label="Quitar selección"
+        (click)="limpiarSeleccion.emit()"
+      >
+        <svg lucideX size="16"></svg>
+      </button>
+    </div>
+  }
+  <div class="archivos" [class.con-cliente]="clienteVisible" [attr.aria-busy]="cargando">
+    @if (cargando) {
+      <div class="cargando" aria-hidden="true">
+        @for (fila of [1, 2, 3, 4]; track fila) {
+          <div><span></span><i></i></div>
+        }
+      </div>
+    } @else if (error) {
+      <div class="vacio error" role="alert">
+        <svg lucideFolderOpen size="28"></svg>
+        <h2>No se pudieron cargar los documentos</h2>
+        <p>{{ error }}</p>
+        <button type="button" (click)="cambiarPagina.emit(pagina)">Volver a intentar</button>
+      </div>
+    } @else if (documentos.length) {
+      <div class="fila encabezados">
+        <div class="nombre">
+          @if (puedeRevisar) {
+            <input
+              type="checkbox"
+              aria-label="Seleccionar todos los documentos de esta página"
+              [checked]="todosSeleccionados"
+              [indeterminate]="seleccionParcial"
+              (change)="seleccionarTodos.emit($any($event.target).checked)"
+            />
+          }
+          <span>Documento</span>
+        </div>
+        @if (clienteVisible) {
+          <span>Cliente</span>
+        }
+        <span>Periodo</span><span>Estado</span><span class="sr-only">Acciones</span>
+      </div>
+      @for (documento of documentos; track documento.id) {
+        <article class="fila archivo">
+          <div class="nombre">
+            @if (puedeRevisar) {
+              <input
+                type="checkbox"
+                [attr.aria-label]="
+                  'Seleccionar ' + (documento.titulo || documento.nombreArchivoOriginal)
+                "
+                [checked]="seleccionados.has(documento.id)"
+                (change)="
+                  seleccionar.emit({ id: documento.id, seleccionado: $any($event.target).checked })
+                "
+              />
+            }
+            <span class="icono-archivo" aria-hidden="true"
+              ><svg lucideFileText size="20"></svg
+            ></span>
+            <div class="identidad">
+              <button
+                type="button"
+                class="nombre-archivo"
+                (click)="ejecutar(vistaPrevia(documento) ? 'ver' : 'descargar', documento)"
+              >
+                {{ documento.titulo || documento.nombreArchivoOriginal }}
+              </button>
+              <span class="tipo"
+                >{{ tipo(documento) }}
+                @if (documento.referencia) {
+                  · {{ documento.referencia }}
+                }
+              </span>
+              @if (obligacion(documento); as tramite) {
+                <span class="relacion"
+                  >{{ tramite.codigoObligacion }} · {{ tramite.nombreObligacion }}</span
+                >
+              } @else {
+                @if (solicitud(documento); as entrega) {
+                  <button
+                    type="button"
+                    class="relacion enlace"
+                    (click)="abrirSolicitud.emit(entrega)"
+                  >
+                    {{ entrega.titulo }} ↗
+                  </button>
+                }
+              }
+              @if (documento.comentarioAsesor) {
+                <span class="comentario">{{ documento.comentarioAsesor }}</span>
+              }
+            </div>
+          </div>
+          @if (clienteVisible) {
+            <div class="cliente">
+              <span class="avatar" aria-hidden="true">{{
+                documento.nombreCliente.slice(0, 1)
+              }}</span
+              ><span>{{ documento.nombreCliente }}</span>
+            </div>
+          }
+          <div class="periodo">
+            <strong>{{ periodo(documento) }}</strong
+            ><span>{{ documento.creadoEn | date: 'dd MMM yyyy' }}</span>
+          </div>
+          <div class="situacion">
+            <span class="estado" [class]="'estado ' + documento.estado">{{
+              estados[documento.estado]
+            }}</span>
+            @if (!esCliente && documento.origen === 'GENERADO_GESTORIA') {
+              <small>{{
+                documento.visibilidad === 'INTERNO_GESTORIA'
+                  ? 'Solo gestoría'
+                  : 'Visible para el cliente'
+              }}</small>
+            }
+            @if (documento.motivoRetirada) {
+              <small>{{ documento.motivoRetirada }}</small>
+            }
+          </div>
+          <div class="acciones">
+            @if (vistaPrevia(documento)) {
+              <button
+                type="button"
+                class="abrir"
+                [attr.aria-label]="'Abrir ' + (documento.titulo || documento.nombreArchivoOriginal)"
+                (click)="ejecutar('ver', documento)"
+              >
+                Abrir
+              </button>
+            }
+            <button
+              type="button"
+              class="icono-boton"
+              [attr.aria-label]="'Descargar ' + documento.nombreArchivoOriginal"
+              title="Descargar"
+              (click)="ejecutar('descargar', documento)"
+            >
+              <svg lucideDownload size="16"></svg>
+            </button>
+            @if (
+              (puedeRevisar && !['RETIRADO', 'SUSTITUIDO'].includes(documento.estado)) ||
+              puedeRetirar(documento) ||
+              documento.estado === 'RETIRADO' ||
+              documento.estado === 'RECHAZADO'
+            ) {
+              <details class="mas" #menu>
+                <summary [attr.aria-label]="'Más acciones de ' + documento.nombreArchivoOriginal">
+                  <svg lucideEllipsis size="18"></svg>
+                </summary>
+                <div class="menu">
+                  @if (
+                    puedeRevisar &&
+                    documento.origen === 'APORTADO_CLIENTE' &&
+                    !['RETIRADO', 'SUSTITUIDO'].includes(documento.estado)
+                  ) {
+                    @if (documento.estado !== 'REVISADO') {
+                      <button type="button" (click)="ejecutar('revisar', documento, menu)">
+                        Marcar revisado
+                      </button>
+                    }
+                    @if (!documento.solicitudId) {
+                      <button type="button" (click)="ejecutar('clasificar', documento, menu)">
+                        Vincular a una petición
+                      </button>
+                    }
+                    @if (documento.estado !== 'RECHAZADO') {
+                      <button type="button" (click)="ejecutar('rechazar', documento, menu)">
+                        Pedir corrección
+                      </button>
+                    }
+                  }
+                  @if (
+                    puedeRevisar &&
+                    documento.origen === 'GENERADO_GESTORIA' &&
+                    !['RETIRADO', 'SUSTITUIDO'].includes(documento.estado)
+                  ) {
+                    @if (documento.visibilidad === 'INTERNO_GESTORIA') {
+                      <button type="button" (click)="ejecutar('publicar', documento, menu)">
+                        Compartir con el cliente
+                      </button>
+                    } @else {
+                      <button type="button" (click)="ejecutar('ocultar', documento, menu)">
+                        Ocultar al cliente
+                      </button>
+                    }
+                  }
+                  @if (puedeRetirar(documento)) {
+                    <button
+                      type="button"
+                      class="peligro"
+                      (click)="ejecutar('retirar', documento, menu)"
+                    >
+                      Retirar documento
+                    </button>
+                  }
+                  @if (documento.estado === 'RECHAZADO' || documento.estado === 'RETIRADO') {
+                    <button type="button" (click)="ejecutar('sustituir', documento, menu)">
+                      Subir una nueva versión
+                    </button>
+                  }
+                </div>
+              </details>
+            }
+          </div>
+        </article>
+      }
+    } @else {
+      <div class="vacio">
+        <span class="carpeta"><svg lucideFolderOpen size="30"></svg></span>
+        <h2>{{ hayFiltros ? 'No hay coincidencias' : 'Todavía no hay documentos' }}</h2>
+        @if (hayFiltros) {
+          <button type="button" (click)="limpiar.emit()">Quitar filtros</button>
+        } @else {
+          <button type="button" class="principal" (click)="subir.emit()">
+            {{ esCliente ? 'Añadir documentos' : 'Subir documento' }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+  @if (paginas > 1 && !error) {
+    <nav class="paginacion" aria-label="Páginas de documentos">
+      <button
+        type="button"
+        [disabled]="pagina === 0 || cargando"
+        (click)="cambiarPagina.emit(pagina - 1)"
+      >
+        Anterior</button
+      ><span>Página {{ pagina + 1 }} de {{ paginas }}</span
+      ><button
+        type="button"
+        [disabled]="pagina + 1 >= paginas || cargando"
+        (click)="cambiarPagina.emit(pagina + 1)"
+      >
+        Siguiente
+      </button>
+    </nav>
+  }
+</section>

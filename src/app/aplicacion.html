@@ -164,7 +164,7 @@
             type="button"
             class="primary"
             [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
-            (click)="cambiarVista('subir')"
+            (click)="abrirSubida()"
           >
             <svg lucideFileUp size="17"></svg>
             <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
@@ -817,10 +817,7 @@
                       }
                     </article>
                   } @empty {
-                    <p class="empty">
-                      Este cliente aún no tiene obligaciones configuradas. El panel no asumirá
-                      trimestres hasta que la gestoría revise su ficha.
-                    </p>
+                    <p class="empty">Sin obligaciones configuradas.</p>
                   }
                 </div>
 
@@ -1018,7 +1015,9 @@
                       etiquetaEstadoSolicitud(solicitud.estado)
                     }}</span>
                   </div>
-                  <p>{{ solicitud.descripcion || 'Sin instrucciones adicionales' }}</p>
+                  @if (solicitud.descripcion) {
+                    <p>{{ solicitud.descripcion }}</p>
+                  }
                   <p class="estado-explicado">{{ descripcionEstadoSolicitud(solicitud) }}</p>
                   <small>
                     {{ nombrePersona(solicitud.nombreAsesorAsignado || 'Sin responsable') }} ·
@@ -1198,375 +1197,41 @@
       }
 
       @if (vistaActiva === 'documentos') {
-        <section class="ayuda-contextual compacta">
-          <div>
-            <strong>{{
-              esCliente()
-                ? 'Tu expediente histórico'
-                : 'Comprueba quién lo aportó y quién puede verlo'
-            }}</strong>
-            <p>
-              {{
-                esCliente()
-                  ? 'Aquí encontrarás tanto los archivos que subiste como los modelos, libros y justificantes que publique tu gestoría.'
-                  : '“Solo gestoría” es un borrador interno. “Visible para el cliente” aparece inmediatamente en su expediente.'
-              }}
-            </p>
-          </div>
-        </section>
-        @if (solicitudFiltradaDocumentos(); as solicitudFiltrada) {
-          <section
-            class="ayuda-contextual compacta contexto-repositorio-activo"
-            aria-label="Petición documental seleccionada"
-          >
-            <div>
-              <span class="eyebrow">Viendo una petición concreta</span>
-              <strong>{{ solicitudFiltrada.titulo }}</strong>
-              <p>
-                {{ solicitudFiltrada.nombreCliente }} · vence
-                {{ solicitudFiltrada.fechaVencimiento | date: 'dd/MM/yyyy' }}
-              </p>
-            </div>
-            <button type="button" class="secondary small" (click)="limpiarFiltrosDocumentos()">
-              Ver todo el repositorio
-            </button>
-          </section>
-        }
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>{{ esCliente() ? 'Mis archivos' : 'Repositorio documental' }}</h2>
-              <p>
-                {{
-                  esCliente()
-                    ? 'Todo lo que has subido y lo que tu gestoría ha compartido contigo'
-                    : 'Expediente histórico: documentación aportada y entregada por la gestoría'
-                }}
-              </p>
-            </div>
-          </div>
-          @if (!esCliente()) {
-            <app-resumen-repositorio
-              [total]="totalDocumentos"
-              [porRevisar]="documentosPorRevisarPagina()"
-              [sinAsociar]="documentosSinAsociarPagina()"
-              [borradores]="borradoresInternosPagina()"
-            />
-          }
-          <app-filtros-documentos
+        @defer (on immediate) {
+          <app-repositorio-documental
             [esCliente]="esCliente()"
-            [texto]="terminoBusquedaDocumentos"
-            [clienteId]="filtroClienteDocumento"
-            [anio]="filtroAnioDocumento"
-            [anios]="aniosDisponiblesDocumentos()"
-            [estado]="filtroEstadoDocumento"
-            [origen]="filtroOrigenDocumento"
-            [periodo]="filtroPeriodoDocumento"
-            [tipo]="filtroTipoDocumento"
-            [visibilidad]="filtroVisibilidadDocumento"
+            [puedeRevisar]="puedeRevisarDocumentos()"
+            [documentos]="documentosRepositorio"
             [clientes]="clientes"
+            [solicitudes]="solicitudes"
+            [cumplimientos]="cumplimientosRepositorio()"
+            [filtros]="filtrosRepositorio()"
             [opcionesTipo]="opcionesTipoDocumento"
-            (textoChange)="terminoBusquedaDocumentos = $event"
-            (clienteIdChange)="filtroClienteDocumento = $event"
-            (anioChange)="filtroAnioDocumento = $event"
-            (estadoChange)="filtroEstadoDocumento = $event"
-            (origenChange)="filtroOrigenDocumento = $event"
-            (periodoChange)="filtroPeriodoDocumento = $event"
-            (tipoChange)="filtroTipoDocumento = $event"
-            (visibilidadChange)="filtroVisibilidadDocumento = $event"
-            (aplicar)="cargarPaginaDocumentos(0)"
+            [anios]="aniosDisponiblesDocumentos()"
+            [seleccionados]="seleccionDocumentos"
+            [total]="totalDocumentos"
+            [pagina]="paginaDocumentos"
+            [paginas]="totalPaginasDocumentos"
+            [cargando]="cargandoRepositorio"
+            [error]="errorRepositorio"
+            (filtrar)="aplicarFiltrosRepositorio($event)"
             (limpiar)="limpiarFiltrosDocumentos()"
+            (cambiarPagina)="cargarPaginaDocumentos($event)"
+            (seleccionar)="cambiarSeleccionDocumento($event.id, $event.seleccionado)"
+            (seleccionarTodos)="cambiarSeleccionTodosDocumentos($event)"
+            (limpiarSeleccion)="seleccionDocumentos.clear()"
+            (accion)="accionDocumento($event)"
+            (masiva)="aplicarAccionMasivaDocumentos($event)"
+            (subir)="abrirSubida()"
+            (ayuda)="abrirManual(esCliente() ? 'archivos-cliente' : 'documentos')"
+            (abrirSolicitud)="abrirSolicitudPanel($event)"
           />
-
-          @if (puedeRevisarDocumentos()) {
-            <div class="acciones-masivas" aria-label="Acciones sobre los documentos seleccionados">
-              <strong>{{ seleccionDocumentos.size }} seleccionados</strong>
-              <button
-                type="button"
-                class="secondary small"
-                [disabled]="seleccionDocumentos.size === 0"
-                (click)="aplicarAccionMasivaDocumentos('REVISAR')"
-              >
-                Marcar revisados
-              </button>
-              <button
-                type="button"
-                class="primary small"
-                [disabled]="seleccionDocumentos.size === 0"
-                (click)="aplicarAccionMasivaDocumentos('PUBLICAR')"
-              >
-                Publicar borradores
-              </button>
-              <button
-                type="button"
-                class="secondary small"
-                [disabled]="seleccionDocumentos.size === 0"
-                (click)="seleccionDocumentos.clear()"
-              >
-                Limpiar selección
-              </button>
-            </div>
-          }
-
-          <div class="table">
-            <div class="table-row table-header-documentos">
-              <div class="table-head">
-                @if (puedeRevisarDocumentos()) {
-                  <input
-                    type="checkbox"
-                    aria-label="Seleccionar todos los documentos de esta página"
-                    (change)="cambiarSeleccionTodosDocumentos($any($event.target).checked)"
-                  />
-                }
-                Documento
-              </div>
-              <div class="table-head">
-                {{ esCliente() ? 'Relacionado con' : 'Cliente y contexto' }}
-              </div>
-              <div class="table-head">Periodo</div>
-              <div class="table-head">Estado</div>
-              <div class="table-head">Acciones</div>
-            </div>
-
-            @for (documento of documentosFiltrados(); track documento.id) {
-              <article class="table-row documento-fila-tabla">
-                <div class="celda-seleccion celda-documento">
-                  @if (puedeRevisarDocumentos()) {
-                    <input
-                      type="checkbox"
-                      [checked]="documentoSeleccionado(documento.id)"
-                      [attr.aria-label]="
-                        'Seleccionar ' + (documento.titulo || documento.nombreArchivoOriginal)
-                      "
-                      (change)="
-                        cambiarSeleccionDocumento(documento.id, $any($event.target).checked)
-                      "
-                    />
-                  }
-                  <div>
-                    <strong>{{ documento.titulo || documento.nombreArchivoOriginal }}</strong>
-                    @if (documento.titulo) {
-                      <small>{{ documento.nombreArchivoOriginal }}</small>
-                    }
-                    <div class="metadatos-documento">
-                      <span>{{ etiquetaTipoDocumento(documento.tipo) }}</span>
-                      <span>{{ etiquetaOrigenDocumento(documento) }}</span>
-                    </div>
-                    @if (documento.referencia) {
-                      <small>Referencia: {{ documento.referencia }}</small>
-                    }
-                    @if (documento.comentarioAsesor) {
-                      <small class="comentario-documento">{{ documento.comentarioAsesor }}</small>
-                    }
-                  </div>
-                </div>
-                <div class="celda-contexto-documento">
-                  @if (!esCliente()) {
-                    <strong class="nombre-cliente-documento">{{ documento.nombreCliente }}</strong>
-                  }
-                  <app-contexto-documento
-                    [documento]="documento"
-                    [solicitud]="solicitudDeDocumento(documento)"
-                    [cumplimiento]="cumplimientoDeDocumento(documento)"
-                  />
-                </div>
-                <div class="periodo-documento">
-                  <strong>{{ etiquetaPeriodoDocumento(documento) }}</strong>
-                  <small>Subido {{ documento.creadoEn | date: 'dd/MM/yyyy' }}</small>
-                </div>
-                <div class="estado-documento-celda">
-                  <span class="estado" [class]="documento.estado">{{
-                    etiquetaEstadoDocumento(documento.estado)
-                  }}</span>
-                  @if (!esCliente()) {
-                    <small
-                      class="visibilidad-documento"
-                      [class.interna]="documento.visibilidad === 'INTERNO_GESTORIA'"
-                      >{{ etiquetaVisibilidadDocumento(documento) }}</small
-                    >
-                  }
-                  @if (documento.motivoRetirada) {
-                    <small class="motivo-retirada">{{ documento.motivoRetirada }}</small>
-                  }
-                </div>
-                <div class="row-actions acciones-documento-fila">
-                  @if (esPrevisualizable(documento)) {
-                    <button
-                      type="button"
-                      class="secondary small"
-                      (click)="previsualizarDocumento(documento)"
-                    >
-                      Vista previa
-                    </button>
-                  }
-                  <button
-                    type="button"
-                    class="icon-button"
-                    aria-label="Descargar documento"
-                    (click)="descargarDocumento(documento)"
-                  >
-                    <svg lucideDownload size="17"></svg>
-                  </button>
-                  @if (
-                    puedeRevisarDocumentos() &&
-                    documento.origen === 'APORTADO_CLIENTE' &&
-                    !documento.solicitudId &&
-                    documento.estado !== 'RETIRADO' &&
-                    documento.estado !== 'SUSTITUIDO'
-                  ) {
-                    <button
-                      type="button"
-                      class="secondary small"
-                      (click)="documentoAsociando = documento"
-                    >
-                      Clasificar
-                    </button>
-                  }
-                  @if (
-                    puedeRevisarDocumentos() &&
-                    documento.origen === 'GENERADO_GESTORIA' &&
-                    documento.visibilidad === 'INTERNO_GESTORIA'
-                  ) {
-                    <button
-                      type="button"
-                      class="primary small"
-                      (click)="publicarDocumento(documento)"
-                    >
-                      Publicar al cliente
-                    </button>
-                  }
-                  @if (
-                    puedeRevisarDocumentos() &&
-                    documento.origen === 'APORTADO_CLIENTE' &&
-                    documento.estado !== 'RETIRADO' &&
-                    documento.estado !== 'SUSTITUIDO'
-                  ) {
-                    <button
-                      type="button"
-                      class="primary small"
-                      (click)="establecerEstado(documento, 'REVISADO')"
-                    >
-                      Revisar
-                    </button>
-                    <button
-                      type="button"
-                      class="secondary small danger"
-                      (click)="establecerEstado(documento, 'RECHAZADO')"
-                    >
-                      Rechazar
-                    </button>
-                  }
-                  @if (
-                    (puedeRevisarDocumentos() && documento.origen === 'GENERADO_GESTORIA') ||
-                    documento.estado === 'RECIBIDO' ||
-                    documento.estado === 'RECHAZADO' ||
-                    documento.estado === 'RETIRADO'
-                  ) {
-                    <details class="menu-acciones-documento">
-                      <summary>Más</summary>
-                      <div>
-                        @if (
-                          puedeRevisarDocumentos() &&
-                          documento.origen === 'GENERADO_GESTORIA' &&
-                          documento.visibilidad === 'COMPARTIDO_CLIENTE'
-                        ) {
-                          <button
-                            type="button"
-                            class="secondary small"
-                            (click)="retirarPublicacionDocumento(documento)"
-                          >
-                            Ocultar al cliente
-                          </button>
-                        }
-                        @if (documento.estado === 'RECIBIDO' || documento.estado === 'RECHAZADO') {
-                          <button
-                            type="button"
-                            class="secondary small danger"
-                            (click)="retirarDocumento(documento)"
-                          >
-                            Retirar
-                          </button>
-                        }
-                        @if (
-                          puedeRevisarDocumentos() &&
-                          documento.origen === 'GENERADO_GESTORIA' &&
-                          (documento.estado === 'BORRADOR' || documento.estado === 'PUBLICADO')
-                        ) {
-                          <button
-                            type="button"
-                            class="secondary small danger"
-                            (click)="retirarDocumento(documento)"
-                          >
-                            Archivar versión
-                          </button>
-                        }
-                        @if (documento.estado === 'RECHAZADO' || documento.estado === 'RETIRADO') {
-                          <button
-                            type="button"
-                            class="secondary small"
-                            (click)="usarDocumentoComoSustitucion(documento)"
-                          >
-                            Sustituir
-                          </button>
-                        }
-                      </div>
-                    </details>
-                  }
-                </div>
-              </article>
-            } @empty {
-              <div class="tabla-documentos-vacia">
-                <svg lucideFileText size="26"></svg>
-                <strong>No hay documentos con estos filtros</strong>
-                <span>Prueba a limpiar los filtros o añade un documento nuevo.</span>
-                <button type="button" class="secondary small" (click)="limpiarFiltrosDocumentos()">
-                  Limpiar filtros
-                </button>
-              </div>
-            }
-          </div>
-          <div class="row-actions pagination">
-            <button
-              type="button"
-              class="secondary small"
-              [disabled]="paginaDocumentos === 0"
-              (click)="cargarPaginaDocumentos(paginaDocumentos - 1)"
-            >
-              Anterior
-            </button>
-            <span
-              >Página {{ totalPaginasDocumentos === 0 ? 0 : paginaDocumentos + 1 }} de
-              {{ totalPaginasDocumentos }} · {{ totalDocumentos }} documentos</span
-            >
-            <button
-              type="button"
-              class="secondary small"
-              [disabled]="paginaDocumentos + 1 >= totalPaginasDocumentos"
-              (click)="cargarPaginaDocumentos(paginaDocumentos + 1)"
-            >
-              Siguiente
-            </button>
-          </div>
-        </section>
+        } @error {
+          <p role="alert">No se pudo abrir Documentos. <a href="/">Recargar Savia</a></p>
+        }
       }
 
       @if (vistaActiva === 'subir') {
-        <section class="ayuda-contextual" [class.cliente]="esCliente()">
-          <div>
-            <strong>{{
-              esCliente()
-                ? 'Puedes añadir muchos archivos y volver más tarde'
-                : 'Elige correctamente el espacio documental'
-            }}</strong>
-            <p>
-              {{
-                esCliente()
-                  ? 'Cada archivo quedará guardado al subirlo. Si pertenece a una entrega, selecciónala para que la gestoría sepa qué está recibiendo. Después vuelve a la entrega para enviarla cuando hayas terminado.'
-                  : 'La documentación aportada pertenece al expediente de entrada. La preparada por la gestoría nace como borrador interno salvo que decidas publicarla.'
-              }}
-            </p>
-          </div>
-        </section>
         <section class="subir-layout">
           <div class="panel">
             <div class="panel-header">
@@ -1576,24 +1241,27 @@
                   {{
                     esCliente()
                       ? 'Puedes seleccionar varios PDF, JPG o PNG a la vez'
-                      : 'Guarda una aportación del cliente o un resultado preparado por la gestoría'
+                      : 'PDF, JPG y PNG'
                   }}
                 </p>
               </div>
             </div>
 
             <form class="form" (ngSubmit)="registerUpload()">
-              <label>
-                Cliente
-                <select name="uploadClient" [(ngModel)]="formularioSubida.clienteId">
-                  @for (cliente of clientes; track cliente.id) {
-                    <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
-                  }
-                </select>
-              </label>
+              @if (!esCliente()) {
+                <label>
+                  Cliente
+                  <select name="uploadClient" [(ngModel)]="formularioSubida.clienteId" required>
+                    <option [ngValue]="null" disabled>Selecciona un cliente</option>
+                    @for (cliente of clientes; track cliente.id) {
+                      <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
+                    }
+                  </select>
+                </label>
+              }
               @if (puedeRevisarDocumentos()) {
                 <label>
-                  Espacio documental
+                  Procedencia
                   <select
                     name="uploadOrigin"
                     [(ngModel)]="formularioSubida.origen"
@@ -1794,66 +1462,15 @@
               }
             </form>
           </div>
-
-          <div class="side-summary">
-            <div class="summary-item">
-              <svg lucideCalendarDays size="20"></svg>
-              <div>
-                <strong>Periodo actual</strong>
-                <span>{{ anioSeleccionado }} - T{{ trimestreActivo }}</span>
-              </div>
-            </div>
-            @if (esCliente()) {
-              <div class="summary-item">
-                <svg lucideCircleCheck size="20"></svg>
-                <div>
-                  <strong>Tu proceso</strong>
-                  <span>Añadir archivos → revisar → enviar</span>
-                </div>
-              </div>
-            } @else {
-              <div class="summary-item">
-                <svg lucideUsers size="20"></svg>
-                <div>
-                  <strong>Clientes activos</strong>
-                  <span>{{ cantidadClientesActivos() }}</span>
-                </div>
-              </div>
-            }
-            <div class="summary-item">
-              <svg lucideFileText size="20"></svg>
-              <div>
-                <strong>Tipos aceptados</strong>
-                <span>PDF, JPG y PNG</span>
-              </div>
-            </div>
-          </div>
         </section>
       }
 
       @if (vistaActiva === 'equipo' && puedeAdministrar()) {
-        <section class="configuracion-pasos" aria-label="Preparación del equipo">
-          <div [class.completo]="asesores().length > 0">
-            <span>1</span><strong>Crear gestor</strong
-            ><small>{{ asesores().length > 0 ? 'Preparado' : 'Pendiente' }}</small>
-          </div>
-          <div [class.completo]="asignaciones.length > 0">
-            <span>2</span><strong>Asignar clientes</strong
-            ><small>{{
-              asignaciones.length > 0 ? asignaciones.length + ' asignaciones' : 'Pendiente'
-            }}</small>
-          </div>
-          <div>
-            <span>3</span><strong>Comprobar acceso</strong
-            ><small>Revisión manual: el gestor solo debe ver sus clientes</small>
-          </div>
-        </section>
         <section class="two-column">
           <div class="panel">
             <div class="panel-header">
               <div>
                 <h2>Alta de usuario</h2>
-                <p>Se crea también en Keycloak</p>
               </div>
             </div>
             <form class="form" (ngSubmit)="agregarUsuario()">
@@ -2182,30 +1799,6 @@
             </div>
           </section>
 
-          @if (showLocalDemoCredentials && puedeAdministrar()) {
-            <section class="panel">
-              <div class="panel-header">
-                <div>
-                  <h2>Herramientas de desarrollo local</h2>
-                  <p>No se muestran en producción</p>
-                </div>
-              </div>
-              <div class="configuracion-listar">
-                <div>
-                  <span>Base URL</span><strong>{{ urlBaseApiVisible }}</strong>
-                </div>
-                <div>
-                  <span>OpenAPI local</span><strong>{{ urlOpenApiLocal }}</strong>
-                </div>
-                <div>
-                  <span>Estado</span><strong>{{ estadoApi }}</strong>
-                </div>
-                <button type="button" class="secondary" (click)="comprobarApi()">
-                  Comprobar conexión
-                </button>
-              </div>
-            </section>
-          }
           @if (puedeAdministrar()) {
             <section class="panel">
               <div class="panel-header">

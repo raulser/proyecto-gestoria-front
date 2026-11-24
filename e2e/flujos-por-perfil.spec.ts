@@ -70,6 +70,11 @@ test('gestor: distingue petición documental de obligación fiscal', async ({ pa
   await expect(page.getByRole('button', { name: 'Equipo', exact: true })).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Documentos', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Documentos', exact: true })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Cliente', exact: true })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Año', exact: true })).toBeVisible();
+  await expect(page.getByText('Comprueba quién lo aportó y quién puede verlo')).toHaveCount(0);
+  await expect(page.locator('app-repositorio-documental .seleccion')).toHaveCount(0);
   await expect(page.getByText('Viendo una petición concreta')).toHaveCount(0);
   await page.getByRole('button', { name: 'Filtros', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Filtros avanzados' })).toBeVisible();

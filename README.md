@@ -23,6 +23,15 @@ El directorio tiene búsqueda por nombre, NIF o correo, filtros de estado y una
 ficha lateral con acceso a documentos, obligaciones y configuración. Las vistas
 de panel, directorio y alta se cargan cuando se necesitan.
 
+Documentos se carga al abrirlo y muestra búsqueda, cliente, tipo y año sin abrir
+un panel adicional. Las vistas «Todos», «Del cliente» y «De la gestoría» filtran
+en el servidor; la búsqueda espera 400 ms tras la última pulsación. Los filtros
+de estado, periodo y acceso quedan en «Filtros». El total corresponde al resultado
+completo, sin contadores parciales presentados como globales. Cada archivo tiene
+apertura, descarga y un menú de acciones; las acciones masivas aparecen al
+seleccionar archivos. Subir desde un expediente conserva su cliente, año y origen.
+Los errores de carga se muestran dentro de la lista con reintento.
+
 En móvil, la barra inferior mantiene cuatro destinos con etiquetas y agrupa las
 opciones secundarias en «Más». El área de contenido reserva el espacio de la barra
 y la zona segura del dispositivo. La marca comparte los mismos SVG en el portal
@@ -42,10 +51,10 @@ prompt de generación, en [docs/identidad-v6.md](docs/identidad-v6.md).
 - Documentos propios, periodicidad mensual/trimestral/anual/puntual o sin vencimiento, fechas y recordatorios editables.
 - Ficha fiscal guiada con propuestas explicadas, calendario y configuración manual separada.
 - Solicitudes, checklist, conversación, envío y reapertura.
-- Repositorio histórico con filtros de origen, periodo, categoría y visibilidad.
+- Documentos por cliente, año, tipo y procedencia, con filtros adicionales de estado y acceso.
 - Subida múltiple de PDF/JPEG/PNG, libre o asociada a una solicitud.
 - Equipo, asignaciones, plan, auditoría y marca para administradores.
-- Estado de API e identidad de la sesión.
+- Cuenta, soporte y manuales adaptados al perfil.
 
 El plan documental se guarda con cada cliente. Las propuestas iniciales se copian;
 modificarlas no altera otros clientes. «Otro» permite dar nombre al tipo y empezar

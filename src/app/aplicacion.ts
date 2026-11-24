@@ -3,8 +3,6 @@ import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/c
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  LucideCalendarDays,
-  LucideCircleCheck,
   LucideDownload,
   LucideFileText,
   LucideFileUp,
@@ -26,9 +24,8 @@ import { DialogoAccionComponent } from './infraestructura/dialogo-accion.compone
 import { ServicioFeedback } from './infraestructura/servicio-feedback';
 import { ServicioDialogos } from './infraestructura/servicio-dialogos';
 import { ProgresoSubidaComponent } from './documentos/progreso-subida.component';
-import { FiltrosDocumentosComponent } from './documentos/filtros-documentos.component';
-import { ContextoDocumentoComponent } from './documentos/contexto-documento.component';
-import { ResumenRepositorioComponent } from './documentos/resumen-repositorio.component';
+import { RepositorioDocumentalComponent } from './documentos/repositorio-documental.component';
+import type { AccionArchivo, FiltrosRepositorio } from './documentos/filtros-repositorio';
 import { AsociarDocumentoComponent } from './documentos/asociar-documento.component';
 import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente-cliente.component';
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
@@ -83,8 +80,6 @@ import {
     PanelTrabajoComponent,
     CommonModule,
     FormsModule,
-    LucideCalendarDays,
-    LucideCircleCheck,
     LucideDownload,
     LucideFileText,
     LucideFileUp,
@@ -98,9 +93,7 @@ import {
     CentroFeedbackComponent,
     DialogoAccionComponent,
     ProgresoSubidaComponent,
-    FiltrosDocumentosComponent,
-    ContextoDocumentoComponent,
-    ResumenRepositorioComponent,
+    RepositorioDocumentalComponent,
     AsociarDocumentoComponent,
     ResumenExpedienteClienteComponent,
     EditorSolicitudComponent,
@@ -258,6 +251,9 @@ export class Aplicacion implements OnInit {
   filtroVisibilidadDocumento: VisibilidadDocumento | '' = '';
   filtroTipoDocumento: TipoDocumento | '' = '';
   filtroPeriodoDocumento: PeriodoDocumento | '' = '';
+  cargandoRepositorio = false;
+  errorRepositorio = '';
+  private cargaRepositorioId = 0;
   paginaDocumentos = 0;
   totalPaginasDocumentos = 0;
   totalDocumentos = 0;
@@ -466,7 +462,11 @@ export class Aplicacion implements OnInit {
         error: (error) => {
           this.loading = false;
           if (error instanceof ErrorSesionCaducada) this._error = error.message;
-          else this.error = this.obtenerErrorApi(error, 'No se pudo cargar tu cuenta. Vuelve a intentarlo.');
+          else
+            this.error = this.obtenerErrorApi(
+              error,
+              'No se pudo cargar tu cuenta. Vuelve a intentarlo.',
+            );
           this.detectorCambios.markForCheck();
         },
       });
@@ -533,6 +533,10 @@ export class Aplicacion implements OnInit {
   }
 
   cargarPaginaDocumentos(pagina = 0): void {
+    const cargaId = ++this.cargaRepositorioId;
+    this.cargandoRepositorio = true;
+    this.errorRepositorio = '';
+    this.seleccionDocumentos.clear();
     const parametros = new URLSearchParams({
       pagina: String(Math.max(0, pagina)),
       tamano: '25',
@@ -558,6 +562,8 @@ export class Aplicacion implements OnInit {
       >(`${this.urlBaseApi}/api/documentos/pagina?${parametros.toString()}`, { headers: this.cabecerasAutenticacion() })
       .subscribe({
         next: (respuesta) => {
+          if (cargaId !== this.cargaRepositorioId) return;
+          this.cargandoRepositorio = false;
           this.documentosRepositorio = respuesta.datos.contenido;
           this.seleccionDocumentos.clear();
           this.paginaDocumentos = respuesta.datos.pagina;
@@ -565,8 +571,15 @@ export class Aplicacion implements OnInit {
           this.totalDocumentos = respuesta.datos.totalElementos;
           this.detectorCambios.markForCheck();
         },
-        error: (error) =>
-          (this.error = this.obtenerErrorApi(error, 'No se pudo cargar la página de documentos')),
+        error: (error) => {
+          if (cargaId !== this.cargaRepositorioId) return;
+          this.cargandoRepositorio = false;
+          this.errorRepositorio = this.obtenerErrorApi(
+            error,
+            'Revisa la conexión y vuelve a intentarlo.',
+          );
+          this.detectorCambios.markForCheck();
+        },
       });
   }
 
@@ -581,6 +594,95 @@ export class Aplicacion implements OnInit {
     this.filtroTipoDocumento = '';
     this.filtroVisibilidadDocumento = '';
     this.cargarPaginaDocumentos(0);
+  }
+
+  filtrosRepositorio(): FiltrosRepositorio {
+    return {
+      texto: this.terminoBusquedaDocumentos,
+      clienteId: this.filtroClienteDocumento,
+      solicitudId: this.filtroSolicitudDocumento,
+      anio: this.filtroAnioDocumento,
+      estado: this.filtroEstadoDocumento,
+      origen: this.filtroOrigenDocumento,
+      visibilidad: this.filtroVisibilidadDocumento,
+      tipo: this.filtroTipoDocumento,
+      periodo: this.filtroPeriodoDocumento,
+    };
+  }
+
+  aplicarFiltrosRepositorio(cambios: Partial<FiltrosRepositorio>): void {
+    const filtros = { ...this.filtrosRepositorio(), ...cambios };
+    if (filtros.clienteId !== this.filtroClienteDocumento) filtros.solicitudId = null;
+    this.terminoBusquedaDocumentos = filtros.texto;
+    this.filtroClienteDocumento = filtros.clienteId;
+    this.filtroSolicitudDocumento = filtros.solicitudId;
+    this.filtroAnioDocumento = filtros.anio;
+    this.filtroEstadoDocumento = filtros.estado;
+    this.filtroOrigenDocumento = filtros.origen;
+    this.filtroVisibilidadDocumento = filtros.visibilidad;
+    this.filtroTipoDocumento = filtros.tipo;
+    this.filtroPeriodoDocumento = filtros.periodo;
+    this.cargarPaginaDocumentos(0);
+  }
+
+  cumplimientosRepositorio(): RespuestaCumplimientoObligacion[] {
+    return [...this.agendaFiscal, ...this.cumplimientosCliente];
+  }
+
+  abrirSubida(): void {
+    if (this.vistaActiva === 'documentos') {
+      this.formularioSubida.sustituyeDocumentoId = null;
+      this.formularioSubida.clienteId = this.esCliente()
+        ? (this.clientes[0]?.id ?? null)
+        : this.filtroClienteDocumento;
+      this.formularioSubida.solicitudId = this.filtroSolicitudDocumento;
+      this.formularioSubida.origen = this.filtroSolicitudDocumento
+        ? 'APORTADO_CLIENTE'
+        : this.filtroOrigenDocumento || 'APORTADO_CLIENTE';
+      this.formularioSubida.visibilidad =
+        this.formularioSubida.origen === 'GENERADO_GESTORIA'
+          ? 'INTERNO_GESTORIA'
+          : 'COMPARTIDO_CLIENTE';
+      this.formularioSubida.tipo =
+        this.filtroTipoDocumento ||
+        (this.formularioSubida.origen === 'GENERADO_GESTORIA'
+          ? 'MODELO_TRIBUTARIO'
+          : 'FACTURA_RECIBIDA');
+      if (this.filtroAnioDocumento) this.formularioSubida.anio = this.filtroAnioDocumento;
+    }
+    this.cambiarVista('subir');
+  }
+
+  accionDocumento({ accion, documento }: AccionArchivo): void {
+    switch (accion) {
+      case 'ver':
+        this.previsualizarDocumento(documento);
+        break;
+      case 'descargar':
+        this.descargarDocumento(documento);
+        break;
+      case 'clasificar':
+        this.documentoAsociando = documento;
+        break;
+      case 'publicar':
+        this.publicarDocumento(documento);
+        break;
+      case 'revisar':
+        this.establecerEstado(documento, 'REVISADO');
+        break;
+      case 'rechazar':
+        this.establecerEstado(documento, 'RECHAZADO');
+        break;
+      case 'ocultar':
+        this.retirarPublicacionDocumento(documento);
+        break;
+      case 'retirar':
+        this.retirarDocumento(documento);
+        break;
+      case 'sustituir':
+        this.usarDocumentoComoSustitucion(documento);
+        break;
+    }
   }
 
   cargarPanel(): void {
@@ -2680,7 +2782,7 @@ export class Aplicacion implements OnInit {
     const titulos: Record<Vista, string> = {
       panel: this.esCliente() ? 'Mi espacio documental' : 'Panel de trabajo',
       clientes: this.esCliente() ? 'Mis datos y fechas fiscales' : 'Clientes',
-      documentos: this.esCliente() ? 'Mis archivos' : 'Repositorio documental',
+      documentos: this.esCliente() ? 'Mis archivos' : 'Documentos',
       solicitudes: this.esCliente() ? 'Lo que debo entregar' : 'Peticiones de documentación',
       subir: this.esCliente() ? 'Añadir documentos' : 'Subida de documentos',
       equipo: 'Equipo y asignaciones',

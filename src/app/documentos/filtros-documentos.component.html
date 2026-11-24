@@ -1,0 +1,142 @@
+<form class="filtros" (ngSubmit)="aplicar({})" aria-label="Buscar y filtrar documentos">
+  <div class="barra">
+    <label class="busqueda"
+      ><span>Buscar</span>
+      <div>
+        <svg lucideSearch size="17"></svg
+        ><input
+          name="buscar"
+          aria-label="Buscar documentos"
+          placeholder="Nombre del archivo…"
+          [ngModel]="textoLocal"
+          (ngModelChange)="buscar($event)"
+        />
+        @if (textoLocal) {
+          <button
+            type="button"
+            class="borrar"
+            aria-label="Borrar búsqueda"
+            (click)="textoLocal = ''; aplicar({})"
+          >
+            <svg lucideX size="15"></svg>
+          </button>
+        }
+      </div>
+    </label>
+    @if (!esCliente) {
+      <label
+        >Cliente<select
+          name="cliente"
+          [ngModel]="filtros.clienteId"
+          (ngModelChange)="aplicar({ clienteId: $event })"
+        >
+          <option [ngValue]="null">Todos los clientes</option>
+          @for (cliente of clientes; track cliente.id) {
+            <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
+          }
+        </select></label
+      >
+    }
+    <label
+      >Tipo de documento<select
+        name="tipo"
+        [ngModel]="filtros.tipo"
+        (ngModelChange)="aplicar({ tipo: $event })"
+      >
+        <option value="">Todos los tipos</option>
+        @for (tipo of opcionesTipo; track tipo.valor) {
+          <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
+        }
+      </select></label
+    >
+    <label class="anio"
+      >Año<select name="anio" [ngModel]="filtros.anio" (ngModelChange)="aplicar({ anio: $event })">
+        <option [ngValue]="null">Todos</option>
+        @for (anio of anios; track anio) {
+          <option [ngValue]="anio">{{ anio }}</option>
+        }
+      </select></label
+    >
+  </div>
+  <div class="vistas">
+    <div class="pestanas" role="group" aria-label="Procedencia de los documentos">
+      <button
+        type="button"
+        [attr.aria-pressed]="filtros.origen === ''"
+        (click)="aplicar({ origen: '' })"
+      >
+        Todos
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="filtros.origen === 'APORTADO_CLIENTE'"
+        (click)="aplicar({ origen: 'APORTADO_CLIENTE' })"
+      >
+        {{ esCliente ? 'Subidos por mí' : 'Del cliente' }}
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="filtros.origen === 'GENERADO_GESTORIA'"
+        (click)="aplicar({ origen: 'GENERADO_GESTORIA' })"
+      >
+        {{ esCliente ? 'De mi gestoría' : 'De la gestoría' }}
+      </button>
+    </div>
+    <button
+      type="button"
+      class="filtro-boton"
+      [attr.aria-expanded]="panelAbierto"
+      aria-controls="filtros-avanzados-documentos"
+      (click)="panelAbierto = !panelAbierto"
+    >
+      <svg lucideFilter size="15"></svg>Filtros
+      @if (cantidadAvanzados) {
+        <span>{{ cantidadAvanzados }}</span>
+      }
+    </button>
+  </div>
+  @if (panelAbierto) {
+    <section id="filtros-avanzados-documentos" class="avanzados" aria-label="Filtros avanzados">
+      <label
+        >Estado<select
+          name="estado"
+          [ngModel]="filtros.estado"
+          (ngModelChange)="aplicar({ estado: $event })"
+        >
+          <option value="">Todos los estados</option>
+          @for (estado of estados; track estado[0]) {
+            @if (!esCliente || (estado[0] !== 'BORRADOR' && estado[0] !== 'PENDIENTE')) {
+              <option [value]="estado[0]">{{ estado[1] }}</option>
+            }
+          }
+        </select></label
+      >
+      <label
+        >Periodo<select
+          name="periodo"
+          [ngModel]="filtros.periodo"
+          (ngModelChange)="aplicar({ periodo: $event })"
+        >
+          <option value="">Todos los periodos</option>
+          <option value="MENSUAL">Mensual</option>
+          <option value="TRIMESTRAL">Trimestral</option>
+          <option value="ANUAL">Anual</option>
+          <option value="PUNTUAL">Sin periodo</option>
+        </select></label
+      >
+      @if (!esCliente) {
+        <label
+          >Acceso<select
+            name="visibilidad"
+            [ngModel]="filtros.visibilidad"
+            (ngModelChange)="aplicar({ visibilidad: $event })"
+          >
+            <option value="">Todos</option>
+            <option value="INTERNO_GESTORIA">Solo gestoría</option>
+            <option value="COMPARTIDO_CLIENTE">Visible para el cliente</option>
+          </select></label
+        >
+      }
+    </section>
+  }
+</form>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Aplicacion } from './aplicacion';
-import { throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
 import { ServicioFeedback } from './infraestructura/servicio-feedback';
 import {
@@ -108,6 +108,62 @@ describe('Aplicacion', () => {
     expect(app.filtroSolicitudDocumento).toBe(peticion.id);
     expect(app.cargarPaginaDocumentos).toHaveBeenCalledWith(0);
     vi.unstubAllGlobals();
+  });
+
+  it('cambiar de cliente elimina una petición que pertenecía al cliente anterior', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    vi.spyOn(app, 'cargarPaginaDocumentos');
+    app.filtroClienteDocumento = 1;
+    app.filtroSolicitudDocumento = 31;
+    app.aplicarFiltrosRepositorio({ clienteId: 2 });
+    expect(app.filtroSolicitudDocumento).toBeNull();
+    expect(app.filtroClienteDocumento).toBe(2);
+    expect(app.cargarPaginaDocumentos).toHaveBeenCalledWith(0);
+  });
+
+  it('subir desde un expediente conserva cliente, año y procedencia sin compartir borradores', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    vi.stubGlobal('scrollTo', vi.fn());
+    app.vistaActiva = 'documentos';
+    app.filtroClienteDocumento = 7;
+    app.filtroAnioDocumento = 2025;
+    app.filtroOrigenDocumento = 'GENERADO_GESTORIA';
+    app.abrirSubida();
+    expect(app.formularioSubida.clienteId).toBe(7);
+    expect(app.formularioSubida.anio).toBe(2025);
+    expect(app.formularioSubida.origen).toBe('GENERADO_GESTORIA');
+    expect(app.formularioSubida.visibilidad).toBe('INTERNO_GESTORIA');
+    expect(app.vistaActiva).toBe('subir');
+    vi.unstubAllGlobals();
+  });
+
+  it('una respuesta lenta del filtro anterior no sobrescribe los documentos actuales', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    const anterior = new Subject<unknown>();
+    const actual = new Subject<unknown>();
+    const get = vi
+      .spyOn(TestBed.inject(HttpClient), 'get')
+      .mockReturnValueOnce(anterior)
+      .mockReturnValueOnce(actual);
+    try {
+      app.cargarPaginaDocumentos(0);
+      app.cargarPaginaDocumentos(0);
+      actual.next({
+        datos: {
+          contenido: [{ ...documento('RECIBIDO'), id: 9 }],
+          pagina: 0,
+          totalPaginas: 1,
+          totalElementos: 1,
+        },
+      });
+      anterior.next({ datos: { contenido: [], pagina: 0, totalPaginas: 0, totalElementos: 0 } });
+      expect(app.documentosRepositorio.map((d) => d.id)).toEqual([9]);
+      expect(app.cargandoRepositorio).toBe(false);
+    } finally {
+      anterior.complete();
+      actual.complete();
+      get.mockRestore();
+    }
   });
 
   it('relaciona una peticion con el vencimiento fiscal exacto', () => {

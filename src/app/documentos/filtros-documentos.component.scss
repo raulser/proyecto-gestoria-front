@@ -1,0 +1,164 @@
+:host {
+  display: block;
+}
+.filtros {
+  display: grid;
+  gap: 20px;
+}
+.barra {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+label {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  flex: 1 1 150px;
+  color: #5b6175;
+  font-size: 11px;
+  font-weight: 600;
+}
+.busqueda {
+  flex: 2 1 220px;
+}
+.anio {
+  flex: 0 1 100px;
+}
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  border: 1px solid #e2dfea;
+  border-radius: 9px;
+  background: #fff;
+  color: #303449;
+  font: inherit;
+  font-size: 13px;
+  padding: 0 11px;
+}
+.busqueda > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 42px;
+  border: 1px solid #e2dfea;
+  border-radius: 9px;
+  padding: 0 11px;
+  background: #fff;
+  color: #8a879a;
+}
+.busqueda input {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  outline: 0;
+}
+.busqueda > div:focus-within {
+  outline: 2px solid #a284df;
+  outline-offset: 2px;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.borrar {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: #747184;
+}
+.vistas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pestanas {
+  display: flex;
+  gap: 4px;
+  background: #f2eff7;
+  padding: 4px;
+  border-radius: 10px;
+}
+.pestanas button {
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  min-height: 35px;
+  padding: 7px 15px;
+  color: #747085;
+  font-size: 12px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.pestanas button[aria-pressed='true'] {
+  background: #fff;
+  color: #6033b4;
+  box-shadow: 0 1px 4px #34215115;
+}
+.filtro-boton {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 39px;
+  padding: 8px 11px;
+  border: 1px solid #e4dfec;
+  border-radius: 9px;
+  color: #5c566e;
+  background: #fff;
+  font-size: 12px;
+}
+.filtro-boton[aria-expanded='true'] {
+  border-color: #a284df;
+  color: #6033b4;
+}
+.filtro-boton span {
+  border-radius: 5px;
+  background: #eee7fa;
+  padding: 2px 5px;
+}
+.avanzados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e8e2f0;
+  border-radius: 10px;
+  background: #faf8fd;
+}
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid #9c78db;
+  outline-offset: 3px;
+}
+@media (max-width: 620px) {
+  .barra {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 13px 10px;
+  }
+  .busqueda {
+    grid-column: 1/-1;
+  }
+  label:has(select[name='cliente']) {
+    grid-column: 1/-1;
+  }
+  .vistas {
+    gap: 7px;
+  }
+  .pestanas {
+    gap: 0;
+  }
+  .pestanas button {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+  .filtro-boton {
+    font-size: 11px;
+    padding: 8px;
+  }
+}

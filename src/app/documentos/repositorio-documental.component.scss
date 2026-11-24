@@ -1,0 +1,521 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.repositorio {
+  border: 1px solid #e7e2ed;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 3px 14px #28144303;
+}
+.cabecera-filtros {
+  padding: 24px 24px 0;
+}
+button,
+summary {
+  font: inherit;
+  cursor: pointer;
+}
+button {
+  border: 0;
+  background: transparent;
+}
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible {
+  outline: 2px solid #a180df;
+  outline-offset: 3px;
+}
+.resultados {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 64px;
+  padding: 16px 24px;
+}
+.resultado-total {
+  font-size: 12px;
+  font-weight: 600;
+  color: #686174;
+}
+.herramientas {
+  margin-left: auto;
+  display: flex;
+  gap: 15px;
+}
+.herramientas button {
+  padding: 4px 0;
+  color: #786b8e;
+  font-size: 12px;
+}
+.herramientas button:hover {
+  color: #6332b5;
+  text-decoration: underline;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chips button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #f1ebfa;
+  color: #6c3cac;
+  font-size: 11px;
+}
+.peticion-activa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 24px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f6f2fc;
+  color: #65547f;
+  font-size: 12px;
+}
+.peticion-activa button {
+  display: grid;
+  place-items: center;
+  color: inherit;
+}
+.seleccion {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 12px 24px;
+  background: #f1eafa;
+  color: #6035a6;
+  font-size: 12px;
+}
+.seleccion button {
+  padding: 7px 10px;
+  background: #fff;
+  color: #623a9a;
+  border: 1px solid #e0d4f0;
+  border-radius: 7px;
+}
+.seleccion .cerrar-seleccion {
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+}
+.fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px 145px 110px;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 24px;
+  border-top: 1px solid #f0edf4;
+}
+.con-cliente .fila {
+  grid-template-columns: minmax(200px, 1.5fr) minmax(120px, 0.8fr) 100px 135px 110px;
+  gap: 15px;
+}
+.encabezados {
+  min-height: 42px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  color: #766b83;
+  background: #fbfafd;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nombre {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex: 0 0 16px;
+  accent-color: #7545c8;
+  cursor: pointer;
+}
+.icono-archivo {
+  display: grid;
+  place-items: center;
+  flex: 0 0 37px;
+  height: 43px;
+  border: 1px solid #e9e1f2;
+  border-radius: 9px;
+  color: #9571c7;
+  background: #faf7ff;
+}
+.identidad {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+.nombre-archivo {
+  padding: 0;
+  text-align: left;
+  overflow-wrap: anywhere;
+  color: #333044;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.nombre-archivo:hover {
+  color: #6b3fd1;
+  text-decoration: underline;
+}
+.tipo,
+.relacion,
+.comentario {
+  color: #756981;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.relacion {
+  color: #7d689b;
+}
+.relacion.enlace {
+  padding: 0;
+  text-align: left;
+}
+.relacion.enlace:hover {
+  text-decoration: underline;
+}
+.comentario {
+  color: #a15c33;
+}
+.cliente {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #655d73;
+  font-size: 11px;
+  line-height: 1.4;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #f1edf7;
+  color: #9378b6;
+  flex: 0 0 auto;
+  font-size: 11px;
+}
+.periodo {
+  display: grid;
+  gap: 5px;
+  color: #786c85;
+  font-size: 10px;
+}
+.periodo strong {
+  color: #756b83;
+  font-size: 11px;
+  font-weight: 500;
+}
+.situacion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  padding: 5px 7px;
+  background: #f3f1f7;
+  color: #84768f;
+  font-size: 10px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.estado.RECIBIDO,
+.estado.PENDIENTE {
+  background: #fff5e6;
+  color: #a36b23;
+}
+.estado.REVISADO,
+.estado.PUBLICADO {
+  background: #ebf7f0;
+  color: #3c8963;
+}
+.estado.RECHAZADO {
+  background: #fff0ed;
+  color: #b66550;
+}
+.estado.BORRADOR {
+  background: #f0eafa;
+  color: #8b65ba;
+}
+.situacion small {
+  color: #786783;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.acciones {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.abrir {
+  color: #79549f;
+  padding: 7px;
+  font-size: 11px;
+  border-radius: 6px;
+}
+.abrir:hover,
+.icono-boton:hover,
+summary:hover {
+  background: #f4eff9;
+}
+.icono-boton,
+summary {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  color: #806a95;
+}
+summary {
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+.mas {
+  position: relative;
+}
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 6;
+  width: 210px;
+  padding: 5px;
+  border: 1px solid #e6dff0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 36px #30213e1f;
+}
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 11px 9px;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 12px;
+  color: #6b587d;
+}
+.menu button:hover {
+  background: #f6f1fb;
+}
+.menu button.peligro {
+  color: #b66550;
+}
+.vacio {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 64px 24px 72px;
+  text-align: center;
+  border-top: 1px solid #f0edf4;
+  color: #756580;
+}
+.carpeta {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 21px;
+  background: #f5f0fc;
+  color: #b399d5;
+}
+.vacio h2 {
+  margin: 0;
+  color: #766580;
+  font-size: 15px;
+  font-weight: 500;
+}
+.vacio p {
+  margin: 0;
+  max-width: 440px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.vacio button {
+  padding: 10px 15px;
+  border: 1px solid #e2d8ee;
+  border-radius: 8px;
+  color: #7850aa;
+  font-size: 12px;
+}
+.vacio button.principal {
+  background: #7141c8;
+  border-color: #7141c8;
+  color: #fff;
+}
+.paginacion {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+  border-top: 1px solid #eee8f4;
+  padding: 16px 24px;
+  color: #756981;
+  font-size: 11px;
+}
+.paginacion button {
+  padding: 8px;
+  color: #765c95;
+}
+.paginacion button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.cargando > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 24px;
+  border-top: 1px solid #f0edf4;
+}
+.cargando span,
+.cargando i {
+  height: 30px;
+  background: #f2eef7;
+  border-radius: 7px;
+  animation: espera 1.5s ease-in-out infinite;
+}
+.cargando span {
+  width: 37px;
+  height: 43px;
+}
+.cargando i {
+  width: 60%;
+  height: 12px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@keyframes espera {
+  50% {
+    opacity: 0.45;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cargando span,
+  .cargando i {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  .fila,
+  .con-cliente .fila {
+    grid-template-columns: minmax(0, 1fr) 100px 120px;
+    gap: 12px;
+  }
+  .encabezados {
+    display: none;
+  }
+  .con-cliente .cliente {
+    grid-column: 1;
+    grid-row: 2;
+    padding-left: 28px;
+  }
+  .acciones {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .nombre {
+    grid-column: 1;
+  }
+  .periodo {
+    grid-column: 2;
+  }
+  .situacion {
+    grid-column: 3;
+  }
+}
+@media (max-width: 620px) {
+  .repositorio {
+    border-radius: 12px;
+  }
+  .cabecera-filtros {
+    padding: 16px 16px 0;
+  }
+  .resultados {
+    padding: 14px 16px;
+    gap: 9px;
+  }
+  .peticion-activa {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .fila,
+  .con-cliente .fila {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 13px;
+    padding: 18px 16px;
+  }
+  .nombre {
+    grid-column: 1/-1;
+  }
+  .nombre-archivo {
+    font-size: 13px;
+  }
+  .con-cliente .cliente {
+    grid-column: 1;
+    grid-row: 2;
+    padding-left: 0;
+  }
+  .periodo {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+  }
+  .situacion {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .acciones {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .seleccion {
+    padding: 12px 16px;
+  }
+  .seleccion strong {
+    width: 100%;
+  }
+  .vacio {
+    padding: 45px 16px;
+  }
+  .chips {
+    order: 3;
+    width: 100%;
+  }
+  .chips:empty {
+    display: none;
+  }
+}

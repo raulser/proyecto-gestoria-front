@@ -1308,9 +1308,13 @@ textarea {
   color: #65746c;
 }
 
-.upload-layout,
-.subir-layout {
+.upload-layout {
   grid-template-columns: minmax(360px, 520px) minmax(260px, 1fr);
+}
+
+.subir-layout {
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
 }
 
 .dropzone {
