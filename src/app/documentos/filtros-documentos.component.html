@@ -23,19 +23,12 @@
         }
       </div>
     </label>
-    @if (!esCliente) {
-      <label
-        >Cliente<select
-          name="cliente"
-          [ngModel]="filtros.clienteId"
-          (ngModelChange)="aplicar({ clienteId: $event })"
-        >
-          <option [ngValue]="null">Todos los clientes</option>
-          @for (cliente of clientes; track cliente.id) {
-            <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
-          }
-        </select></label
-      >
+    @if (!esCliente && !clienteFijo) {
+      <app-selector-cliente
+        [clientes]="clientes"
+        [seleccionado]="filtros.clienteId"
+        (cambiar)="aplicar({ clienteId: $event })"
+      />
     }
     <label
       >Tipo de documento<select

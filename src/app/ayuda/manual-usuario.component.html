@@ -93,6 +93,92 @@
           @for (parrafo of actual.parrafos; track $index) {
             <p>{{ parrafo }}</p>
           }
+          @for (recorrido of actual.recorridos ?? []; track recorrido.titulo) {
+            <section class="recorrido" [attr.aria-label]="recorrido.titulo">
+              <h4>{{ recorrido.titulo }}</h4>
+              @if (recorrido.antes?.length) {
+                <h5>Antes de empezar</h5>
+                <ul>
+                  @for (requisito of recorrido.antes; track $index) {
+                    <li>{{ requisito }}</li>
+                  }
+                </ul>
+              }
+              <ol class="pasos-guiados">
+                @for (paso of recorrido.pasos; track $index) {
+                  <li>
+                    <strong>{{ paso.haz }}</strong>
+                    <p>{{ paso.veras }}</p>
+                  </li>
+                }
+              </ol>
+              @if (recorrido.comprobar?.length) {
+                <div class="comprobacion">
+                  <h5>Al terminar, comprueba</h5>
+                  <ul>
+                    @for (texto of recorrido.comprobar; track $index) {
+                      <li>{{ texto }}</li>
+                    }
+                  </ul>
+                </div>
+              }
+              @if (recorrido.incidencias?.length) {
+                <details class="incidencias-recorrido">
+                  <summary>Si no sale lo esperado</summary>
+                  <ul>
+                    @for (texto of recorrido.incidencias; track $index) {
+                      <li>{{ texto }}</li>
+                    }
+                  </ul>
+                </details>
+              }
+            </section>
+          }
+          @for (captura of actual.capturas ?? []; track captura.archivo) {
+            <figure class="captura-manual">
+              <figcaption>
+                <h4>{{ captura.titulo }}</h4>
+                <p>{{ captura.descripcion }}</p>
+              </figcaption>
+              <a
+                [href]="captura.archivo"
+                target="_blank"
+                rel="noopener"
+                [attr.aria-label]="'Ampliar captura: ' + captura.titulo"
+              >
+                <span class="imagen-anotada">
+                  <img
+                    [src]="captura.archivo"
+                    [width]="captura.ancho"
+                    [height]="captura.alto"
+                    [alt]="captura.titulo + '. ' + captura.descripcion"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  @for (marca of captura.marcas; track marca.numero) {
+                    <span
+                      class="marca-captura"
+                      aria-hidden="true"
+                      [style.left.%]="marca.x"
+                      [style.top.%]="marca.y"
+                      [style.width.%]="marca.ancho"
+                      [style.height.%]="marca.alto"
+                      ><b>{{ marca.numero }}</b></span
+                    >
+                  }
+                </span>
+                <span class="ampliar-captura">Ampliar captura ↗</span>
+              </a>
+              <ol class="leyenda-captura">
+                @for (marca of captura.marcas; track marca.numero) {
+                  <li>
+                    <strong>{{ marca.titulo }}</strong
+                    ><span>{{ marca.descripcion }}</span>
+                  </li>
+                }
+              </ol>
+            </figure>
+          }
           @if (actual.pasos?.length) {
             <h4>Paso a paso</h4>
             <ol>

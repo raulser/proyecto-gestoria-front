@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SelectorClienteComponent } from './selector-cliente.component';
 import { LucideFilter, LucideSearch, LucideX } from '@lucide/angular';
 import { RespuestaCliente, TipoDocumento } from '../modelos-aplicacion';
 import {
@@ -18,12 +19,13 @@ import {
 
 @Component({
   selector: 'app-filtros-documentos',
-  imports: [FormsModule, LucideFilter, LucideSearch, LucideX],
+  imports: [FormsModule, LucideFilter, LucideSearch, LucideX, SelectorClienteComponent],
   templateUrl: './filtros-documentos.component.html',
   styleUrl: './filtros-documentos.component.scss',
 })
 export class FiltrosDocumentosComponent implements OnChanges, OnDestroy {
   @Input() esCliente = false;
+  @Input() clienteFijo = false;
   @Input() filtros: FiltrosRepositorio = { ...FILTROS_DOCUMENTOS_VACIOS };
   @Input() clientes: RespuestaCliente[] = [];
   @Input() anios: number[] = [];

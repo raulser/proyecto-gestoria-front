@@ -3,6 +3,7 @@ export type Vista =
   | 'clientes'
   | 'solicitudes'
   | 'documentos'
+  | 'documentos-cliente'
   | 'subir'
   | 'equipo'
   | 'plan'

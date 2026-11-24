@@ -33,6 +33,7 @@ import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.c
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
 import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
 import { DirectorioClientesComponent } from './clientes/directorio-clientes.component';
+import { CabeceraExpedienteComponent } from './clientes/cabecera-expediente.component';
 import { EditorClienteComponent } from './clientes/editor-cliente.component';
 import { ManualUsuarioComponent } from './ayuda/manual-usuario.component';
 import { FormularioCliente } from './modelos-aplicacion';
@@ -77,6 +78,7 @@ import {
     ManualUsuarioComponent,
     EditorClienteComponent,
     DirectorioClientesComponent,
+    CabeceraExpedienteComponent,
     PanelTrabajoComponent,
     CommonModule,
     FormsModule,
@@ -107,6 +109,8 @@ export class Aplicacion implements OnInit {
   private solicitudEnlaceAbierta = false;
   editorClienteAbierto = false;
   clienteParaEditar: RespuestaCliente | null = null;
+  clienteExpedienteDocumental: RespuestaCliente | null = null;
+  clienteSubidaFijo: RespuestaCliente | null = null;
   guardandoCliente = false;
   errorAltaCliente = '';
 
@@ -418,6 +422,8 @@ export class Aplicacion implements OnInit {
   }
 
   cerrarSesion(): void {
+    this.clienteExpedienteDocumental = null;
+    this.clienteSubidaFijo = null;
     this.token = '';
     this.usuarioActual = null;
     this.clientes = [];
@@ -435,14 +441,17 @@ export class Aplicacion implements OnInit {
   cambiarVista(vista: Vista): void {
     this.menuMovilAbierto = false;
     this.vistaActiva = vista;
+    if (vista === 'subir') this.clienteSubidaFijo = null;
     if (vista === 'clientes' && !this.esCliente()) this.cerrarObligaciones();
     if (vista === 'clientes' && this.esCliente() && this.clientes[0]) {
       this.abrirObligaciones(this.clientes[0]);
     }
-    if (vista === 'documentos' && this.filtroSolicitudDocumento) {
-      this.filtroSolicitudDocumento = null;
-      this.filtroClienteDocumento = null;
-      this.cargarPaginaDocumentos(0);
+    if (
+      vista === 'documentos' &&
+      (this.filtroSolicitudDocumento || this.clienteExpedienteDocumental)
+    ) {
+      this.clienteExpedienteDocumental = null;
+      this.limpiarFiltrosDocumentos();
     }
     globalThis.scrollTo?.({ top: 0, behavior: 'smooth' });
   }
@@ -585,7 +594,10 @@ export class Aplicacion implements OnInit {
 
   limpiarFiltrosDocumentos(): void {
     this.terminoBusquedaDocumentos = '';
-    this.filtroClienteDocumento = null;
+    this.filtroClienteDocumento =
+      this.vistaActiva === 'documentos-cliente'
+        ? (this.clienteExpedienteDocumental?.id ?? null)
+        : null;
     this.filtroSolicitudDocumento = null;
     this.filtroAnioDocumento = null;
     this.filtroEstadoDocumento = '';
@@ -612,6 +624,8 @@ export class Aplicacion implements OnInit {
 
   aplicarFiltrosRepositorio(cambios: Partial<FiltrosRepositorio>): void {
     const filtros = { ...this.filtrosRepositorio(), ...cambios };
+    if (this.vistaActiva === 'documentos-cliente' && this.clienteExpedienteDocumental)
+      filtros.clienteId = this.clienteExpedienteDocumental.id;
     if (filtros.clienteId !== this.filtroClienteDocumento) filtros.solicitudId = null;
     this.terminoBusquedaDocumentos = filtros.texto;
     this.filtroClienteDocumento = filtros.clienteId;
@@ -630,11 +644,12 @@ export class Aplicacion implements OnInit {
   }
 
   abrirSubida(): void {
-    if (this.vistaActiva === 'documentos') {
+    const clienteFijo = this.clienteCabeceraExpediente();
+    if (this.vistaActiva === 'documentos' || this.vistaActiva === 'documentos-cliente') {
       this.formularioSubida.sustituyeDocumentoId = null;
-      this.formularioSubida.clienteId = this.esCliente()
-        ? (this.clientes[0]?.id ?? null)
-        : this.filtroClienteDocumento;
+      this.formularioSubida.clienteId =
+        clienteFijo?.id ??
+        (this.esCliente() ? (this.clientes[0]?.id ?? null) : this.filtroClienteDocumento);
       this.formularioSubida.solicitudId = this.filtroSolicitudDocumento;
       this.formularioSubida.origen = this.filtroSolicitudDocumento
         ? 'APORTADO_CLIENTE'
@@ -651,6 +666,27 @@ export class Aplicacion implements OnInit {
       if (this.filtroAnioDocumento) this.formularioSubida.anio = this.filtroAnioDocumento;
     }
     this.cambiarVista('subir');
+    this.clienteSubidaFijo = clienteFijo;
+  }
+
+  clienteCabeceraExpediente(): RespuestaCliente | null {
+    if (this.esCliente()) return null;
+    if (this.vistaActiva === 'documentos-cliente') return this.clienteExpedienteDocumental;
+    if (this.vistaActiva === 'subir') return this.clienteSubidaFijo;
+    return null;
+  }
+
+  abrirObligacionesDesdeDocumentos(cliente: RespuestaCliente): void {
+    this.vistaActiva = 'clientes';
+    this.abrirObligaciones(cliente);
+    globalThis.scrollTo?.({ top: 0, behavior: 'smooth' });
+  }
+
+  vistaMenuActiva(vista: Vista): boolean {
+    return (
+      this.vistaActiva === vista ||
+      (this.vistaActiva === 'documentos-cliente' && vista === 'clientes')
+    );
   }
 
   accionDocumento({ accion, documento }: AccionArchivo): void {
@@ -2554,6 +2590,9 @@ export class Aplicacion implements OnInit {
   }
 
   abrirDocumentosSolicitud(solicitud: RespuestaSolicitudDocumento): void {
+    this.clienteExpedienteDocumental = this.esCliente()
+      ? null
+      : (this.clientes.find((cliente) => cliente.id === solicitud.clienteId) ?? null);
     this.terminoBusquedaDocumentos = '';
     this.filtroClienteDocumento = solicitud.clienteId;
     this.filtroSolicitudDocumento = solicitud.id;
@@ -2563,7 +2602,7 @@ export class Aplicacion implements OnInit {
     this.filtroVisibilidadDocumento = '';
     this.filtroTipoDocumento = '';
     this.filtroPeriodoDocumento = '';
-    this.vistaActiva = 'documentos';
+    this.vistaActiva = this.clienteExpedienteDocumental ? 'documentos-cliente' : 'documentos';
     this.cargarPaginaDocumentos(0);
     globalThis.scrollTo?.({ top: 0, behavior: 'smooth' });
   }
@@ -2726,6 +2765,7 @@ export class Aplicacion implements OnInit {
     this.vistaActiva = 'solicitudes';
   }
   abrirFacturasPanel(tipo: TipoDocumento): void {
+    this.clienteExpedienteDocumental = null;
     this.filtroClienteDocumento = null;
     this.filtroSolicitudDocumento = null;
     this.filtroOrigenDocumento = '';
@@ -2740,6 +2780,7 @@ export class Aplicacion implements OnInit {
   }
 
   abrirExpediente(cliente: RespuestaCliente): void {
+    this.clienteExpedienteDocumental = this.esCliente() ? null : cliente;
     this.filtroClienteDocumento = cliente.id;
     this.filtroSolicitudDocumento = null;
     this.filtroAnioDocumento = null;
@@ -2749,7 +2790,7 @@ export class Aplicacion implements OnInit {
     this.filtroTipoDocumento = '';
     this.filtroPeriodoDocumento = '';
     this.terminoBusquedaDocumentos = '';
-    this.vistaActiva = 'documentos';
+    this.vistaActiva = this.esCliente() ? 'documentos' : 'documentos-cliente';
     this.cargarPaginaDocumentos(0);
   }
 
@@ -2783,6 +2824,7 @@ export class Aplicacion implements OnInit {
       panel: this.esCliente() ? 'Mi espacio documental' : 'Panel de trabajo',
       clientes: this.esCliente() ? 'Mis datos y fechas fiscales' : 'Clientes',
       documentos: this.esCliente() ? 'Mis archivos' : 'Documentos',
+      'documentos-cliente': this.clienteExpedienteDocumental?.nombre ?? 'Expediente del cliente',
       solicitudes: this.esCliente() ? 'Lo que debo entregar' : 'Peticiones de documentación',
       subir: this.esCliente() ? 'Añadir documentos' : 'Subida de documentos',
       equipo: 'Equipo y asignaciones',

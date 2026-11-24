@@ -121,6 +121,49 @@ describe('Aplicacion', () => {
     expect(app.cargarPaginaDocumentos).toHaveBeenCalledWith(0);
   });
 
+  it('abre una página del cliente y quitar los filtros no permite salir de su expediente', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    vi.spyOn(app, 'cargarPaginaDocumentos');
+    app.abrirExpediente({
+      id: 7,
+      nombre: 'Cliente de ejemplo',
+      nif: 'B12345678',
+    } as RespuestaCliente);
+    expect(app.vistaActiva).toBe('documentos-cliente');
+    expect(app.clienteCabeceraExpediente()?.id).toBe(7);
+    app.filtroEstadoDocumento = 'RECIBIDO';
+    app.limpiarFiltrosDocumentos();
+    expect(app.filtroClienteDocumento).toBe(7);
+    expect(app.filtroEstadoDocumento).toBe('');
+    app.aplicarFiltrosRepositorio({ clienteId: 25 });
+    expect(app.filtroClienteDocumento).toBe(7);
+  });
+
+  it('la bandeja general permite volver a todos los clientes al salir del expediente', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    vi.spyOn(app, 'cargarPaginaDocumentos');
+    vi.stubGlobal('scrollTo', vi.fn());
+    app.abrirExpediente({ id: 7, nombre: 'Ejemplo' } as RespuestaCliente);
+    app.cambiarVista('documentos');
+    expect(app.clienteExpedienteDocumental).toBeNull();
+    expect(app.filtroClienteDocumento).toBeNull();
+    expect(app.vistaActiva).toBe('documentos');
+    vi.unstubAllGlobals();
+  });
+
+  it('subir desde un expediente fija el destinatario durante la subida', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    vi.spyOn(app, 'cargarPaginaDocumentos');
+    vi.stubGlobal('scrollTo', vi.fn());
+    app.abrirExpediente({ id: 7, nombre: 'Ejemplo' } as RespuestaCliente);
+    app.abrirSubida();
+    expect(app.formularioSubida.clienteId).toBe(7);
+    expect(app.clienteSubidaFijo?.id).toBe(7);
+    app.cambiarVista('subir');
+    expect(app.clienteSubidaFijo).toBeNull();
+    vi.unstubAllGlobals();
+  });
+
   it('subir desde un expediente conserva cliente, año y procedencia sin compartir borradores', () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     vi.stubGlobal('scrollTo', vi.fn());

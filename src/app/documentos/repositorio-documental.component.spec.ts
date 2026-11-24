@@ -28,7 +28,7 @@ describe('Repositorio documental', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const pantalla = fixture.nativeElement as HTMLElement;
-    expect(pantalla.querySelector('select[name=cliente]')).toBeNull();
+    expect(pantalla.querySelector('app-selector-cliente')).toBeNull();
     expect(pantalla.querySelector('input[type=checkbox]')).toBeNull();
     expect(pantalla.textContent).toContain('Subidos por mí');
     expect(pantalla.textContent).not.toContain('Marcar revisado');
@@ -42,6 +42,17 @@ describe('Repositorio documental', () => {
     expect(fixture.nativeElement.querySelector('.archivo .cliente')).toBeNull();
     expect(fixture.nativeElement.textContent).toContain('factura.pdf');
     expect(fixture.nativeElement.textContent).toContain('T2 · 2026');
+  });
+
+  it('un expediente vacío conserva su cliente sin ofrecer cambiarlo ni indicar falsos filtros', () => {
+    const fixture = TestBed.createComponent(RepositorioDocumentalComponent);
+    fixture.componentRef.setInput('clienteFijo', true);
+    fixture.componentRef.setInput('filtros', { ...FILTROS_DOCUMENTOS_VACIOS, clienteId: 4 });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-selector-cliente')).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('Todavía no hay documentos');
+    expect(fixture.nativeElement.textContent).not.toContain('No hay coincidencias');
+    expect(fixture.nativeElement.textContent).not.toContain('Quitar filtros');
   });
 
   it('una carga pendiente o fallida no aparece como una carpeta vacía', () => {

@@ -303,6 +303,120 @@ button:disabled {
     gap: 16px;
   }
 }
+
+.recorrido {
+  margin: 30px 0;
+  padding-top: 10px;
+  border-top: 1px solid #ebe3f2;
+}
+.recorrido h4 {
+  color: #5e3a85;
+  font-size: 18px;
+}
+h5 {
+  margin: 20px 0 8px;
+  color: #746280;
+  font-size: 12px;
+  font-weight: 650;
+}
+.pasos-guiados > li {
+  padding: 8px 6px 10px 10px;
+}
+.pasos-guiados strong {
+  color: #493853;
+  font-size: 14px;
+  font-weight: 600;
+}
+.pasos-guiados p {
+  margin: 6px 0 0;
+  font-size: 13px;
+}
+.comprobacion {
+  padding: 4px 16px 10px;
+  background: #f7f3fc;
+  border-radius: 10px;
+}
+.comprobacion li,
+.incidencias-recorrido li {
+  font-size: 13px;
+}
+.incidencias-recorrido {
+  margin-top: 16px;
+  color: #776184;
+  font-size: 13px;
+}
+.incidencias-recorrido summary {
+  cursor: pointer;
+  padding: 10px 0;
+}
+.captura-manual {
+  margin: 34px 0;
+  padding-top: 10px;
+  border-top: 1px solid #ebe3f2;
+}
+.captura-manual figcaption p {
+  font-size: 12px;
+  margin: 8px 0 16px;
+}
+.captura-manual a {
+  display: block;
+  text-decoration: none;
+  color: #7242ae;
+}
+.imagen-anotada {
+  position: relative;
+  display: block;
+  width: 100%;
+  background: #faf8fd;
+  border: 1px solid #e6dfee;
+  border-radius: 9px;
+}
+.imagen-anotada img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 9px;
+}
+.marca-captura {
+  position: absolute;
+  display: block;
+  border: 2px solid #b34cd3;
+  border-radius: 5px;
+  pointer-events: none;
+}
+.marca-captura b {
+  position: absolute;
+  top: -10px;
+  left: -9px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #803bb2;
+  color: #fff;
+  font-size: 12px;
+  box-shadow: 0 1px 4px #fff;
+}
+.ampliar-captura {
+  display: block;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.leyenda-captura {
+  padding-left: 22px;
+}
+.leyenda-captura li {
+  font-size: 13px;
+}
+.leyenda-captura strong {
+  color: #5f3b79;
+  display: block;
+}
+.leyenda-captura span {
+  display: block;
+  margin: 3px 0 10px;
+}
 @media (max-width: 700px) {
   .cabecera-manual {
     align-items: stretch;

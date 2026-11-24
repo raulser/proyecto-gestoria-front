@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.24",
+  "version": "2026.11.24.2",
   "perfiles": {
     "cliente": {
       "nombre": "Cliente",
@@ -58,16 +58,50 @@
         "Tu gestoría crea tu cuenta y la vincula a tu expediente. No necesitas registrarte por tu cuenta. Utiliza el correo y las indicaciones de acceso que te hayan facilitado.",
         "Mi panel reúne entregas, próximos vencimientos y actividad. Pulsa una tarea para ir a su contexto. Una cifra de archivos o facturas no indica por sí sola que una obligación esté presentada.",
         "Mi expediente muestra tus datos y las obligaciones que gestiona la gestoría. Lo que debo entregar reúne las peticiones documentales; Mis archivos contiene tus documentos y los que la gestoría haya publicado para ti.",
-        "En el móvil encontrarás las opciones secundarias, como Añadir documentos y Ayuda, dentro de Más. El menú se adapta a tu perfil; solo ves la información a la que tienes acceso."
-      ],
-      "pasos": [
-        "Inicia sesión con tu cuenta.",
-        "Consulta Mi panel y entra en la entrega que debas preparar.",
-        "Utiliza Añadir documentos para subir archivos; comprueba el resultado antes de salir.",
-        "Cierra sesión al terminar si el dispositivo es compartido."
+        "En el móvil encontrarás las opciones secundarias, como Añadir documentos y Ayuda, dentro de Más. El menú se adapta a tu perfil; solo ves la información a la que tienes acceso.",
+        "Las capturas utilizan clientes, archivos y fechas ficticios en un entorno de demostración. Sirven para localizar los controles; los nombres, cifras y plazos de tu expediente serán diferentes. Las fechas del ejemplo no constituyen un calendario fiscal."
       ],
       "destino": "panel",
-      "accion": "Ir a mi panel"
+      "accion": "Ir a mi panel",
+      "recorridos": [
+        {
+          "titulo": "Entrar y localizar tu trabajo pendiente",
+          "antes": [
+            "Necesitas una cuenta creada por la gestoría y la dirección del portal. En otro dispositivo usa la dirección que te hayan facilitado; localhost siempre se refiere al propio dispositivo."
+          ],
+          "pasos": [
+            {
+              "haz": "Abre el portal e introduce Correo o usuario y Contraseña. Pulsa Iniciar sesión.",
+              "veras": "Se abre Mi panel con las funciones de tu cuenta. No existe un alta pública: la gestoría debe vincular tu usuario a tu expediente."
+            },
+            {
+              "haz": "Comprueba el Ejercicio del panel.",
+              "veras": "Las facturas y los archivos del resumen se refieren al año seleccionado; el espacio ocupado acumula la documentación visible."
+            },
+            {
+              "haz": "Entra en Lo que debo entregar y lee el título, las instrucciones y el vencimiento de cada petición.",
+              "veras": "Identificas qué debes aportar. Una entrega en curso permite añadir archivos; una enviada espera revisión."
+            },
+            {
+              "haz": "Usa Mis archivos para consultar documentos y Mi expediente para ver tus datos y obligaciones.",
+              "veras": "Son destinos distintos: uno contiene archivos y el otro muestra el seguimiento compartido por la gestoría."
+            },
+            {
+              "haz": "En el móvil, abre Más para encontrar las opciones secundarias.",
+              "veras": "Puedes acceder a Añadir documentos y Ayuda sin buscar menús de escritorio."
+            }
+          ],
+          "comprobar": [
+            "Tu nombre y perfil corresponden a tu cuenta.",
+            "Ves tu expediente; no tienes que elegir entre los clientes de la gestoría."
+          ],
+          "incidencias": [
+            "Si tus datos no corresponden o no hay expediente vinculado, contacta con la gestoría y no utilices una cuenta ajena.",
+            "Si la contraseña falla, usa ¿Olvidaste la contraseña?; el correo de recuperación requiere que el envío de correo esté configurado."
+          ]
+        }
+      ],
+      "capturas": ["acceso", "panel-cliente"]
     },
     "entregas-cliente": {
       "titulo": "Preparar y enviar una entrega",
@@ -78,15 +112,76 @@
         "Al pulsar He terminado: enviar, la petición pasa a revisión y deja de admitir nuevas aportaciones. Si olvidaste un archivo, utiliza Me falta añadir documentación y explica el motivo. Espera a que la gestoría apruebe la reapertura.",
         "Revisado por la gestoría indica que la petición documental se ha cerrado. La obligación fiscal asociada se sigue por separado; ese cierre no equivale a presentar un impuesto."
       ],
-      "pasos": [
-        "Abre una petición y lee sus instrucciones.",
-        "Pulsa Añadir documentos y comprueba la entrega asociada.",
-        "Elige el tipo y el periodo correctos, selecciona los archivos y pulsa Subir documento.",
-        "Espera a la confirmación y comprueba los documentos de la petición.",
-        "Cuando hayas aportado todo, vuelve a la petición y pulsa He terminado: enviar."
-      ],
       "destino": "solicitudes",
-      "accion": "Ver mis entregas"
+      "accion": "Ver mis entregas",
+      "recorridos": [
+        {
+          "titulo": "Aportar documentos y finalizar una entrega",
+          "antes": [
+            "Prepara archivos legibles, completos y del periodo solicitado. Revisa qué categorías pide la tarjeta."
+          ],
+          "pasos": [
+            {
+              "haz": "En Lo que debo entregar, localiza la petición y pulsa Añadir documentos.",
+              "veras": "Se abre la subida con la entrega asociada. Comprueba el título; no selecciones una petición distinta solo para poder subir."
+            },
+            {
+              "haz": "Elige Tipo, Año y Periodo. Si corresponde, indica Mes o Trimestre.",
+              "veras": "Factura emitida corresponde a tus ventas; Factura recibida, a tus compras y servicios. Un contrato general puede ser puntual y no necesita trimestre."
+            },
+            {
+              "haz": "Revisa ¿A qué entrega pertenece?, selecciona los archivos y pulsa Subir documento o Subir documentos.",
+              "veras": "Aparece el progreso. Espera al resultado; seleccionar archivos no los guarda todavía. La aplicación valida formato, tamaño y seguridad."
+            },
+            {
+              "haz": "Comprueba la confirmación y vuelve a Ver documentos de la petición.",
+              "veras": "Los archivos se muestran en la entrega. Si hay varias categorías, repite con el tipo correcto para cada grupo."
+            },
+            {
+              "haz": "Corrige los archivos que lo requieran y comprueba que has aportado todo. Pulsa He terminado: enviar.",
+              "veras": "La entrega pasa a Enviado a la gestoría. El gestor podrá revisarla; ya no admite nuevas aportaciones hasta que se reabra."
+            }
+          ],
+          "comprobar": [
+            "Cada archivo pertenece a la entrega, categoría y periodo correctos.",
+            "La petición muestra Enviado a la gestoría cuando realmente has terminado, no solo Entrega en curso."
+          ],
+          "incidencias": [
+            "Si algunos archivos fallan, comprueba cuáles se guardaron y repite solo los fallidos.",
+            "El estado Recibido confirma que el archivo llegó; no garantiza que su contenido esté correcto o revisado."
+          ]
+        },
+        {
+          "titulo": "Preguntar o pedir que reabran una entrega",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Pulsa Conversación en la petición afectada y lee los mensajes antes de escribir.",
+              "veras": "La duda queda relacionada con esa entrega. Explica el archivo, el periodo y qué necesitas aclarar; un mensaje no sustituye la subida del documento."
+            },
+            {
+              "haz": "Si ya enviaste la entrega y falta algo, pulsa Me falta añadir documentación.",
+              "veras": "Se abre Solicitar reapertura con un campo de motivo."
+            },
+            {
+              "haz": "Explica qué documento debes añadir y pulsa Enviar solicitud.",
+              "veras": "La solicitud de reapertura queda pendiente de la decisión de la gestoría. Esto no reabre automáticamente la entrega."
+            },
+            {
+              "haz": "Cuando la gestoría la reabra, añade los archivos pendientes y vuelve a pulsar He terminado: enviar.",
+              "veras": "La entrega vuelve a revisión con la documentación completada."
+            }
+          ],
+          "comprobar": [
+            "El motivo se refiere a la petición adecuada.",
+            "Tras una reapertura aprobada, has vuelto a finalizar la entrega cuando corresponde."
+          ],
+          "incidencias": [
+            "Si todavía no puedes añadir archivos, comprueba el estado o pregunta en Conversación; no crees una entrega duplicada."
+          ]
+        }
+      ],
+      "capturas": ["entrega-cliente", "subir-cliente", "reapertura-cliente"]
     },
     "archivos-cliente": {
       "titulo": "Organizar y consultar tus archivos",
@@ -100,15 +195,70 @@
         "Pulsa el nombre del archivo o Abrir para verlo cuando su formato lo permita. El icono Descargar guarda una copia. El menú de tres puntos reúne las otras acciones disponibles, como Retirar documento o Subir una nueva versión, según el estado del archivo.",
         "Los modelos, justificantes o informes preparados por tu gestoría aparecen cuando se publican para ti. Los borradores internos de la gestoría no forman parte de tus archivos visibles."
       ],
-      "pasos": [
-        "Abre Mis archivos y elige Todos, Subidos por mí o De mi gestoría.",
-        "Busca el nombre o selecciona tipo y año. Si hace falta, utiliza Filtros para estado y periodo.",
-        "Pulsa el nombre o Abrir para consultar un archivo, o utiliza el icono Descargar.",
-        "Si necesita corrección, lee el comentario y utiliza Subir una nueva versión cuando esté disponible.",
-        "Si no lo encuentras, pulsa Quitar filtros y comprueba si tu gestoría ya lo ha compartido contigo."
-      ],
       "destino": "documentos",
-      "accion": "Abrir mis archivos"
+      "accion": "Abrir mis archivos",
+      "recorridos": [
+        {
+          "titulo": "Buscar, abrir y descargar un documento",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Mis archivos y elige Todos, Subidos por mí o De mi gestoría.",
+              "veras": "La lista separa tus aportaciones de los modelos, justificantes e informes publicados por tu gestoría."
+            },
+            {
+              "haz": "Escribe parte del nombre en Buscar; ajusta Tipo de documento y Año si lo necesitas.",
+              "veras": "La búsqueda se aplica al terminar de escribir. Los selectores actualizan la lista sin botón Aplicar."
+            },
+            {
+              "haz": "Abre Filtros para buscar por estado o periodo. Si llegaste desde una entrega, revisa su etiqueta encima del listado.",
+              "veras": "Los filtros se acumulan: un archivo debe cumplir todos. Puedes quitar la petición por separado o pulsar Quitar filtros."
+            },
+            {
+              "haz": "Pulsa el nombre o Abrir para consultar el archivo. Utiliza el icono Descargar para guardar una copia.",
+              "veras": "La vista previa depende del formato y del navegador. Si no se puede mostrar, utiliza la descarga y una aplicación compatible."
+            }
+          ],
+          "comprobar": [
+            "El archivo y periodo son los esperados.",
+            "Estás consultando el documento vigente, no una versión sustituida."
+          ],
+          "incidencias": [
+            "Si falta un archivo de la gestoría, puede seguir como borrador interno. Pregunta si ya está publicado.",
+            "No hay coincidencias se refiere a filtros; No se pudieron cargar los documentos es un error que se reintenta desde la lista."
+          ]
+        },
+        {
+          "titulo": "Corregir un archivo y gestionar una retirada",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Localiza Necesita corrección y lee el comentario junto al archivo.",
+              "veras": "Por ejemplo, Falta la segunda página indica que debes preparar el PDF completo, no volver a enviar el mismo archivo."
+            },
+            {
+              "haz": "Abre los tres puntos y elige Subir una nueva versión cuando esté disponible.",
+              "veras": "Se conserva la relación con el archivo anterior. Selecciona la versión corregida y espera la confirmación."
+            },
+            {
+              "haz": "Comprueba el nuevo archivo y su estado; revisa también la petición vinculada.",
+              "veras": "La nueva versión deberá revisarse. Si la petición está enviada, primero puede ser necesaria su reapertura."
+            },
+            {
+              "haz": "Si subiste un archivo equivocado y aparece Retirar documento, utiliza esa acción y explica el motivo.",
+              "veras": "Se registra la retirada; no es una eliminación sin rastro. Comprueba el resultado antes de subir el archivo correcto."
+            }
+          ],
+          "comprobar": [
+            "La corrección resuelve el motivo comunicado.",
+            "El archivo correcto queda en la categoría y entrega previstas."
+          ],
+          "incidencias": [
+            "Las acciones dependen del estado, la procedencia y tus permisos. Si no aparecen, pregunta a la gestoría antes de crear duplicados."
+          ]
+        }
+      ],
+      "capturas": ["archivos-cliente", "correccion-cliente"]
     },
     "expediente-cliente": {
       "titulo": "Consultar tu expediente y obligaciones",
@@ -141,7 +291,37 @@
         }
       ],
       "destino": "clientes",
-      "accion": "Ver mi expediente"
+      "accion": "Ver mi expediente",
+      "recorridos": [
+        {
+          "titulo": "Interpretar una obligación de tu expediente",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Mi expediente y comprueba el nombre, NIF y datos de contacto.",
+              "veras": "La pantalla contiene tu ficha propia. Si hay un dato incorrecto, comunícalo a la gestoría."
+            },
+            {
+              "haz": "En Mis fechas y obligaciones, identifica el ejercicio, el código y el periodo.",
+              "veras": "Un mismo modelo puede tener varias filas de seguimiento, por ejemplo T3 y T4."
+            },
+            {
+              "haz": "Despliega una obligación y lee estado, fecha y mensaje compartido.",
+              "veras": "El detalle explica la fase del trabajo. En el ejemplo, T3 figura presentada y T4 en preparación; son seguimientos separados."
+            },
+            {
+              "haz": "Para consultar un archivo publicado, abre Mis archivos y busca su tipo y periodo.",
+              "veras": "El justificante o modelo se consulta como documento. Que una entrega esté revisada no acredita por sí solo la presentación de la obligación."
+            }
+          ],
+          "comprobar": [
+            "El periodo consultado coincide con el que buscas.",
+            "Distingues el envío de archivos, su revisión y el seguimiento fiscal."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["expediente-cliente"]
     },
     "inicio-gestor": {
       "titulo": "Panel y organización del trabajo",
@@ -150,16 +330,47 @@
         "Panel reúne clientes activos, facturas del ejercicio, documentos pendientes de revisión, entregas abiertas y próximas tareas. Selecciona el ejercicio para interpretar los datos del periodo que estás consultando.",
         "La agenda permite abrir el cliente, vencimiento o petición relacionado. Desde los accesos a documentos puedes continuar con la revisión sin buscar de nuevo el contexto.",
         "El consumo documental por cliente muestra archivos, facturas y espacio utilizado. El espacio refleja el almacenamiento acumulado; los recuentos ligados al ejercicio pueden tener un alcance distinto, indicado en pantalla.",
-        "El gestor trabaja con sus clientes asignados. El administrador dispone además de Equipo, Plan y uso y configuración de la gestoría. En el móvil, Más agrupa los destinos secundarios."
-      ],
-      "pasos": [
-        "Comprueba el ejercicio seleccionado.",
-        "Revisa Próximas tareas y Pendientes de revisión.",
-        "Entra en el cliente, la petición o los documentos desde su acceso directo.",
-        "Actualiza el seguimiento de la obligación cuando avances en el trabajo."
+        "El gestor trabaja con sus clientes asignados. El administrador dispone además de Equipo, Plan y uso y configuración de la gestoría. En el móvil, Más agrupa los destinos secundarios.",
+        "Las capturas utilizan clientes, archivos y fechas ficticios en un entorno de demostración. Sirven para localizar los controles; los nombres, cifras y plazos de tu expediente serán diferentes. Las fechas del ejemplo no constituyen un calendario fiscal."
       ],
       "destino": "panel",
-      "accion": "Abrir el panel"
+      "accion": "Abrir el panel",
+      "recorridos": [
+        {
+          "titulo": "Preparar la jornada desde el panel",
+          "antes": [
+            "Comprueba que trabajas con tu cuenta. El gestor ve clientes asignados; el administrador puede organizar toda la gestoría."
+          ],
+          "pasos": [
+            {
+              "haz": "Selecciona el Ejercicio del panel.",
+              "veras": "Las cifras del periodo cambian. El consumo de almacenamiento sigue siendo acumulado."
+            },
+            {
+              "haz": "Abre Pendientes de revisión.",
+              "veras": "Accedes a la bandeja documental filtrada para revisar aportaciones recibidas de la cartera permitida."
+            },
+            {
+              "haz": "Consulta Próximas tareas y abre una entrega o vencimiento.",
+              "veras": "El acceso conserva el contexto del trabajo para continuar sin buscarlo desde cero."
+            },
+            {
+              "haz": "Para un cliente concreto, entra en Clientes, localízalo y pulsa Documentos en su ficha.",
+              "veras": "Se abre su expediente documental exclusivo. Para revisar varios clientes, utiliza Documentos en el menú general."
+            },
+            {
+              "haz": "Revisa el consumo por cliente y las facturas del ejercicio.",
+              "veras": "Puedes localizar expedientes con más documentación. La cifra de facturas no representa honorarios facturados ni modelos presentados."
+            }
+          ],
+          "comprobar": [
+            "Has priorizado por fecha y estado, no solo por cantidad de archivos.",
+            "Las tareas revisadas terminan con su seguimiento actualizado donde corresponda."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["acceso", "panel-gestor", "panel-administrador", "movil-gestor"]
     },
     "clientes": {
       "titulo": "Alta de clientes y plan documental",
@@ -171,15 +382,96 @@
         "Las modificaciones del plan se guardan en la ficha de ese cliente. Comprueba la automatización, las fechas y la cuenta vinculada antes de esperar recordatorios o entregas automáticas.",
         "Crear la ficha de un cliente no crea por sí solo sus credenciales de acceso. Un administrador debe crear el usuario de perfil Cliente y vincularlo a la ficha correspondiente."
       ],
-      "pasos": [
-        "Abre Clientes y utiliza Nuevo cliente o Editar.",
-        "Completa los datos e indica el tipo.",
-        "Revisa el plan documental: selección, periodicidad, fechas y avisos.",
-        "Comprueba el resumen y guarda.",
-        "Abre el expediente para revisar obligaciones y documentos; si necesita acceder al portal, solicita al administrador su cuenta vinculada."
-      ],
       "destino": "clientes",
-      "accion": "Abrir clientes"
+      "accion": "Abrir clientes",
+      "recorridos": [
+        {
+          "titulo": "Crear una ficha con documentación adaptada",
+          "antes": [
+            "Prepara nombre o razón social, NIF/CIF y correo. Decide qué documentación recoger y con qué frecuencia; los plazos fiscales se revisan por separado."
+          ],
+          "pasos": [
+            {
+              "haz": "En Clientes, pulsa Nuevo cliente y selecciona el tipo.",
+              "veras": "Se propone un plan inicial. Otro tipo permite nombrar un caso personalizado; no obliga a encajarlo en una categoría incorrecta."
+            },
+            {
+              "haz": "Completa los datos identificativos y pulsa Continuar.",
+              "veras": "Pasas a Documentación. La ficha todavía no está guardada."
+            },
+            {
+              "haz": "Activa o desactiva cada pauta; cambia su nombre o usa Quitar si sobra. Para otra necesidad, escribe Nombre del nuevo documento y pulsa Añadir documento.",
+              "veras": "El plan queda adaptado al cliente. Desactivar conserva una pauta en la configuración; quitar la retira del plan que estás preparando."
+            },
+            {
+              "haz": "Escoge la periodicidad de cada pauta: Mensual, Trimestral, Anual, Una vez o Sin vencimiento.",
+              "veras": "Sin vencimiento sirve para documentación general del expediente. No asignes un trimestre a todos los archivos por defecto."
+            },
+            {
+              "haz": "Abre Configurar fechas de la pauta y revisa Primera apertura, Primera entrega hasta y Recordatorio.",
+              "veras": "La apertura indica cuándo preparar la petición; la entrega fija cuándo esperas recibir documentos; el recordatorio establece su antelación."
+            },
+            {
+              "haz": "Revisa Preparar solicitudes automáticamente y pulsa Continuar.",
+              "veras": "El resumen muestra las pautas activas y sus fechas. Cambiar el plan no reescribe entregas anteriores."
+            },
+            {
+              "haz": "Comprueba el resumen y pulsa Crear cliente. Utiliza Anterior para corregir antes de confirmar.",
+              "veras": "Se guarda la ficha con su plan. Después se revisa el perfil fiscal y, si necesita portal, el administrador crea una cuenta vinculada en Equipo."
+            }
+          ],
+          "comprobar": [
+            "No faltan documentos necesarios ni sobran pautas ajenas al cliente.",
+            "Las pautas generales figuran sin vencimiento cuando corresponde.",
+            "Ficha de cliente y usuario de acceso están correctamente diferenciados."
+          ],
+          "incidencias": [
+            "Si Continuar está desactivado, revisa los datos requeridos y su formato.",
+            "Si el cliente ya existe, búscalo por NIF antes de darlo de alta otra vez."
+          ]
+        },
+        {
+          "titulo": "Trabajar con una ficha existente o importar varias",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Busca por nombre, NIF o correo y revisa Activos, Todos o Archivados.",
+              "veras": "El directorio y la ficha rápida muestran el cliente seleccionado."
+            },
+            {
+              "haz": "Pulsa Documentos para sus archivos, Obligaciones y trámites para su seguimiento o Configurar cliente y documentos para editar el plan.",
+              "veras": "Cada acceso abre el contexto correspondiente. En los documentos del cliente no aparece un selector para cambiar a otra persona."
+            },
+            {
+              "haz": "Para un alta masiva, despliega Importar varios clientes desde CSV y pulsa Descargar plantilla.",
+              "veras": "La plantilla utiliza nombre, nif, email, telefono y tipo. Respeta las cabeceras y los valores del tipo; Seleccionar CSV carga el fichero para revisión sin crear aún los clientes."
+            },
+            {
+              "haz": "Revisa la validación, corrige filas erróneas y pulsa Importar clientes válidos cuando los datos sean correctos.",
+              "veras": "Confirma el diálogo de importación. La aplicación informa del resultado; comprueba los clientes incorporados antes de repetir el lote."
+            },
+            {
+              "haz": "Abre Otras acciones si necesitas archivar una ficha o descargar los datos disponibles.",
+              "veras": "Comprueba la identidad del cliente antes de confirmar. Archivados permite localizar las fichas archivadas; archivar no equivale a borrar su documentación."
+            }
+          ],
+          "comprobar": [
+            "El NIF identifica la ficha correcta.",
+            "Después de editar, se ha guardado el nuevo plan y no se han duplicado altas."
+          ],
+          "incidencias": [
+            "El CSV/TXT tiene un máximo de 2 MB. Un error de una fila requiere corregir esa fila; consulta el resultado antes de reenviar el archivo entero.",
+            "Si un gestor no ve una ficha, el administrador debe revisar su asignación."
+          ]
+        }
+      ],
+      "capturas": [
+        "clientes-directorio",
+        "alta-cliente-datos",
+        "alta-plan-documental",
+        "alta-fechas-documentales",
+        "alta-revision"
+      ]
     },
     "fiscal": {
       "titulo": "Perfil fiscal y obligaciones",
@@ -190,15 +482,71 @@
         "También puedes añadir o editar una obligación manualmente con su código, nombre, categoría, periodicidad, meses, día límite, documentos esperados y observaciones. Verifica cada fecha y excepción antes de utilizarla como plazo de trabajo.",
         "El plan documental define qué reunir del cliente. La obligación define qué se debe preparar o tramitar y su seguimiento por ejercicio y periodo. Mantén ambos coherentes sin tratar el cierre de una petición como una presentación automática."
       ],
-      "pasos": [
-        "Abre el expediente del cliente y revisa su ficha fiscal.",
-        "Completa los datos conocidos y señala los que falten.",
-        "Revisa cada recomendación y registra la decisión.",
-        "Comprueba o ajusta las obligaciones y sus fechas.",
-        "Consulta el ejercicio y periodo correctos para iniciar su seguimiento."
-      ],
       "destino": "clientes",
-      "accion": "Ir a los expedientes"
+      "accion": "Ir a los expedientes",
+      "recorridos": [
+        {
+          "titulo": "Completar el perfil y decidir las propuestas",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "En Clientes, abre Obligaciones y trámites y entra en 1 Perfil y propuestas.",
+              "veras": "Aparecen el asistente fiscal y las recomendaciones del cliente."
+            },
+            {
+              "haz": "Recorre Situación, Regímenes, Circunstancias y Revisar.",
+              "veras": "Indica territorio, regímenes y circunstancias conocidas. Pendiente mantiene visible que falta confirmar información."
+            },
+            {
+              "haz": "Revisa y guarda el perfil con datos contrastados.",
+              "veras": "Las recomendaciones reflejan el perfil configurado. El tipo jurídico no asigna automáticamente todas las obligaciones."
+            },
+            {
+              "haz": "Lee el motivo y los requisitos de cada propuesta antes de usar Confirmar obligación.",
+              "veras": "Las confirmadas quedan activas. Las que necesitan información deben revisarse después de completar los datos."
+            },
+            {
+              "haz": "Si descartas una recomendación, registra el motivo. Reábrela si cambia la situación.",
+              "veras": "La decisión queda diferenciada de una propuesta sin resolver."
+            }
+          ],
+          "comprobar": [
+            "La configuración corresponde al cliente y a su territorio.",
+            "Cada obligación confirmada tiene respaldo en la revisión profesional."
+          ],
+          "incidencias": [
+            "Las propuestas automáticas no deben confirmarse suponiendo datos desconocidos. Completa el perfil o utiliza la configuración manual revisada."
+          ]
+        },
+        {
+          "titulo": "Añadir o ajustar una obligación manual",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Entra en 3 Configuración manual y utiliza Añadir obligación o Editar.",
+              "veras": "Puedes partir de una plantilla o de Configuración manual."
+            },
+            {
+              "haz": "Revisa código, nombre, categoría, periodicidad y las fechas mostradas.",
+              "veras": "Configura mensual, trimestral, anual o puntual según el trámite. Verifica meses, día límite y excepciones aplicables."
+            },
+            {
+              "haz": "Indica documentos esperados y observaciones útiles; guarda la obligación.",
+              "veras": "La configuración pertenece a ese cliente. El plan documental sigue siendo independiente."
+            },
+            {
+              "haz": "Abre 2 Calendario y seguimiento y usa Generar o completar vencimientos para el ejercicio cuando proceda.",
+              "veras": "Se preparan los vencimientos de trabajo según las obligaciones configuradas. Revisa las fechas resultantes antes de usarlas."
+            }
+          ],
+          "comprobar": [
+            "La obligación aparece una sola vez con la periodicidad correcta.",
+            "Los vencimientos del ejercicio tienen fechas revisadas."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["perfil-fiscal"]
     },
     "solicitudes": {
       "titulo": "Pedir documentación y revisar entregas",
@@ -210,22 +558,86 @@
         "En Pendiente de revisión, comprueba los archivos y su checklist. Si falta documentación, reabre la petición o resuelve la solicitud de reapertura del cliente indicando el motivo. Cerrar petición documental confirma la revisión de esa petición; no registra la presentación fiscal.",
         "Los avisos y sus enlaces requieren que el cliente tenga una cuenta activa y que el correo esté configurado. Si un mensaje no llega, pide al administrador que revise el destinatario y el envío; no crees una petición duplicada para intentar resolverlo."
       ],
-      "pasos": [
-        "Crea la petición con instrucciones concretas y una fecha revisada.",
-        "Consulta la entrega y los mensajes en Seguimiento.",
-        "Cuando esté enviada, abre Ver documentos y revisa los archivos.",
-        "Reabre si falta algo o cierra la petición documental cuando la revisión termine.",
-        "Continúa por separado el seguimiento de la obligación asociada."
-      ],
       "destino": "solicitudes",
-      "accion": "Abrir solicitudes"
+      "accion": "Abrir solicitudes",
+      "recorridos": [
+        {
+          "titulo": "Crear una petición clara y comprobar el aviso",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Solicitudes y, en Pedir documentación, elige Cliente.",
+              "veras": "El gestor solo trabaja con su cartera. El administrador puede seleccionar además el responsable disponible."
+            },
+            {
+              "haz": "Escribe Qué necesitas e Instrucciones para el cliente.",
+              "veras": "Un título como Facturas de ventas y gastos identifica la entrega; las instrucciones concretan periodo, legibilidad y qué debe incluir."
+            },
+            {
+              "haz": "Selecciona Documentación esperada, Vencimiento y Repetición.",
+              "veras": "En ordenador, Ctrl o Cmd permite seleccionar varias categorías. Una vez evita una repetición no deseada."
+            },
+            {
+              "haz": "Pulsa Crear solicitud y comprueba que aparece en Seguimiento.",
+              "veras": "La petición queda disponible para el cliente vinculado. El correo y su enlace dependen de cuentas activas y del servicio de envío."
+            },
+            {
+              "haz": "Si procede de una obligación, utiliza Crear petición de documentos desde su seguimiento.",
+              "veras": "Se mantiene la relación con la obligación y su periodo. Revisa el contexto antes de confirmar."
+            }
+          ],
+          "comprobar": [
+            "Cliente, categorías y fecha son correctos.",
+            "No hay otra petición equivalente ya creada.",
+            "No das por recibido un correo solo porque exista la petición."
+          ],
+          "incidencias": [
+            "Si no llega el aviso, el administrador debe comprobar correo de la cuenta, configuración y resultado del envío. No dupliques la petición para reenviar documentación."
+          ]
+        },
+        {
+          "titulo": "Editar, revisar o reabrir una entrega",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Pulsa Editar en la tarjeta de la petición.",
+              "veras": "El formulario de la izquierda cambia a Editar solicitud y carga sus datos. En móvil, vuelve al formulario superior si no lo ves."
+            },
+            {
+              "haz": "Modifica los campos permitidos y pulsa Guardar cambios; Cancelar edición descarta la edición.",
+              "veras": "El cliente y la repetición permanecen bloqueados en esta edición. Comprueba que el título de edición desaparece tras guardar o cancelar."
+            },
+            {
+              "haz": "En una entrega enviada, pulsa Ver documentos y revisa cada archivo y las categorías solicitadas.",
+              "veras": "Los archivos se abren en el expediente del cliente con la petición indicada en la lista. El comentario y la conversación ayudan a resolver dudas."
+            },
+            {
+              "haz": "Si falta algo, usa Reabrir y concreta el motivo; si el cliente pidió reapertura, resuelve esa petición.",
+              "veras": "El cliente podrá añadir archivos y deberá finalizar la entrega otra vez."
+            },
+            {
+              "haz": "Cuando la documentación esté revisada, pulsa Cerrar petición documental.",
+              "veras": "La petición queda cerrada. Registra por separado la presentación o fase de la obligación asociada."
+            }
+          ],
+          "comprobar": [
+            "Los archivos son legibles y cubren lo pedido, no solo hay algún archivo de cada tipo.",
+            "Se ha comunicado con claridad cualquier corrección o reapertura."
+          ],
+          "incidencias": [
+            "Cancelar una petición deja de admitir aportaciones: revisa el contexto y el diálogo antes de confirmar.",
+            "Una entrega en curso no se considera finalizada por el mero hecho de contener documentos."
+          ]
+        }
+      ],
+      "capturas": ["crear-solicitud", "editar-solicitud", "reabrir-gestor"]
     },
     "documentos": {
       "titulo": "Documentos, subida y publicación",
       "resumen": "Separar lo aportado por el cliente de lo preparado por la gestoría.",
       "parrafos": [
-        "En Documentos tienes a la vista Buscar, Cliente, Tipo de documento y Año. Selecciona un cliente para consultar su expediente o deja Todos los clientes para trabajar con la cartera completa. La búsqueda y las selecciones actualizan la lista sin un botón adicional de confirmación.",
-        "Las vistas Todos, Del cliente y De la gestoría separan la procedencia. En Filtros puedes añadir estado, periodo y acceso: Solo gestoría o Visible para el cliente. Los filtros adicionales activos aparecen junto al resultado y se pueden quitar por separado. Quitar filtros restablece el listado.",
+        "Documentos en el menú general es la bandeja de toda la cartera permitida: sirve para revisar pendientes y buscar entre clientes. Para trabajar dentro de un expediente, entra en Clientes y pulsa Documentos en su ficha: se abre una pantalla propia con nombre y NIF, sin selector de otros clientes.",
+        "En la bandeja general, Cliente es un buscador: escribe nombre, NIF o correo y elige una coincidencia. No necesitas recorrer un desplegable con toda la cartera. Las vistas Todos, Del cliente y De la gestoría separan la procedencia; Filtros añade estado, periodo y acceso. En el expediente propio, quitar filtros conserva el cliente fijo.",
         "Cada archivo muestra nombre, tipo, periodo y estado. Si procede, incluye la petición o la obligación relacionada. El nombre del cliente aparece cuando consultas varios expedientes; al seleccionar uno deja de repetirse en cada fila. El total corresponde a todos los documentos encontrados, aunque haya varias páginas.",
         "Ver documentos desde una petición abre sus archivos filtrados. La petición activa aparece sobre la lista; quitar ese filtro mantiene el cliente seleccionado. Al pulsar Subir documento desde este contexto, se conserva el cliente, el año elegido y la procedencia; compruébalos antes de guardar.",
         "En Subir, elige Cliente y Procedencia. La documentación aportada por el cliente reúne sus facturas y otros justificantes. La preparada por la gestoría permite indicar título, descripción, referencia y publicación. Si no has elegido un cliente antes, selecciónalo en el formulario.",
@@ -235,15 +647,115 @@
         "Pulsa el nombre o Abrir para la vista previa y el icono Descargar para guardar una copia. El menú de tres puntos reúne Marcar revisado, Pedir corrección, Vincular a una petición, Retirar documento y Subir una nueva versión cuando el origen, el estado y tus permisos lo permiten.",
         "Las acciones para varios archivos aparecen al marcarlos con sus casillas. Seleccionar todos afecta solo a la página actual. Marcar revisados y Compartir con el cliente comprueban qué documentos admiten la acción; revisa el resultado antes de continuar."
       ],
-      "pasos": [
-        "Abre Documentos y selecciona cliente, tipo, año y procedencia según lo que necesites localizar.",
-        "Consulta el archivo pulsando su nombre o Abrir. Utiliza el menú de tres puntos para revisarlo, vincularlo o compartirlo.",
-        "Para añadir archivos, pulsa Subir documento y comprueba el cliente y los datos preparados.",
-        "Elige el periodo real, selecciona los archivos y espera la confirmación de cada subida.",
-        "Localiza el archivo en Documentos. Si es un borrador, utiliza Compartir con el cliente solo cuando esté listo."
-      ],
       "destino": "documentos",
-      "accion": "Abrir documentos"
+      "accion": "Abrir documentos",
+      "recorridos": [
+        {
+          "titulo": "Elegir entre la bandeja general y el expediente del cliente",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Para revisar toda tu cartera, abre Documentos en el menú y utiliza Filtros → Estado → Por revisar.",
+              "veras": "Obtienes una cola de aportaciones pendientes de los clientes que puedes consultar."
+            },
+            {
+              "haz": "Para localizar una persona en esa bandeja, escribe nombre, NIF o correo en Cliente y selecciona el resultado.",
+              "veras": "La búsqueda muestra coincidencias acotadas; Todos los clientes vuelve a toda la cartera permitida."
+            },
+            {
+              "haz": "Para trabajar exclusivamente con alguien, abre Clientes → su ficha → Documentos.",
+              "veras": "El encabezado identifica nombre y NIF. No hay selector de otros clientes; Quitar filtros mantiene este expediente."
+            },
+            {
+              "haz": "Usa Obligaciones y trámites para continuar con el seguimiento o Clientes para volver al directorio.",
+              "veras": "La navegación expresa qué cliente estás consultando. El menú general Documentos vuelve a la bandeja de la cartera."
+            },
+            {
+              "haz": "Desde una petición, pulsa Ver documentos y comprueba la etiqueta de esa petición.",
+              "veras": "Quitar la petición amplía la consulta dentro del cliente. Subir documento mantiene ese destinatario y el contexto preparado."
+            }
+          ],
+          "comprobar": [
+            "El encabezado identifica el alcance esperado: cartera o cliente concreto.",
+            "Antes de subir o compartir, el destinatario es correcto."
+          ],
+          "incidencias": []
+        },
+        {
+          "titulo": "Revisar aportaciones y resolver una corrección",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre el nombre del archivo o Abrir y comprueba contenido, periodo, clasificación y petición.",
+              "veras": "El estado Por revisar solo indica recepción; debes examinar el documento."
+            },
+            {
+              "haz": "En los tres puntos, usa Marcar revisado si es correcto o Pedir corrección si hay un problema.",
+              "veras": "Pedir corrección abre un diálogo para indicar qué debe corregir o sustituir el cliente."
+            },
+            {
+              "haz": "Escribe un motivo concreto y confirma Rechazar y avisar.",
+              "veras": "El comentario aparece junto al documento con Necesita corrección. La entrega puede requerir reapertura para recibir la nueva versión."
+            },
+            {
+              "haz": "Utiliza Vincular a una petición si está disponible y el archivo pertenece a una entrega existente.",
+              "veras": "La relación ayuda a reunir la documentación en su contexto. Comprueba cliente y periodo antes de vincular."
+            },
+            {
+              "haz": "Para varias aportaciones, marca casillas y revisa las acciones que aparecen.",
+              "veras": "Seleccionar todos afecta solo a la página actual. Lee el resultado: algunos archivos pueden no admitir la acción por su estado u origen."
+            }
+          ],
+          "comprobar": [
+            "La revisión corresponde al contenido real.",
+            "Las correcciones explican cómo resolver el problema.",
+            "Revisar archivos no se ha confundido con cerrar la petición o presentar el modelo."
+          ],
+          "incidencias": []
+        },
+        {
+          "titulo": "Subir un borrador o publicar un documento de la gestoría",
+          "antes": ["Prepara la versión correcta y confirma el cliente antes de publicar."],
+          "pasos": [
+            {
+              "haz": "En el expediente, pulsa Subir documento. Si llegas desde Subir general, selecciona primero el cliente.",
+              "veras": "Desde el expediente el destinatario queda fijado; desde la bandeja general puede ser necesario seleccionarlo."
+            },
+            {
+              "haz": "Elige Procedencia y Tipo. Para un modelo o informe preparado, usa la procedencia de la gestoría.",
+              "veras": "Se habilitan título, descripción, referencia y publicación. Las facturas emitidas por tu cliente y las recibidas de proveedores pertenecen a la documentación del cliente."
+            },
+            {
+              "haz": "Indica año y periodo real, completa el título y selecciona el archivo.",
+              "veras": "Un modelo trimestral utiliza su trimestre; una cuenta anual no necesita trimestre. La factura de honorarios cobrada por la gestoría es un gasto del cliente y se clasifica como recibida."
+            },
+            {
+              "haz": "Elige Guardar como borrador interno o Publicar al cliente al subir; pulsa Subir documento.",
+              "veras": "El borrador queda Solo gestoría. Publicar lo hace visible al cliente; espera la confirmación del guardado."
+            },
+            {
+              "haz": "Para publicar un borrador ya guardado, abre sus tres puntos y pulsa Compartir con el cliente.",
+              "veras": "El documento queda compartido. Ocultar al cliente retira su acceso si necesitas volver a uso interno."
+            }
+          ],
+          "comprobar": [
+            "Archivo, cliente, periodo y visibilidad son correctos.",
+            "El justificante presentado está clasificado como tal y vinculado a la obligación cuando corresponde.",
+            "No has confundido una factura de honorarios con un justificante fiscal."
+          ],
+          "incidencias": [
+            "Si un cliente no lo ve, comprueba que está publicado para ese cliente y que su cuenta está vinculada a esa ficha.",
+            "El almacenamiento se organiza mediante datos del expediente y periodo; el usuario no tiene que construir rutas de carpetas manualmente."
+          ]
+        }
+      ],
+      "capturas": [
+        "expediente-documentos",
+        "bandeja-documentos",
+        "revisar-documento",
+        "motivo-correccion",
+        "compartir-borrador"
+      ]
     },
     "cumplimiento": {
       "titulo": "Seguimiento de una obligación",
@@ -284,7 +796,46 @@
         }
       ],
       "destino": "clientes",
-      "accion": "Ver obligaciones de un cliente"
+      "accion": "Ver obligaciones de un cliente",
+      "recorridos": [
+        {
+          "titulo": "Actualizar una obligación de un ejercicio y periodo",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Clientes → Obligaciones y trámites → 2 Calendario y seguimiento.",
+              "veras": "Identifica el ejercicio y despliega la fila del modelo y periodo correctos."
+            },
+            {
+              "haz": "Revisa Responsable, Estado y Fecha límite.",
+              "veras": "Puedes reflejar falta de documentación, recepción, preparación o revisión sin registrar una presentación que todavía no se ha realizado."
+            },
+            {
+              "haz": "Cuando proceda, registra Resultado, Importe, Fecha de presentación, Referencia y NRC.",
+              "veras": "Estos datos documentan el trámite realizado. Solo se completan con información comprobada."
+            },
+            {
+              "haz": "En Documento justificante, selecciona el archivo correcto.",
+              "veras": "Ver justificante presentado permite consultarlo en el seguimiento del equipo. Si debe verlo el cliente, comprueba también su publicación."
+            },
+            {
+              "haz": "Separa Notas internas de Mensaje visible para el cliente y pulsa Guardar seguimiento.",
+              "veras": "El cliente consulta el mensaje compartido; el equipo conserva sus notas de trabajo."
+            },
+            {
+              "haz": "Vuelve a abrir el periodo y comprueba lo guardado.",
+              "veras": "El seguimiento refleja la fase real. Cerrar una petición documental no modifica automáticamente estos datos."
+            }
+          ],
+          "comprobar": [
+            "Ejercicio, periodo y fecha corresponden al trámite real.",
+            "El justificante vinculado coincide con lo presentado.",
+            "No se ha compartido una nota interna por error."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["seguimiento-obligacion"]
     },
     "estados-solicitudes": {
       "titulo": "Estados de las peticiones documentales",
@@ -412,15 +963,74 @@
         "La clave temporal del alta debe cumplir la política indicada en el formulario. Facilita el acceso por un canal adecuado y comprueba que la persona cambia su clave y configura la seguridad de su cuenta según las indicaciones del portal.",
         "Asignación de clientes vincula cada gestor con sus expedientes. Si alguien no ve un cliente, comprueba la cuenta activa, su perfil y esa asignación antes de crear un duplicado."
       ],
-      "pasos": [
-        "Abre Equipo y completa Alta de usuario.",
-        "Selecciona el perfil. Si es Cliente, elige la ficha de cliente correcta.",
-        "Crea el usuario y comprueba que figura activo en Equipo y accesos.",
-        "Para un gestor, añade las asignaciones de clientes necesarias.",
-        "Comprueba el acceso con la cuenta correspondiente y confirma que ve los expedientes previstos."
-      ],
       "destino": "equipo",
-      "accion": "Abrir equipo"
+      "accion": "Abrir equipo",
+      "recorridos": [
+        {
+          "titulo": "Dar acceso a una persona y vincular su expediente",
+          "antes": [
+            "Crea primero la ficha del cliente si el nuevo usuario tendrá perfil Cliente. Cada persona debe utilizar su propia cuenta."
+          ],
+          "pasos": [
+            {
+              "haz": "Abre Equipo y completa Nombre, Email y Clave temporal en Alta de usuario.",
+              "veras": "La clave debe cumplir la política indicada: al menos 12 caracteres con mayúscula, minúscula, número y símbolo."
+            },
+            {
+              "haz": "Elige Perfil: Administrador, Gestor o Cliente.",
+              "veras": "Administrador gestiona la organización; Gestor trabaja con su cartera; Cliente consulta su expediente vinculado."
+            },
+            {
+              "haz": "Si eliges Cliente, selecciona Cliente vinculado y comprueba su nombre.",
+              "veras": "Esta selección determina qué expediente podrá consultar la nueva cuenta."
+            },
+            {
+              "haz": "Pulsa Crear usuario y comprueba Equipo y accesos.",
+              "veras": "La cuenta debe aparecer con el perfil y estado previstos. Facilita su acceso por un canal adecuado, sin publicar contraseñas en conversaciones documentales."
+            },
+            {
+              "haz": "Pide a la persona que complete las indicaciones de seguridad de su cuenta.",
+              "veras": "La gestión de contraseña y segundo factor está en Ayuda → Cuenta, soporte y privacidad."
+            }
+          ],
+          "comprobar": [
+            "Correo, perfil y cliente vinculado son correctos.",
+            "No se ha creado otra cuenta para resolver una asignación que faltaba."
+          ],
+          "incidencias": [
+            "Si el usuario ya existe, revisa su acceso antes de repetir el alta.",
+            "Las cuentas rápidas visibles en el login de pruebas no sustituyen a las cuentas personales."
+          ]
+        },
+        {
+          "titulo": "Asignar cartera y desactivar accesos",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "En Asignación de clientes, selecciona el gestor y el cliente, y pulsa Asignar.",
+              "veras": "La relación aparece en la lista. El gestor podrá trabajar con ese expediente."
+            },
+            {
+              "haz": "Para retirar una asignación, comprueba la fila y usa Quitar acceso a este cliente.",
+              "veras": "Se retira esa relación entre gestor y cliente; no se elimina la ficha documental."
+            },
+            {
+              "haz": "Para suspender una cuenta, identifica nombre, correo y perfil en Equipo y accesos antes de usar Desactivar.",
+              "veras": "Se cambia el acceso de esa persona. Evita desactivar una cuenta diferente por coincidencia de nombre."
+            },
+            {
+              "haz": "Si alguien no ve lo previsto, revisa cuenta activa, perfil, cliente vinculado o cartera asignada.",
+              "veras": "La solución depende del tipo de cuenta; crear duplicados no corrige permisos mal configurados."
+            }
+          ],
+          "comprobar": [
+            "Cada gestor tiene solo la cartera necesaria.",
+            "El usuario cliente está vinculado a su propia ficha."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["equipo-alta", "equipo-asignaciones"]
     },
     "plan": {
       "titulo": "Plan, consumo y configuración",
@@ -432,7 +1042,57 @@
         "La información del plan y del consumo no sustituye una factura de honorarios. Si publicas una factura a un cliente, clasifícala y compártela en su contexto documental."
       ],
       "destino": "plan",
-      "accion": "Ver plan y uso"
+      "accion": "Ver plan y uso",
+      "recorridos": [
+        {
+          "titulo": "Comprobar capacidad, actividad y avisos",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Plan y uso y compara usuarios internos, clientes activos y almacenamiento con los límites.",
+              "veras": "Son medidas diferentes: liberar una cuenta no libera por sí mismo espacio documental."
+            },
+            {
+              "haz": "Consulta el panel para localizar el espacio utilizado por cada cliente.",
+              "veras": "El almacenamiento es acumulado; los recuentos de facturas y archivos del ejercicio pueden variar al cambiar el año."
+            },
+            {
+              "haz": "Revisa Actividad reciente cuando necesites comprobar una operación registrada.",
+              "veras": "El actor y la fecha ayudan a identificar el evento. Si no hay registro, no supongas que una operación se completó."
+            },
+            {
+              "haz": "Antes de Ejecutar recordatorios, verifica plan documental, fechas, cuentas activas y correo.",
+              "veras": "El botón procesa los avisos que correspondan; no corrige una dirección errónea ni crea una cuenta que falte."
+            }
+          ],
+          "comprobar": [
+            "El consumo se interpreta con su unidad y alcance.",
+            "Los avisos tienen destinatarios válidos antes de ejecutarlos."
+          ],
+          "incidencias": []
+        },
+        {
+          "titulo": "Actualizar la identidad de la gestoría",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Ayuda y despliega Cuenta, soporte y privacidad.",
+              "veras": "El administrador dispone de Identidad de la gestoría."
+            },
+            {
+              "haz": "Revisa email de facturación, nombre comercial y color principal; guarda los cambios.",
+              "veras": "La identidad se aplica al portal según la configuración disponible."
+            },
+            {
+              "haz": "Comprueba el resultado y los datos de soporte y privacidad.",
+              "veras": "La información visible al usuario debe identificar los canales reales de la gestoría."
+            }
+          ],
+          "comprobar": ["No quedan datos de ejemplo como canales de contacto reales."],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["plan-consumo"]
     },
     "incidencias": {
       "titulo": "Subidas, errores y dudas frecuentes",
@@ -446,7 +1106,40 @@
         "Para pedir ayuda, indica la acción que intentabas hacer, el cliente o la petición afectados y el mensaje exacto. No compartas tu contraseña. Utiliza la conversación de la petición para dudas documentales y el canal de soporte para incidencias del portal."
       ],
       "destino": "subir",
-      "accion": "Ir a la subida de documentos"
+      "accion": "Ir a la subida de documentos",
+      "recorridos": [
+        {
+          "titulo": "Resolver una subida o carga que falla",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Lee el mensaje junto a la operación y espera a que termine el progreso.",
+              "veras": "Un proceso en curso, un error y una lista vacía son situaciones distintas."
+            },
+            {
+              "haz": "Comprueba el resultado de cada archivo en una subida múltiple.",
+              "veras": "Repite solo los fallidos. Tras un corte de red, busca primero el archivo para evitar duplicarlo."
+            },
+            {
+              "haz": "Si el rechazo es de formato, tamaño o análisis, revisa el archivo original y las condiciones mostradas.",
+              "veras": "Cambiar la extensión no transforma el formato. Utiliza un documento válido y legible."
+            },
+            {
+              "haz": "Si falla la carga del listado, revisa la conexión y pulsa Volver a intentar.",
+              "veras": "Un fallo de red no equivale a que no existan archivos ni obliga por sí solo a iniciar sesión otra vez."
+            },
+            {
+              "haz": "Si el acceso redirige al login con Se ha perdido la sesión, vuelve a entrar.",
+              "veras": "Comprueba después si la última operación se guardó. Los datos que solo estaban escritos y no se guardaron pueden requerir volver a introducirse."
+            }
+          ],
+          "comprobar": [
+            "No has repetido operaciones ya guardadas.",
+            "Si necesitas soporte, incluyes acción, contexto y mensaje exacto, sin contraseña."
+          ],
+          "incidencias": []
+        }
+      ]
     },
     "cuenta": {
       "titulo": "Cuenta, seguridad y ayuda",
@@ -458,6 +1151,891 @@
         "La sesión se renueva automáticamente mientras trabajas, sin recargar la pantalla ni modificar lo que escribes. Se cierra tras 2 horas de inactividad o al alcanzar 24 horas desde el acceso. Si deja de ser válida, se abre el login con Se ha perdido la sesión. Inicia sesión de nuevo. Al volver a entrar, comprueba si tu última operación terminó antes de repetirla.",
         "Si no recuerdas tu contraseña, utiliza ¿Olvidaste la contraseña? en el acceso y sigue las instrucciones. Si el correo de recuperación no llega, contacta con la gestoría para que revise tu cuenta y el destinatario.",
         "Tu cuenta es personal. Si necesitas acceder a otro expediente o función, pide a la gestoría que revise tus permisos. No utilices la cuenta de otra persona."
+      ],
+      "recorridos": [
+        {
+          "titulo": "Leer el manual, consultar el PDF y gestionar tu acceso",
+          "antes": [],
+          "pasos": [
+            {
+              "haz": "Abre Ayuda y utiliza Buscar en el manual o el índice de capítulos.",
+              "veras": "La guía corresponde a tu perfil. Puedes buscar acciones como reapertura, justificante o nueva versión."
+            },
+            {
+              "haz": "Lee los pasos y las comprobaciones; pulsa una captura para ampliarla.",
+              "veras": "Los números señalan controles reales. Las leyendas explican qué hace cada uno."
+            },
+            {
+              "haz": "Pulsa Ver PDF para el visor integrado o Descargar PDF para una copia completa.",
+              "veras": "Puedes avanzar páginas y ampliar. Abrir PDF en otra pestaña sirve como alternativa si el visor integrado no está disponible."
+            },
+            {
+              "haz": "Despliega Cuenta, soporte y privacidad y abre Gestionar contraseña y segundo factor.",
+              "veras": "La gestión de la cuenta se abre aparte. Sigue allí las instrucciones y vuelve al portal al terminar."
+            },
+            {
+              "haz": "Pulsa Cerrar sesión al acabar en un dispositivo compartido.",
+              "veras": "El siguiente acceso debe realizarse con la cuenta personal correspondiente."
+            }
+          ],
+          "comprobar": [
+            "El manual y el PDF corresponden al perfil con el que accedes.",
+            "La cuenta se ha cerrado si el dispositivo es compartido."
+          ],
+          "incidencias": []
+        }
+      ],
+      "capturas": ["cuenta-soporte"]
+    }
+  },
+  "capturas": {
+    "panel-administrador": {
+      "titulo": "Panel de trabajo",
+      "descripcion": "Ejemplo ficticio: ejercicio, documentos pendientes y próxima tarea.",
+      "archivo": "manuales/capturas/panel-administrador.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 24.727783203125,
+          "y": 16.25,
+          "ancho": 5.703125,
+          "alto": 4.583333333333333,
+          "titulo": "Ejercicio",
+          "descripcion": "Cambia el año del resumen."
+        },
+        {
+          "numero": 2,
+          "x": 58.7109375,
+          "y": 24.166666666666668,
+          "ancho": 18.011474609375,
+          "alto": 20.91362847222222,
+          "titulo": "Pendientes de revisión",
+          "descripcion": "Acceso a los documentos que debes revisar."
+        },
+        {
+          "numero": 3,
+          "x": 25.968017578125,
+          "y": 61.608072916666664,
+          "ancho": 30.570068359375,
+          "alto": 2.0833333333333335,
+          "titulo": "Próxima tarea",
+          "descripcion": "Abre el trabajo asociado a una fecha."
+        }
+      ]
+    },
+    "clientes-directorio": {
+      "titulo": "Buscar un cliente y abrir su expediente",
+      "descripcion": "Directorio con dos clientes ficticios. Cada ficha da acceso a su documentación y trámites.",
+      "archivo": "manuales/capturas/clientes-directorio.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 55.849609375,
+          "y": 31.49956597222222,
+          "ancho": 13.807373046875,
+          "alto": 5.555555555555555,
+          "titulo": "Buscar clientes",
+          "descripcion": "Escribe nombre, NIF o correo para localizar una ficha."
+        },
+        {
+          "numero": 2,
+          "x": 74.188232421875,
+          "y": 66.79036458333333,
+          "ancho": 19.84375,
+          "alto": 8.333333333333334,
+          "titulo": "Documentos del cliente",
+          "descripcion": "Abre la pantalla exclusiva del cliente seleccionado."
+        },
+        {
+          "numero": 3,
+          "x": 60.074462890625,
+          "y": 20.123697916666668,
+          "ancho": 10.44189453125,
+          "alto": 5.555555555555555,
+          "titulo": "Nuevo cliente",
+          "descripcion": "Inicia el alta guiada de datos y plan documental."
+        }
+      ]
+    },
+    "expediente-documentos": {
+      "titulo": "Documentos de un cliente",
+      "descripcion": "Esta pantalla pertenece únicamente al cliente del encabezado; no hay selector para cambiar a otro.",
+      "archivo": "manuales/capturas/expediente-documentos.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 25.343017578125,
+          "y": 8.472222222222221,
+          "ancho": 23.92578125,
+          "alto": 5.054253472222222,
+          "titulo": "Cliente del expediente",
+          "descripcion": "El nombre y el NIF identifican el destinatario de todos los archivos de esta pantalla."
+        },
+        {
+          "numero": 2,
+          "x": 62.46337890625,
+          "y": 35.470920138888886,
+          "ancho": 22.662353515625,
+          "alto": 5.833333333333333,
+          "titulo": "Tipo y año",
+          "descripcion": "Localiza una categoría y un periodo dentro de este cliente."
+        },
+        {
+          "numero": 3,
+          "x": 85.32958984375,
+          "y": 68.45703125,
+          "ancho": 3.077392578125,
+          "alto": 3.888888888888889,
+          "titulo": "Abrir un archivo",
+          "descripcion": "Consulta el documento sin salir del expediente. La descarga y las otras acciones están a su lado."
+        }
+      ]
+    },
+    "compartir-borrador": {
+      "titulo": "Compartir un documento preparado por la gestoría",
+      "descripcion": "El ejemplo sigue siendo interno hasta que se ejecuta Compartir con el cliente.",
+      "archivo": "manuales/capturas/compartir-borrador.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 72.547607421875,
+          "y": 50.92664930555556,
+          "ancho": 4.840087890625,
+          "alto": 1.9444444444444444,
+          "titulo": "Acceso actual",
+          "descripcion": "Solo el equipo ve este borrador. El estado y el acceso son datos distintos."
+        },
+        {
+          "numero": 2,
+          "x": 77.938232421875,
+          "y": 53.56553819444444,
+          "ancho": 15.46875,
+          "alto": 5.138888888888889,
+          "titulo": "Compartir con el cliente",
+          "descripcion": "Publica el archivo en el portal de este cliente. Comprueba antes el contenido y el destinatario."
+        }
+      ]
+    },
+    "bandeja-documentos": {
+      "titulo": "Revisar documentos de toda la cartera",
+      "descripcion": "La vista general sirve para el trabajo transversal; el ejemplo muestra solo archivos por revisar.",
+      "archivo": "manuales/capturas/bandeja-documentos.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 49.5703125,
+          "y": 24.166666666666668,
+          "ancho": 18.363037109375,
+          "alto": 5.555555555555555,
+          "titulo": "Buscar un cliente",
+          "descripcion": "Escribe nombre, NIF o correo y elige un resultado. No necesitas recorrer toda la cartera."
+        },
+        {
+          "numero": 2,
+          "x": 23.780517578125,
+          "y": 46.80555555555556,
+          "ancho": 22.29736328125,
+          "alto": 5.833333333333333,
+          "titulo": "Estado del trabajo",
+          "descripcion": "Por revisar reúne las aportaciones recibidas. Necesita corrección y Borrador permiten preparar otras colas de trabajo."
+        },
+        {
+          "numero": 3,
+          "x": 70.250244140625,
+          "y": 46.80555555555556,
+          "ancho": 22.29736328125,
+          "alto": 5.833333333333333,
+          "titulo": "Acceso del documento",
+          "descripcion": "Distingue lo interno de lo que puede ver el cliente."
+        }
+      ]
+    },
+    "revisar-documento": {
+      "titulo": "Revisar una aportación del cliente",
+      "descripcion": "Abre el archivo antes de darlo por revisado; el menú permite pedir una corrección indicando el motivo.",
+      "archivo": "manuales/capturas/revisar-documento.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 86.50146484375,
+          "y": 57.970920138888886,
+          "ancho": 3.077392578125,
+          "alto": 3.888888888888889,
+          "titulo": "Consultar el contenido",
+          "descripcion": "Abre la vista previa para comprobar el archivo."
+        },
+        {
+          "numero": 2,
+          "x": 79.110107421875,
+          "y": 68.66536458333333,
+          "ancho": 15.46875,
+          "alto": 5.138888888888889,
+          "titulo": "Solicitar una corrección",
+          "descripcion": "Explica qué falta o qué debe sustituir el cliente."
+        }
+      ]
+    },
+    "motivo-correccion": {
+      "titulo": "Explicar la corrección",
+      "descripcion": "Escribe una indicación concreta para que el cliente sepa qué archivo debe corregir.",
+      "archivo": "manuales/capturas/motivo-correccion.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 31.25,
+          "y": 44.84809027777778,
+          "ancho": 37.5,
+          "alto": 14.609375,
+          "titulo": "Motivo visible al cliente",
+          "descripcion": "Indica el problema y cómo resolverlo."
+        }
+      ]
+    },
+    "alta-cliente-datos": {
+      "titulo": "Alta: tipo y datos del cliente",
+      "descripcion": "Ejemplo sin guardar. El tipo inicial propone documentación que se puede adaptar después.",
+      "archivo": "manuales/capturas/alta-cliente-datos.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 66.30126953125,
+          "y": 45.787760416666664,
+          "ancho": 17.68310546875,
+          "alto": 2.0833333333333335,
+          "titulo": "Tipo personalizado",
+          "descripcion": "Otro tipo permite preparar un caso que no encaja en las opciones habituales."
+        },
+        {
+          "numero": 2,
+          "x": 13.671875,
+          "y": 62.86241319444444,
+          "ancho": 40.96923828125,
+          "alto": 5.833333333333333,
+          "titulo": "Ficha del cliente",
+          "descripcion": "Introduce la razón social o el nombre de quien tendrá el expediente."
+        }
+      ]
+    },
+    "alta-plan-documental": {
+      "titulo": "Alta: adaptar el plan documental",
+      "descripcion": "Cada pauta se puede activar, quitar, renombrar y configurar. Los contratos pueden quedar sin vencimiento.",
+      "archivo": "manuales/capturas/alta-plan-documental.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 65.859375,
+          "y": 33.595920138888886,
+          "ancho": 10.9375,
+          "alto": 4.722222222222222,
+          "titulo": "Periodicidad por documento",
+          "descripcion": "No todos los documentos tienen que ser trimestrales."
+        },
+        {
+          "numero": 2,
+          "x": 13.671875,
+          "y": 80.47092013888889,
+          "ancho": 57.7197265625,
+          "alto": 5.833333333333333,
+          "titulo": "Documentación personalizada",
+          "descripcion": "Añade un documento que no figure en la propuesta inicial."
+        }
+      ]
+    },
+    "alta-fechas-documentales": {
+      "titulo": "Apertura, entrega y recordatorio",
+      "descripcion": "Fechas de recogida documental del ejemplo; no son un calendario fiscal oficial.",
+      "archivo": "manuales/capturas/alta-fechas-documentales.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 17.03125,
+          "y": 55.470920138888886,
+          "ancho": 21.53564453125,
+          "alto": 5.833333333333333,
+          "titulo": "Cuándo abrir la entrega",
+          "descripcion": "La automatización prepara la petición a partir de esta fecha."
+        },
+        {
+          "numero": 2,
+          "x": 39.50439453125,
+          "y": 55.470920138888886,
+          "ancho": 21.536865234375,
+          "alto": 5.833333333333333,
+          "titulo": "Límite documental",
+          "descripcion": "Fecha hasta la que esperas recibir los archivos."
+        },
+        {
+          "numero": 3,
+          "x": 61.978759765625,
+          "y": 55.470920138888886,
+          "ancho": 21.53564453125,
+          "alto": 5.833333333333333,
+          "titulo": "Aviso previo",
+          "descripcion": "Escoge la antelación o Sin recordatorio."
+        }
+      ]
+    },
+    "alta-revision": {
+      "titulo": "Alta: revisar y guardar",
+      "descripcion": "Comprueba los datos y las pautas activas. La cuenta de acceso se crea después en Equipo.",
+      "archivo": "manuales/capturas/alta-revision.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 67.069091796875,
+          "y": 88.61111111111111,
+          "ancho": 8.22998046875,
+          "alto": 5.555555555555555,
+          "titulo": "Corregir antes de guardar",
+          "descripcion": "Vuelve a los datos o al plan si falta algo."
+        },
+        {
+          "numero": 2,
+          "x": 76.002197265625,
+          "y": 88.61111111111111,
+          "ancho": 10.325927734375,
+          "alto": 5.555555555555555,
+          "titulo": "Confirmar el alta",
+          "descripcion": "Guarda la ficha y su plan documental; no crea credenciales de usuario."
+        }
+      ]
+    },
+    "perfil-fiscal": {
+      "titulo": "Perfil fiscal y propuestas",
+      "descripcion": "Completa únicamente datos contrastados. La propuesta requiere revisión profesional antes de confirmarla.",
+      "archivo": "manuales/capturas/perfil-fiscal.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 22.452392578125,
+          "y": 58.91493055555556,
+          "ancho": 17.855224609375,
+          "alto": 6.666666666666667,
+          "titulo": "Pasos del perfil",
+          "descripcion": "Situación, regímenes, circunstancias y revisión final."
+        },
+        {
+          "numero": 2,
+          "x": 24.327392578125,
+          "y": 80.09548611111111,
+          "ancho": 33.289794921875,
+          "alto": 5.555555555555555,
+          "titulo": "Territorio",
+          "descripcion": "Selecciona el correspondiente al cliente; no presupongas el régimen por su tipo."
+        }
+      ]
+    },
+    "seguimiento-obligacion": {
+      "titulo": "Guardar seguimiento y justificante",
+      "descripcion": "Datos ficticios de una presentación de ejemplo. Cerrar una petición no actualiza esta ficha.",
+      "archivo": "manuales/capturas/seguimiento-obligacion.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 39.9072265625,
+          "y": 47.185329861111114,
+          "ancho": 16.6943359375,
+          "alto": 5.555555555555555,
+          "titulo": "Justificante vinculado",
+          "descripcion": "Selecciona el archivo adecuado para consultarlo desde esta obligación."
+        },
+        {
+          "numero": 2,
+          "x": 23.546142578125,
+          "y": 69.96310763888889,
+          "ancho": 33.055419921875,
+          "alto": 7.5,
+          "titulo": "Comunicación al cliente",
+          "descripcion": "Se muestra en su seguimiento. Las notas internas quedan para el equipo."
+        },
+        {
+          "numero": 3,
+          "x": 35.377197265625,
+          "y": 86.07421875,
+          "ancho": 12.6171875,
+          "alto": 5.694444444444445,
+          "titulo": "Confirmar los cambios",
+          "descripcion": "Guarda la fase, las fechas, el resultado y las referencias de este periodo."
+        }
+      ]
+    },
+    "equipo-alta": {
+      "titulo": "Crear una cuenta vinculada al expediente",
+      "descripcion": "El administrador elige el perfil y, para una cuenta de cliente, el expediente que podrá consultar.",
+      "archivo": "manuales/capturas/equipo-alta.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 22.374267578125,
+          "y": 65.05425347222223,
+          "ancho": 25.819091796875,
+          "alto": 5.555555555555555,
+          "titulo": "Permisos de la cuenta",
+          "descripcion": "Administrador, Gestor o Cliente según su función."
+        },
+        {
+          "numero": 2,
+          "x": 22.374267578125,
+          "y": 75.47092013888889,
+          "ancho": 25.819091796875,
+          "alto": 5.555555555555555,
+          "titulo": "Expediente permitido",
+          "descripcion": "Elige la ficha correcta antes de crear el usuario."
+        }
+      ]
+    },
+    "equipo-asignaciones": {
+      "titulo": "Asignar clientes al gestor",
+      "descripcion": "La ficha del cliente, la cuenta de acceso y las asignaciones del equipo son elementos separados.",
+      "archivo": "manuales/capturas/equipo-asignaciones.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 87.811279296875,
+          "y": 62.024739583333336,
+          "ancho": 6.142578125,
+          "alto": 5.694444444444445,
+          "titulo": "Dar acceso al expediente",
+          "descripcion": "Selecciona gestor y cliente en las listas y pulsa Asignar."
+        },
+        {
+          "numero": 2,
+          "x": 36.00341796875,
+          "y": 71.74696180555556,
+          "ancho": 55.997314453125,
+          "alto": 5.416666666666667,
+          "titulo": "Retirar una asignación",
+          "descripcion": "Quita a este gestor el acceso a este cliente; no elimina la ficha del cliente."
+        }
+      ]
+    },
+    "plan-consumo": {
+      "titulo": "Consultar el plan y el consumo",
+      "descripcion": "El almacenamiento es acumulado. Los límites de usuarios y clientes se consultan por separado.",
+      "archivo": "manuales/capturas/plan-consumo.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 80.335693359375,
+          "y": 20.416666666666668,
+          "ancho": 15.0244140625,
+          "alto": 2.0833333333333335,
+          "titulo": "Espacio utilizado",
+          "descripcion": "Compara el consumo con la capacidad disponible del plan."
+        },
+        {
+          "numero": 2,
+          "x": 82.099609375,
+          "y": 44.1796875,
+          "ancho": 13.026123046875,
+          "alto": 5.416666666666667,
+          "titulo": "Procesar avisos pendientes",
+          "descripcion": "Requiere fechas, cuentas destinatarias y correo configurados; no se ejecuta en esta demostración."
+        }
+      ]
+    },
+    "acceso": {
+      "titulo": "Iniciar sesión",
+      "descripcion": "Las cuentas rápidas solo aparecen en pruebas. Para el uso habitual introduce las credenciales personales facilitadas por la gestoría.",
+      "archivo": "manuales/capturas/acceso.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente", "gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 55.5712890625,
+          "y": 38.33984375,
+          "ancho": 32.03125,
+          "alto": 6.111111111111111,
+          "titulo": "Cuenta personal",
+          "descripcion": "Escribe el correo o usuario de tu cuenta."
+        },
+        {
+          "numero": 2,
+          "x": 54.9462890625,
+          "y": 61.950954861111114,
+          "ancho": 33.28125,
+          "alto": 6.111111111111111,
+          "titulo": "Entrar",
+          "descripcion": "Introduce tu contraseña y accede a las funciones de tu perfil."
+        }
+      ]
+    },
+    "panel-cliente": {
+      "titulo": "Tu panel y próximas tareas",
+      "descripcion": "Las cifras resumen archivos y entregas; no acreditan por sí solas una presentación fiscal.",
+      "archivo": "manuales/capturas/panel-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 24.727783203125,
+          "y": 16.25,
+          "ancho": 5.703125,
+          "alto": 4.583333333333333,
+          "titulo": "Ejercicio del resumen",
+          "descripcion": "Comprueba el año antes de interpretar cifras y tareas."
+        },
+        {
+          "numero": 2,
+          "x": 25.968017578125,
+          "y": 61.608072916666664,
+          "ancho": 30.570068359375,
+          "alto": 2.0833333333333335,
+          "titulo": "Acceso a la tarea",
+          "descripcion": "Entra en el trabajo relacionado con esa entrega."
+        }
+      ]
+    },
+    "entrega-cliente": {
+      "titulo": "Completar una entrega documental",
+      "descripcion": "Ejemplo con una factura recibida y otra que necesita corrección. Subir archivos y finalizar la entrega son acciones distintas.",
+      "archivo": "manuales/capturas/entrega-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 36.0791015625,
+          "y": 81.69270833333333,
+          "ancho": 12.59033203125,
+          "alto": 5.694444444444445,
+          "titulo": "Finalizar la entrega",
+          "descripcion": "Úsalo cuando hayas comprobado que no falta documentación."
+        }
+      ]
+    },
+    "reapertura-cliente": {
+      "titulo": "Pedir que reabran una entrega",
+      "descripcion": "Solicita la reapertura cuando una entrega enviada necesita nuevos archivos. La gestoría debe resolverla.",
+      "archivo": "manuales/capturas/reapertura-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 30.6640625,
+          "y": 44.84809027777778,
+          "ancho": 37.5,
+          "alto": 14.609375,
+          "titulo": "Explicar lo pendiente",
+          "descripcion": "Indica qué necesitas añadir para que la gestoría pueda decidir."
+        }
+      ]
+    },
+    "subir-cliente": {
+      "titulo": "Añadir archivos al periodo y a la entrega correctos",
+      "descripcion": "Selecciona los archivos y espera la confirmación de subida. El cliente no elige expedientes ajenos.",
+      "archivo": "manuales/capturas/subir-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 30.3515625,
+          "y": 33.220486111111114,
+          "ancho": 55.625,
+          "alto": 5.555555555555555,
+          "titulo": "Clasificación",
+          "descripcion": "Factura emitida: tus ventas. Factura recibida: tus proveedores y servicios."
+        },
+        {
+          "numero": 2,
+          "x": 47.3046875,
+          "y": 43.63715277777778,
+          "ancho": 8.359375,
+          "alto": 5.555555555555555,
+          "titulo": "Periodo real",
+          "descripcion": "Mensual, trimestral, anual o puntual según el archivo."
+        },
+        {
+          "numero": 3,
+          "x": 30.3515625,
+          "y": 64.47048611111111,
+          "ancho": 55.625,
+          "alto": 5.555555555555555,
+          "titulo": "Entrega asociada",
+          "descripcion": "Revisa la petición; elige ninguna para documentación independiente."
+        }
+      ]
+    },
+    "archivos-cliente": {
+      "titulo": "Consultar tus documentos y los de tu gestoría",
+      "descripcion": "Mis archivos pertenece únicamente a tu expediente. Los borradores internos no aparecen.",
+      "archivo": "manuales/capturas/archivos-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 25.3515625,
+          "y": 24.02777777777778,
+          "ancho": 35.23681640625,
+          "alto": 5.833333333333333,
+          "titulo": "Localizar un archivo",
+          "descripcion": "Escribe parte del nombre y espera la actualización del listado."
+        },
+        {
+          "numero": 2,
+          "x": 88.06396484375,
+          "y": 69.08203125,
+          "ancho": 3.077392578125,
+          "alto": 3.888888888888889,
+          "titulo": "Documento publicado",
+          "descripcion": "Abre el justificante que tu gestoría ha compartido contigo."
+        }
+      ]
+    },
+    "correccion-cliente": {
+      "titulo": "Corregir un documento rechazado",
+      "descripcion": "Lee el motivo antes de sustituirlo. La nueva versión debe resolver la corrección indicada.",
+      "archivo": "manuales/capturas/correccion-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 26.280517578125,
+          "y": 64.4140625,
+          "ancho": 19.339599609375,
+          "alto": 2.1375868055555554,
+          "titulo": "Motivo de la corrección",
+          "descripcion": "La gestoría indica qué falta en este archivo."
+        },
+        {
+          "numero": 2,
+          "x": 79.110107421875,
+          "y": 70.01085069444444,
+          "ancho": 15.46875,
+          "alto": 5.138888888888889,
+          "titulo": "Aportar el archivo corregido",
+          "descripcion": "Conserva la relación con el documento anterior."
+        }
+      ]
+    },
+    "expediente-cliente": {
+      "titulo": "Consultar el seguimiento de tus obligaciones",
+      "descripcion": "El seguimiento lo actualiza la gestoría. El cliente consulta el estado y el mensaje compartido.",
+      "archivo": "manuales/capturas/expediente-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["cliente"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 22.452392578125,
+          "y": 73.57421875,
+          "ancho": 35.242919921875,
+          "alto": 8.75,
+          "titulo": "Ejercicio y periodo",
+          "descripcion": "Abre la obligación y comprueba su fecha y resultado."
+        }
+      ]
+    },
+    "panel-gestor": {
+      "titulo": "Priorizar el trabajo diario",
+      "descripcion": "El gestor ve su cartera asignada y puede entrar directamente en los pendientes de revisión.",
+      "archivo": "manuales/capturas/panel-gestor.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 58.7109375,
+          "y": 24.166666666666668,
+          "ancho": 18.011474609375,
+          "alto": 20.91362847222222,
+          "titulo": "Bandeja de revisión",
+          "descripcion": "Abre los documentos recibidos que esperan revisión."
+        },
+        {
+          "numero": 2,
+          "x": 25.968017578125,
+          "y": 61.608072916666664,
+          "ancho": 30.570068359375,
+          "alto": 2.0833333333333335,
+          "titulo": "Próxima tarea",
+          "descripcion": "Continúa con la entrega relacionada."
+        }
+      ]
+    },
+    "crear-solicitud": {
+      "titulo": "Pedir documentación al cliente",
+      "descripcion": "La petición reúne instrucciones, categorías, fecha y conversación. El administrador puede elegir además el responsable.",
+      "archivo": "manuales/capturas/crear-solicitud.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 22.374267578125,
+          "y": 37.361111111111114,
+          "ancho": 25.819091796875,
+          "alto": 5.555555555555555,
+          "titulo": "Título concreto",
+          "descripcion": "Describe una entrega que el cliente pueda identificar."
+        },
+        {
+          "numero": 2,
+          "x": 22.374267578125,
+          "y": 61.80555555555556,
+          "ancho": 25.819091796875,
+          "alto": 16.944444444444443,
+          "titulo": "Categorías esperadas",
+          "descripcion": "Selecciona los tipos necesarios para la lista de comprobación."
+        }
+      ]
+    },
+    "editar-solicitud": {
+      "titulo": "Editar una petición existente",
+      "descripcion": "Editar carga la petición en el formulario de la izquierda. El cliente y la repetición no se cambian en esta edición.",
+      "archivo": "manuales/capturas/editar-solicitud.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 55.390625,
+          "y": 6.111111111111111,
+          "ancho": 37.5,
+          "alto": 3.1944444444444446,
+          "titulo": "Edición activa",
+          "descripcion": "Comprueba el título y los datos antes de modificar."
+        },
+        {
+          "numero": 2,
+          "x": 83.358154296875,
+          "y": 84.72222222222223,
+          "ancho": 13.594970703125,
+          "alto": 5.833333333333333,
+          "titulo": "Guardar la edición",
+          "descripcion": "Aplica los cambios a esta petición; Cancelar edición los descarta."
+        }
+      ]
+    },
+    "reabrir-gestor": {
+      "titulo": "Reabrir una entrega enviada",
+      "descripcion": "Explica por qué debe volver a preparar la entrega. El cliente tendrá que finalizarla otra vez.",
+      "archivo": "manuales/capturas/reabrir-gestor.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 30.6640625,
+          "y": 44.84809027777778,
+          "ancho": 37.5,
+          "alto": 14.609375,
+          "titulo": "Motivo para el cliente",
+          "descripcion": "Concreta la documentación que falta."
+        }
+      ]
+    },
+    "cuenta-soporte": {
+      "titulo": "Cuenta, soporte y privacidad",
+      "descripcion": "Estos datos aparecen dentro de Ayuda. La gestión de contraseña y segundo factor se abre en otra pestaña.",
+      "archivo": "manuales/capturas/cuenta-soporte.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": ["gestor", "administrador"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 22.374267578125,
+          "y": 47.25694444444444,
+          "ancho": 25.819091796875,
+          "alto": 5.416666666666667,
+          "titulo": "Seguridad de la cuenta",
+          "descripcion": "Gestiona tu acceso personal siguiendo las indicaciones de esa página."
+        },
+        {
+          "numero": 2,
+          "x": 53.349609375,
+          "y": 47.25694444444444,
+          "ancho": 40.604248046875,
+          "alto": 5.416666666666667,
+          "titulo": "Pedir ayuda",
+          "descripcion": "Explica la acción, el contexto y el mensaje de error; no envíes la contraseña."
+        }
+      ]
+    },
+    "movil-gestor": {
+      "titulo": "Navegar desde el móvil",
+      "descripcion": "Las secciones principales están en la barra inferior. Más reúne Subir y Ayuda.",
+      "archivo": "manuales/capturas/movil-gestor.jpg",
+      "ancho": 390,
+      "alto": 844,
+      "perfiles": ["gestor"],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 75.99759615384616,
+          "y": 93.24644549763033,
+          "ancho": 18.61378205128205,
+          "alto": 5.805687203791469,
+          "titulo": "Opciones secundarias",
+          "descripcion": "Abre este menú para localizar Subir y Ayuda."
+        }
       ]
     }
   }

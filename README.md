@@ -196,6 +196,23 @@ sistemas se puede indicar `--fuentes /ruta/familia`, con `Regular.ttf` y
 `Bold.ttf`. Los archivos se publican desde `public/manuales`. Revisar sus páginas
 renderizadas antes de publicar cambios en el contenido o la maquetación.
 
+Las guías incluyen requisitos previos, acciones con su resultado esperado,
+comprobaciones e incidencias. Las capturas reales de demostración están en
+`public/manuales/capturas`; su catálogo, perfiles permitidos y coordenadas
+porcentuales de los indicadores viven en `manuales.json`. El lector HTML y el
+generador PDF aplican las mismas restricciones por perfil. Los indicadores se
+dibujan sobre la imagen en HTML o como vectores en PDF; el JPEG original se
+conserva intacto para ampliarlo. Al cambiar una pantalla, actualiza su captura,
+las coordenadas y las instrucciones; incrementa la versión y regenera los tres
+PDF. Usa datos ficticios en un entorno aislado, sin datos personales ni claves
+en las capturas. Comprueba las páginas renderizadas, el índice enlazado y el
+visor de la aplicación, incluido el móvil.
+
+El acceso Clientes → Documentos abre un expediente documental con cliente fijo.
+Quitar filtros y subir desde allí conservan el destinatario. Documentos en el
+menú es la bandeja de toda la cartera permitida; su buscador de cliente muestra
+hasta ocho coincidencias por nombre, NIF o correo.
+
 El selector de cuentas de prueba del login se habilita en loopback o mediante
 `SAVIA_DEMO_ACCOUNTS=true` en Keycloak. El override LAN activa esta opción para
 las pruebas desde otros dispositivos; la configuración base no la activa.

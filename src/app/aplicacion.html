@@ -61,9 +61,9 @@
         @for (item of elementosMenuVisibles(); track item.view) {
           <button
             type="button"
-            [class.activo]="vistaActiva === item.view"
+            [class.activo]="vistaMenuActiva(item.view)"
             [class.nav-secundaria]="!vistasMenuPrincipal.includes(item.view)"
-            [attr.aria-current]="vistaActiva === item.view ? 'page' : null"
+            [attr.aria-current]="vistaMenuActiva(item.view) ? 'page' : null"
             [attr.aria-label]="item.label"
             [attr.title]="item.label"
             (click)="cambiarVista(item.view)"
@@ -122,7 +122,7 @@
           @for (item of elementosMenuSecundarios(); track item.view) {
             <button
               type="button"
-              [class.actual]="vistaActiva === item.view"
+              [class.actual]="vistaMenuActiva(item.view)"
               (click)="cambiarVista(item.view)"
             >
               <span>{{ item.label }}</span
@@ -150,27 +150,44 @@
     </aside>
 
     <main class="workspace">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">{{ usuarioActual.nombreEmpresa }}</p>
-          <h1>{{ tituloVista() }}</h1>
-        </div>
+      @if (clienteCabeceraExpediente(); as clienteExpediente) {
+        @defer (on immediate) {
+          <app-cabecera-expediente
+            [cliente]="clienteExpediente"
+            [subida]="vistaActiva === 'subir'"
+            (volver)="cambiarVista('clientes')"
+            (documentos)="abrirExpediente(clienteExpediente)"
+            (obligaciones)="abrirObligacionesDesdeDocumentos(clienteExpediente)"
+            (subir)="abrirSubida()"
+          />
+        }
+      } @else {
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">{{ usuarioActual.nombreEmpresa }}</p>
+            <h1>{{ tituloVista() }}</h1>
+          </div>
 
-        <div
-          class="topbar-actions"
-          [hidden]="(vistaActiva === 'clientes' && !esCliente()) || vistaActiva === 'configuracion'"
-        >
-          <button
-            type="button"
-            class="primary"
-            [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
-            (click)="abrirSubida()"
+          <div
+            class="topbar-actions"
+            [hidden]="
+              (vistaActiva === 'clientes' && !esCliente()) ||
+              vistaActiva === 'configuracion' ||
+              vistaActiva === 'subir'
+            "
           >
-            <svg lucideFileUp size="17"></svg>
-            <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
-          </button>
-        </div>
-      </header>
+            <button
+              type="button"
+              class="primary"
+              [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
+              (click)="abrirSubida()"
+            >
+              <svg lucideFileUp size="17"></svg>
+              <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
+            </button>
+          </div>
+        </header>
+      }
 
       @if (vistaActiva === 'panel') {
         @defer (on immediate) {
@@ -1196,10 +1213,11 @@
         </section>
       }
 
-      @if (vistaActiva === 'documentos') {
+      @if (vistaActiva === 'documentos' || vistaActiva === 'documentos-cliente') {
         @defer (on immediate) {
           <app-repositorio-documental
             [esCliente]="esCliente()"
+            [clienteFijo]="vistaActiva === 'documentos-cliente'"
             [puedeRevisar]="puedeRevisarDocumentos()"
             [documentos]="documentosRepositorio"
             [clientes]="clientes"
@@ -1248,7 +1266,7 @@
             </div>
 
             <form class="form" (ngSubmit)="registerUpload()">
-              @if (!esCliente()) {
+              @if (!esCliente() && !clienteSubidaFijo) {
                 <label>
                   Cliente
                   <select name="uploadClient" [(ngModel)]="formularioSubida.clienteId" required>

@@ -15,8 +15,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.utils import ImageReader
 from reportlab.platypus import (
-    BaseDocTemplate, CondPageBreak, Frame, KeepTogether, ListFlowable, ListItem,
+    BaseDocTemplate, CondPageBreak, Flowable, Frame, KeepTogether, ListFlowable, ListItem,
     PageBreak, PageTemplate, Paragraph, Spacer, Table, TableStyle,
 )
 from reportlab.platypus.tableofcontents import TableOfContents
@@ -30,11 +31,46 @@ GRIS = colors.HexColor('#6a6279')
 BORDE = colors.HexColor('#e8e1f1')
 
 
+class CapturaAnotada(Flowable):
+    """Imagen real intacta; los indicadores se dibujan como vectores en el PDF."""
+    def __init__(self, captura, ancho):
+        super().__init__()
+        self.captura = captura
+        escala = min(ancho / captura['ancho'], 345 / captura['alto'])
+        self.width = captura['ancho'] * escala
+        self.height = captura['alto'] * escala
+        self.hAlign = 'LEFT'
+        self.imagen = ImageReader(str(RAIZ / 'public' / captura['archivo']))
+
+    def draw(self):
+        c = self.canv
+        c.saveState()
+        c.drawImage(self.imagen, 0, 0, width=self.width, height=self.height)
+        c.setStrokeColor(BORDE)
+        c.rect(0, 0, self.width, self.height)
+        for marca in self.captura['marcas']:
+            x = max(0, marca['x'] / 100 * self.width)
+            y = (1 - (marca['y'] + marca['alto']) / 100) * self.height
+            w = min(marca['ancho'] / 100 * self.width, self.width - x)
+            h = marca['alto'] / 100 * self.height
+            c.setStrokeColor(VIOLETA)
+            c.setLineWidth(1.2)
+            c.roundRect(x, y, w, h, 2, stroke=1, fill=0)
+            bx = max(8, min(self.width - 8, x + 1))
+            by = max(8, min(self.height - 8, y + h))
+            c.setFillColor(VIOLETA)
+            c.circle(bx, by, 8, fill=1, stroke=0)
+            c.setFillColor(colors.white)
+            c.setFont('SaviaBold', 8.5)
+            c.drawCentredString(bx, by - 3, str(marca['numero']))
+        c.restoreState()
+
+
 class ManualDoc(BaseDocTemplate):
     def __init__(self, destino, perfil):
         self.perfil = perfil
         super().__init__(str(destino), pagesize=A4, leftMargin=52, rightMargin=52,
-                         topMargin=62, bottomMargin=54, title=f'Manual de Savia - {perfil}',
+                         topMargin=62, bottomMargin=48, title=f'Manual de Savia - {perfil}',
                          author='Savia', subject=f'Manual de usuario. Perfil {perfil}.')
         self.addPageTemplates(PageTemplate(id='manual', frames=[Frame(
             self.leftMargin, self.bottomMargin, self.width, self.height,
@@ -73,11 +109,13 @@ def estilos():
         'capitulo': ParagraphStyle('Capitulo', fontName='SaviaBold', fontSize=18, leading=24, textColor=TINTA, spaceAfter=9, keepWithNext=True),
         'subtitulo': ParagraphStyle('Subtitulo', fontName='SaviaBold', fontSize=11, leading=16, textColor=TINTA, spaceBefore=14, spaceAfter=8, keepWithNext=True),
         'resumen': ParagraphStyle('Resumen', fontName='Savia', fontSize=11, leading=17, textColor=VIOLETA, spaceAfter=16, keepWithNext=True),
-        'texto': ParagraphStyle('Texto', fontName='Savia', fontSize=10, leading=15.7, textColor=GRIS, spaceAfter=10),
-        'paso': ParagraphStyle('Paso', fontName='Savia', fontSize=10, leading=15.7, textColor=GRIS, spaceAfter=8),
+        'texto': ParagraphStyle('Texto', fontName='Savia', fontSize=10, leading=15, textColor=GRIS, spaceAfter=9),
+        'paso': ParagraphStyle('Paso', fontName='Savia', fontSize=10, leading=15, textColor=GRIS, spaceAfter=7),
         'estado': ParagraphStyle('Estado', fontName='SaviaBold', fontSize=9.2, leading=13.6, textColor=TINTA),
         'descripcion': ParagraphStyle('Descripcion', fontName='Savia', fontSize=9.2, leading=13.6, textColor=GRIS),
         'indice': ParagraphStyle('Indice', fontName='Savia', fontSize=10.5, leading=16, textColor=TINTA, spaceBefore=7, leftIndent=0, firstLineIndent=0, rightIndent=18, alignment=TA_LEFT),
+        'leyenda': ParagraphStyle('Leyenda', fontName='Savia', fontSize=9.2, leading=14, textColor=GRIS, spaceBefore=5, spaceAfter=3),
+        'comprobar': ParagraphStyle('Comprobar', fontName='Savia', fontSize=9.4, leading=14.5, textColor=TINTA, leftIndent=11, borderColor=BORDE, borderPadding=7, borderWidth=.5, spaceBefore=7, spaceAfter=9),
     }
 
 
@@ -88,19 +126,45 @@ def generar(perfil, salida):
     contenido = [Spacer(1, 35), Paragraph('Manual de usuario', estilo['titulo']),
                  Paragraph(manual['nombre'], estilo['perfil']),
                  Paragraph(escape(manual['descripcion']), estilo['texto']),
-                 Paragraph('Esta guía describe los recorridos disponibles para tu perfil en Savia. '
-                           'El contenido coincide con el manual consultable dentro de Ayuda.', estilo['texto']),
+                 Paragraph('Guía práctica con pasos, resultados esperados, comprobaciones y capturas '
+                           'anotadas de la aplicación. El contenido coincide con el manual de Ayuda.', estilo['texto']),
                  Spacer(1, 22), Paragraph('Contenido', estilo['subtitulo'])]
     indice = TableOfContents()
     indice.levelStyles = [estilo['indice']]
     indice.dotsMinLevel = 0
     contenido += [indice, PageBreak()]
     for numero, identificador in enumerate(manual['capitulos'], 1):
-        inicio_capitulo = len(contenido)
         capitulo = DATOS['secciones'][identificador]
-        contenido += [CondPageBreak(145), Paragraph(f'{numero:02d}  {escape(capitulo["titulo"])}', estilo['capitulo']),
+        if numero > 1:
+            contenido.append(PageBreak())
+        contenido += [Paragraph(f'{numero:02d}  {escape(capitulo["titulo"])}', estilo['capitulo']),
                       Paragraph(escape(capitulo['resumen']), estilo['resumen'])]
         contenido += [Paragraph(escape(parrafo), estilo['texto']) for parrafo in capitulo['parrafos']]
+        for recorrido in capitulo.get('recorridos', []):
+            contenido += [CondPageBreak(140), Paragraph(escape(recorrido['titulo']), estilo['subtitulo'])]
+            if recorrido.get('antes'):
+                contenido.append(Paragraph('<b>Antes de empezar.</b> ' + ' '.join(escape(p) for p in recorrido['antes']), estilo['texto']))
+            for n, paso in enumerate(recorrido['pasos'], 1):
+                contenido.append(KeepTogether([
+                    Paragraph(f'<b>{n}. {escape(paso["haz"])}</b>', estilo['paso']),
+                    Paragraph(escape(paso['veras']), estilo['texto']),
+                ]))
+            if recorrido.get('comprobar'):
+                contenido.append(Paragraph('<b>Al terminar, comprueba</b><br/>' + '<br/>'.join('• ' + escape(p) for p in recorrido['comprobar']), estilo['comprobar']))
+            if recorrido.get('incidencias'):
+                contenido += [Paragraph('Si no sale lo esperado', estilo['subtitulo'])]
+                contenido += [Paragraph(escape(p), estilo['texto']) for p in recorrido['incidencias']]
+        for clave in capitulo.get('capturas', []):
+            captura = DATOS['capturas'][clave]
+            if perfil not in captura['perfiles']:
+                continue
+            figura = [Paragraph(escape(captura['titulo']), estilo['subtitulo']),
+                      Paragraph(escape(captura['descripcion']), estilo['leyenda']), Spacer(1, 8),
+                      CapturaAnotada(captura, doc.width), Spacer(1, 7)]
+            for marca in captura['marcas']:
+                figura.append(Paragraph(f'<b>{marca["numero"]}. {escape(marca["titulo"])}.</b> ' + escape(marca['descripcion']), estilo['leyenda']))
+            figura.append(Spacer(1, 12))
+            contenido.append(KeepTogether(figura))
         if capitulo.get('pasos'):
             contenido += [Paragraph('Paso a paso', estilo['subtitulo']), ListFlowable(
                 [ListItem(Paragraph(escape(paso), estilo['paso'])) for paso in capitulo['pasos']],
@@ -119,10 +183,6 @@ def generar(perfil, salida):
                 ('LINEBELOW', (0, 0), (-1, -1), .5, BORDE),
             ]))
             contenido += [Spacer(1, 6), tabla]
-        contenido += [Spacer(1, 24)]
-        if identificador == 'cuenta':
-            # Evita que el cierre del manual quede aislado en una página casi vacía.
-            contenido[inicio_capitulo:] = [KeepTogether(contenido[inicio_capitulo:])]
     doc.multiBuild(contenido)
     lector = PdfReader(salida)
     texto = '\n'.join(pagina.extract_text() for pagina in lector.pages)
@@ -131,6 +191,14 @@ def generar(perfil, salida):
             raise RuntimeError(f'Falta el capítulo {identificador} en {salida.name}')
     if len(lector.outline) != len(manual['capitulos']):
         raise RuntimeError('El índice de marcadores está incompleto')
+    for identificador in manual['capitulos']:
+        for recorrido in DATOS['secciones'][identificador].get('recorridos', []):
+            if recorrido['titulo'] not in texto:
+                raise RuntimeError(f'Falta el recorrido {recorrido["titulo"]}')
+        for clave in DATOS['secciones'][identificador].get('capturas', []):
+            captura = DATOS['capturas'][clave]
+            if perfil in captura['perfiles'] and captura['titulo'] not in texto:
+                raise RuntimeError(f'Falta la captura {clave}')
     print(f'{salida.name}: {len(lector.pages)} páginas, {len(lector.outline)} capítulos, {salida.stat().st_size} bytes')
 
 

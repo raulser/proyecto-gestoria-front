@@ -39,6 +39,7 @@ import type { AccionArchivo, AccionDocumento } from './filtros-repositorio';
 })
 export class RepositorioDocumentalComponent {
   @Input() esCliente = false;
+  @Input() clienteFijo = false;
   @Input() puedeRevisar = false;
   @Input() documentos: RespuestaDocumento[] = [];
   @Input() clientes: RespuestaCliente[] = [];
@@ -70,7 +71,9 @@ export class RepositorioDocumentalComponent {
     return !this.esCliente && !this.filtros.clienteId;
   }
   get hayFiltros(): boolean {
-    return Object.values(this.filtros).some(Boolean);
+    return Object.entries(this.filtros).some(
+      ([clave, valor]) => !!valor && !(clave === 'clienteId' && this.clienteFijo),
+    );
   }
   get peticion(): RespuestaSolicitudDocumento | undefined {
     return this.solicitudes.find((s) => s.id === this.filtros.solicitudId);

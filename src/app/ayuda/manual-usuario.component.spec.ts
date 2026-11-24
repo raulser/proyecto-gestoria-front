@@ -27,6 +27,50 @@ describe('Manual por perfil', () => {
       expect(obtenerManual(rol).capitulos.some((capitulo) => capitulo.id === 'equipo')).toBe(true);
     }
   });
+  it('filtra las capturas por perfil también en capítulos compartidos', () => {
+    const gestor = obtenerManual('ASESOR');
+    const administrador = obtenerManual('ADMIN');
+    const capturasGestor = gestor.capitulos.flatMap((c) => c.capturas ?? []);
+    const capturasAdmin = administrador.capitulos.flatMap((c) => c.capturas ?? []);
+    expect(capturasGestor.some((c) => c.archivo.endsWith('panel-gestor.jpg'))).toBe(true);
+    expect(capturasGestor.some((c) => c.archivo.endsWith('panel-administrador.jpg'))).toBe(false);
+    expect(capturasAdmin.some((c) => c.archivo.endsWith('panel-administrador.jpg'))).toBe(true);
+    expect(capturasAdmin.some((c) => c.archivo.endsWith('movil-gestor.jpg'))).toBe(false);
+    for (const rol of ['CLIENTE', 'ASESOR', 'ADMIN'] as const) {
+      const manual = obtenerManual(rol);
+      expect(
+        manual.capitulos
+          .flatMap((c) => c.capturas ?? [])
+          .every((c) => c.perfiles.includes(manual.perfil)),
+      ).toBe(true);
+    }
+  });
+  it('encuentra instrucciones de un recorrido y las leyendas de sus capturas', () => {
+    const capitulos = obtenerManual('ASESOR').capitulos;
+    expect(buscarCapitulos(capitulos, 'cola aportaciones').some((c) => c.id === 'documentos')).toBe(
+      true,
+    );
+    expect(buscarCapitulos(capitulos, 'límite documental').some((c) => c.id === 'clientes')).toBe(
+      true,
+    );
+  });
+  it('muestra acciones, resultados y controles señalados al abrir un capítulo ilustrado', () => {
+    const fixture = TestBed.createComponent(ManualUsuarioComponent);
+    fixture.componentRef.setInput('rol', 'CLIENTE');
+    fixture.componentRef.setInput('seccionInicial', 'archivos-cliente');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.pasos-guiados strong').textContent).toContain(
+      'Mis archivos',
+    );
+    expect(fixture.nativeElement.querySelector('.pasos-guiados p').textContent).toContain(
+      'publicados',
+    );
+    const imagen = fixture.nativeElement.querySelector('figure img') as HTMLImageElement;
+    expect(imagen.getAttribute('src')).toBe('manuales/capturas/archivos-cliente.jpg');
+    expect(imagen.getAttribute('alt')).toContain('Consultar tus documentos');
+    expect(fixture.nativeElement.querySelectorAll('.marca-captura').length).toBeGreaterThan(0);
+    expect(fixture.nativeElement.querySelector('figure a').getAttribute('target')).toBe('_blank');
+  });
   it('busca sin acentos también en el contenido de los estados', () => {
     const capitulos = obtenerManual('CLIENTE').capitulos;
     expect(
