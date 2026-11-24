@@ -1,5 +1,5 @@
 {
-  "version": "2026.11",
+  "version": "2026.11.24",
   "perfiles": {
     "cliente": {
       "nombre": "Cliente",
@@ -95,14 +95,17 @@
         "Clasifica como Factura emitida las facturas que tú emites a tus clientes y como Factura recibida las de tus proveedores. Los tickets, nóminas, contratos y extractos tienen su propio tipo. Elige Otro cuando ninguno encaje.",
         "El periodo puede ser mensual, trimestral, anual o puntual. Indica el año y, cuando corresponda, el mes o trimestre. Un documento anual o puntual no necesita trimestre; no lo sitúes en un trimestre solo para completar el formulario.",
         "Si el documento responde a una petición, selecciónala en ¿A qué entrega pertenece? Al llegar desde la petición, revisa el contexto que aparece preparado. Para un archivo independiente, utiliza No corresponde a ninguna entrega.",
-        "Mis archivos permite buscar y filtrar. Consulta la información de origen, periodo y petición para localizar el documento correcto. Vista previa abre los formatos compatibles; Descargar permite conservar una copia.",
+        "En Mis archivos puedes buscar por nombre y elegir Tipo de documento y Año sin abrir los filtros. Las vistas Todos, Subidos por mí y De mi gestoría separan tus aportaciones de los documentos preparados para ti. No necesitas seleccionar un cliente: esta pantalla solo muestra tu expediente.",
+        "La lista se actualiza al elegir una opción o terminar de escribir. En Filtros puedes acotar por estado y periodo. Quitar filtros vuelve al listado completo; una petición seleccionada se indica encima de la lista y puede quitarse por separado.",
+        "Pulsa el nombre del archivo o Abrir para verlo cuando su formato lo permita. El icono Descargar guarda una copia. El menú de tres puntos reúne las otras acciones disponibles, como Retirar documento o Subir una nueva versión, según el estado del archivo.",
         "Los modelos, justificantes o informes preparados por tu gestoría aparecen cuando se publican para ti. Los borradores internos de la gestoría no forman parte de tus archivos visibles."
       ],
       "pasos": [
-        "Abre Mis archivos y utiliza la búsqueda o los filtros.",
-        "Comprueba nombre, tipo, periodo y estado antes de descargar.",
-        "Si un documento necesita corrección, lee las indicaciones de la gestoría y aporta la versión correcta en el contexto correspondiente.",
-        "Si no encuentras un archivo, limpia los filtros y comprueba que no estás viendo solo una petición o un periodo."
+        "Abre Mis archivos y elige Todos, Subidos por mí o De mi gestoría.",
+        "Busca el nombre o selecciona tipo y año. Si hace falta, utiliza Filtros para estado y periodo.",
+        "Pulsa el nombre o Abrir para consultar un archivo, o utiliza el icono Descargar.",
+        "Si necesita corrección, lee el comentario y utiliza Subir una nueva versión cuando esté disponible.",
+        "Si no lo encuentras, pulsa Quitar filtros y comprueba si tu gestoría ya lo ha compartido contigo."
       ],
       "destino": "documentos",
       "accion": "Abrir mis archivos"
@@ -218,25 +221,29 @@
       "accion": "Abrir solicitudes"
     },
     "documentos": {
-      "titulo": "Repositorio, subida y publicación",
+      "titulo": "Documentos, subida y publicación",
       "resumen": "Separar lo aportado por el cliente de lo preparado por la gestoría.",
       "parrafos": [
-        "El repositorio muestra cliente, origen, tipo, periodo, estado y vinculación con la petición u obligación. Busca o combina filtros; al llegar desde una petición o un expediente, comprueba el contexto activo antes de interpretar la lista.",
-        "En Subir, selecciona el cliente y el espacio documental. Aportaciones del cliente reúne facturas emitidas, recibidas y otros justificantes. La documentación preparada por la gestoría tiene título, descripción, referencia y opciones de publicación.",
+        "En Documentos tienes a la vista Buscar, Cliente, Tipo de documento y Año. Selecciona un cliente para consultar su expediente o deja Todos los clientes para trabajar con la cartera completa. La búsqueda y las selecciones actualizan la lista sin un botón adicional de confirmación.",
+        "Las vistas Todos, Del cliente y De la gestoría separan la procedencia. En Filtros puedes añadir estado, periodo y acceso: Solo gestoría o Visible para el cliente. Los filtros adicionales activos aparecen junto al resultado y se pueden quitar por separado. Quitar filtros restablece el listado.",
+        "Cada archivo muestra nombre, tipo, periodo y estado. Si procede, incluye la petición o la obligación relacionada. El nombre del cliente aparece cuando consultas varios expedientes; al seleccionar uno deja de repetirse en cada fila. El total corresponde a todos los documentos encontrados, aunque haya varias páginas.",
+        "Ver documentos desde una petición abre sus archivos filtrados. La petición activa aparece sobre la lista; quitar ese filtro mantiene el cliente seleccionado. Al pulsar Subir documento desde este contexto, se conserva el cliente, el año elegido y la procedencia; compruébalos antes de guardar.",
+        "En Subir, elige Cliente y Procedencia. La documentación aportada por el cliente reúne sus facturas y otros justificantes. La preparada por la gestoría permite indicar título, descripción, referencia y publicación. Si no has elegido un cliente antes, selecciónalo en el formulario.",
         "Una factura emitida por tu cliente se clasifica como Factura emitida; una factura de sus proveedores, como Factura recibida. La factura que la propia gestoría cobra a ese cliente es un gasto del cliente: clasifícala como recibida y utiliza un título o referencia que identifique su origen. No la confundas con un modelo presentado.",
         "Para modelos, justificantes, liquidaciones, libros e informes utiliza el tipo correspondiente de documentación preparada por la gestoría. Elige el periodo real: mensual, trimestral, anual o puntual. No todos los documentos pertenecen a un trimestre.",
-        "Guardar como borrador interno mantiene el documento dentro de la gestoría. Publicar al cliente al subir o Publicar al cliente lo hace visible en su portal. Comprueba el destinatario y la clasificación antes de publicar.",
-        "Clasificar permite asociar una aportación libre a una petición compatible. Vista previa y Descargar sirven para revisar el archivo. Las opciones de revisar, rechazar, sustituir o retirar aparecen según el origen, el estado y tus permisos. Cuando se pida un motivo, deja una explicación útil para el seguimiento."
+        "Guardar como borrador interno mantiene el archivo dentro de la gestoría. Publicar al cliente al subir lo comparte al guardarlo. Para un borrador ya subido, abre el menú de tres puntos del archivo y pulsa Compartir con el cliente. Ocultar al cliente retira su acceso. Confirma siempre el destinatario antes de compartir.",
+        "Pulsa el nombre o Abrir para la vista previa y el icono Descargar para guardar una copia. El menú de tres puntos reúne Marcar revisado, Pedir corrección, Vincular a una petición, Retirar documento y Subir una nueva versión cuando el origen, el estado y tus permisos lo permiten.",
+        "Las acciones para varios archivos aparecen al marcarlos con sus casillas. Seleccionar todos afecta solo a la página actual. Marcar revisados y Compartir con el cliente comprueban qué documentos admiten la acción; revisa el resultado antes de continuar."
       ],
       "pasos": [
-        "Selecciona cliente, origen, tipo y periodo.",
-        "Asocia la petición o el contexto disponible cuando corresponda.",
-        "Para documentación de la gestoría, revisa título, referencia y visibilidad.",
-        "Selecciona los archivos, sube y espera la confirmación de cada uno.",
-        "Comprueba el documento en el repositorio y publica solo cuando proceda."
+        "Abre Documentos y selecciona cliente, tipo, año y procedencia según lo que necesites localizar.",
+        "Consulta el archivo pulsando su nombre o Abrir. Utiliza el menú de tres puntos para revisarlo, vincularlo o compartirlo.",
+        "Para añadir archivos, pulsa Subir documento y comprueba el cliente y los datos preparados.",
+        "Elige el periodo real, selecciona los archivos y espera la confirmación de cada subida.",
+        "Localiza el archivo en Documentos. Si es un borrador, utiliza Compartir con el cliente solo cuando esté listo."
       ],
       "destino": "documentos",
-      "accion": "Abrir el repositorio"
+      "accion": "Abrir documentos"
     },
     "cumplimiento": {
       "titulo": "Seguimiento de una obligación",
@@ -255,7 +262,10 @@
           "estado": "Documentación recibida",
           "descripcion": "Se ha recibido la documentación para continuar el trabajo."
         },
-        { "estado": "En preparación", "descripcion": "La obligación se está preparando." },
+        {
+          "estado": "En preparación",
+          "descripcion": "La obligación se está preparando."
+        },
         {
           "estado": "Pendiente de revisión",
           "descripcion": "La preparación espera revisión interna."
@@ -323,7 +333,7 @@
           "descripcion": "Todavía está pendiente en el circuito documental. Consulta la entrega y las indicaciones asociadas."
         },
         {
-          "estado": "Recibido por la gestoría",
+          "estado": "Por revisar",
           "descripcion": "El archivo está disponible para que lo revisen."
         },
         {
@@ -335,7 +345,7 @@
           "descripcion": "La gestoría ha rechazado el archivo. Lee el motivo o pregunta en la conversación y aporta la corrección."
         },
         {
-          "estado": "Publicado al cliente",
+          "estado": "Publicado",
           "descripcion": "La gestoría ha compartido el documento contigo."
         },
         {
@@ -358,20 +368,23 @@
           "descripcion": "Documento pendiente dentro del circuito documental."
         },
         {
-          "estado": "Pendiente de revisión (recibido)",
+          "estado": "Por revisar",
           "descripcion": "Aportación recibida, pendiente de revisar."
         },
-        { "estado": "Revisado", "descripcion": "Aportación revisada por el equipo." },
         {
-          "estado": "Rechazado",
+          "estado": "Revisado",
+          "descripcion": "Aportación revisada por el equipo."
+        },
+        {
+          "estado": "Necesita corrección",
           "descripcion": "Aportación que necesita corrección. Indica el motivo al cliente."
         },
         {
-          "estado": "Borrador interno",
+          "estado": "Borrador",
           "descripcion": "Documento preparado por la gestoría todavía sin publicar al cliente."
         },
         {
-          "estado": "Publicado al cliente",
+          "estado": "Publicado",
           "descripcion": "Documento de la gestoría compartido con el cliente."
         },
         {
@@ -428,7 +441,8 @@
         "Durante una subida, espera a que termine el progreso. Una selección de archivos no significa que se hayan guardado. Consulta el resultado de cada archivo y la confirmación; si algunos fallan, vuelve a intentar solo los que no se hayan incorporado.",
         "El formulario admite los formatos indicados en pantalla, como PDF, JPEG y PNG. Los documentos pasan por validaciones y análisis antivirus. Si se rechaza el archivo, revisa el mensaje; cambiarle la extensión no convierte su formato ni resuelve el problema.",
         "Si no puedes añadir archivos a una petición enviada, pide o tramita su reapertura. No crees otra petición o una subida libre para eludir el cierre sin revisar antes el contexto.",
-        "Si falta un documento en una lista, limpia los filtros y revisa cliente, periodo, petición y visibilidad. Si el acceso ha caducado o la aplicación no consigue arrancar, vuelve a iniciar sesión o utiliza el reintento que aparece.",
+        "Todavía no hay documentos indica un listado vacío. No hay coincidencias indica que no se han encontrado archivos con los filtros elegidos: prueba Quitar filtros y comprueba cliente, año, procedencia y petición.",
+        "No se pudieron cargar los documentos indica un fallo de carga, no una carpeta vacía. Revisa la conexión y utiliza Volver a intentar dentro de la lista. Un corte de red no significa por sí solo que tu sesión haya caducado.",
         "Para pedir ayuda, indica la acción que intentabas hacer, el cliente o la petición afectados y el mensaje exacto. No compartas tu contraseña. Utiliza la conversación de la petición para dudas documentales y el canal de soporte para incidencias del portal."
       ],
       "destino": "subir",
@@ -441,6 +455,7 @@
         "Ayuda incluye este manual adaptado a tu perfil. Puedes buscar un tema, leer sus capítulos o usar Ver PDF y Descargar PDF para consultar una copia completa. Si tu navegador no muestra el PDF integrado, utiliza Abrir PDF en otra pestaña o vuelve a Leer manual.",
         "Dentro de Cuenta, soporte y privacidad encontrarás tu usuario, perfil, el acceso a la gestión de contraseña y segundo factor, los datos de soporte y la información de privacidad disponible.",
         "La gestión de la cuenta se abre en una pestaña aparte. Sigue allí las indicaciones para contraseña, segundo factor y sesiones. Cierra sesión cuando termines de trabajar en un dispositivo compartido.",
+        "La sesión se renueva automáticamente mientras trabajas, sin recargar la pantalla ni modificar lo que escribes. Se cierra tras 2 horas de inactividad o al alcanzar 24 horas desde el acceso. Si deja de ser válida, se abre el login con Se ha perdido la sesión. Inicia sesión de nuevo. Al volver a entrar, comprueba si tu última operación terminó antes de repetirla.",
         "Si no recuerdas tu contraseña, utiliza ¿Olvidaste la contraseña? en el acceso y sigue las instrucciones. Si el correo de recuperación no llega, contacta con la gestoría para que revise tu cuenta y el destinatario.",
         "Tu cuenta es personal. Si necesitas acceder a otro expediente o función, pide a la gestoría que revise tus permisos. No utilices la cuenta de otra persona."
       ]

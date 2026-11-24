@@ -96,6 +96,7 @@ def generar(perfil, salida):
     indice.dotsMinLevel = 0
     contenido += [indice, PageBreak()]
     for numero, identificador in enumerate(manual['capitulos'], 1):
+        inicio_capitulo = len(contenido)
         capitulo = DATOS['secciones'][identificador]
         contenido += [CondPageBreak(145), Paragraph(f'{numero:02d}  {escape(capitulo["titulo"])}', estilo['capitulo']),
                       Paragraph(escape(capitulo['resumen']), estilo['resumen'])]
@@ -119,6 +120,9 @@ def generar(perfil, salida):
             ]))
             contenido += [Spacer(1, 6), tabla]
         contenido += [Spacer(1, 24)]
+        if identificador == 'cuenta':
+            # Evita que el cierre del manual quede aislado en una página casi vacía.
+            contenido[inicio_capitulo:] = [KeepTogether(contenido[inicio_capitulo:])]
     doc.multiBuild(contenido)
     lector = PdfReader(salida)
     texto = '\n'.join(pagina.extract_text() for pagina in lector.pages)
