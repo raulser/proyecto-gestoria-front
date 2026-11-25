@@ -4,6 +4,7 @@ import { Aplicacion } from './aplicacion';
 import { Subject, throwError } from 'rxjs';
 import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
 import { ServicioFeedback } from './infraestructura/servicio-feedback';
+import { ServicioDialogos } from './infraestructura/servicio-dialogos';
 import {
   RespuestaCliente,
   RespuestaCumplimientoObligacion,
@@ -24,6 +25,64 @@ describe('Aplicacion', () => {
     const fixture = TestBed.createComponent(Aplicacion);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('propone doble autenticación para todas las nuevas cuentas', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    expect(app.nuevoUsuario.dobleFactorRequerido).toBe(true);
+    app.nuevoUsuario.rol = 'CLIENTE';
+    expect(app.nuevoUsuario.dobleFactorRequerido).toBe(true);
+  });
+
+  it('cancelar la desactivación de MFA no envía ninguna petición', async () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    const cambiar = vi.spyOn(TestBed.inject(HttpClient), 'put');
+    const confirmar = vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar').mockResolvedValue(false);
+    await app.gestionarDobleFactor(usuario('CLIENTE'));
+    expect(confirmar).toHaveBeenCalledWith(expect.objectContaining({ peligro: true }));
+    expect(cambiar).not.toHaveBeenCalled();
+    expect(app.seguridadUsuariosPendientes.size).toBe(0);
+  });
+
+  it('el restablecimiento usa su acción propia, conserva MFA y evita envíos duplicados', async () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    const cliente = usuario('CLIENTE');
+    app.usuarios = [cliente];
+    vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar').mockResolvedValue(true);
+    vi.spyOn(app, 'cargarAuditoria').mockImplementation(() => {});
+    const respuesta = new Subject<any>();
+    const enviar = vi.spyOn(TestBed.inject(HttpClient), 'post').mockReturnValue(respuesta);
+    await app.gestionarDobleFactor(cliente, true);
+    await app.gestionarDobleFactor(cliente, true);
+    expect(enviar).toHaveBeenCalledOnce();
+    expect(enviar).toHaveBeenCalledWith(expect.stringContaining('/usuarios/3/restablecer-autenticador'), {}, expect.anything());
+    expect(app.seguridadUsuariosPendientes.has(3)).toBe(true);
+    respuesta.next({ datos: cliente }); respuesta.complete();
+    expect(app.usuarios[0].dobleFactorRequerido).toBe(true);
+    expect(app.aviso).toContain('nuevo QR');
+    expect(app.seguridadUsuariosPendientes.size).toBe(0);
+  });
+
+  it('un error al cambiar MFA conserva el estado visible y permite reintentar', async () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    const cliente = usuario('CLIENTE'); app.usuarios = [cliente];
+    vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar').mockResolvedValue(true);
+    vi.spyOn(TestBed.inject(HttpClient), 'put').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 503 })));
+    await app.gestionarDobleFactor(cliente);
+    expect(app.usuarios[0].dobleFactorRequerido).toBe(true);
+    expect(app.error).toContain('No se pudo actualizar');
+    expect(app.seguridadUsuariosPendientes.size).toBe(0);
+  });
+
+  it('un perfil cliente no puede cambiar ni restablecer la seguridad', async () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('CLIENTE');
+    const confirmar = vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar');
+    await app.gestionarDobleFactor(usuario('CLIENTE'), true);
+    expect(confirmar).not.toHaveBeenCalled();
   });
 
   it('un fallo de conexión al cargar la cuenta no invalida la sesión', () => {
@@ -835,6 +894,7 @@ function usuario(rol: RespuestaUsuario['rol']): RespuestaUsuario {
     nombreEmpresa: 'Gestoria',
     clienteId: rol === 'CLIENTE' ? 21 : null,
     activo: true,
+    dobleFactorRequerido: true,
   };
 }
 

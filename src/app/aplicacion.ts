@@ -29,6 +29,7 @@ import type { AccionArchivo, FiltrosRepositorio } from './documentos/filtros-rep
 import { AsociarDocumentoComponent } from './documentos/asociar-documento.component';
 import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente-cliente.component';
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
+import { AccesoUsuarioComponent } from './equipo/acceso-usuario.component';
 import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.component';
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
 import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
@@ -99,6 +100,7 @@ import {
     AsociarDocumentoComponent,
     ResumenExpedienteClienteComponent,
     EditorSolicitudComponent,
+    AccesoUsuarioComponent,
     PerfilFiscalClienteComponent,
     RecomendacionesFiscalesComponent,
   ],
@@ -392,7 +394,11 @@ export class Aplicacion implements OnInit {
     rol: 'ASESOR' as Rol,
     clienteId: null as number | null,
     activo: true,
+    dobleFactorRequerido: true,
   };
+
+  readonly seguridadUsuariosPendientes = new Set<number>();
+  creandoUsuario = false;
 
   formularioAsignacion = {
     asesorId: null as number | null,
@@ -1991,6 +1997,7 @@ export class Aplicacion implements OnInit {
   }
 
   agregarUsuario(): void {
+    if (this.creandoUsuario) return;
     if (
       !this.puedeAdministrar() ||
       !this.nuevoUsuario.nombre.trim() ||
@@ -2006,13 +2013,17 @@ export class Aplicacion implements OnInit {
       clienteId: this.nuevoUsuario.rol === 'CLIENTE' ? this.nuevoUsuario.clienteId : null,
     };
     this.limpiarMensajes();
+    this.creandoUsuario = true;
     this.http
       .post<
         RespuestaApi<RespuestaUsuario>
       >(`${this.urlBaseApi}/api/usuarios`, payload, { headers: this.cabecerasAutenticacion() })
+      .pipe(finalize(() => { this.creandoUsuario = false; this.detectorCambios.markForCheck(); }))
       .subscribe({
         next: () => {
-          this.aviso = 'Usuario creado. Deberá cambiar la clave al entrar';
+          this.aviso = payload.dobleFactorRequerido
+            ? 'Usuario creado. Al entrar cambiará la clave y vinculará su autenticador'
+            : 'Usuario creado. Deberá cambiar la clave al entrar';
           this.nuevoUsuario = {
             nombre: '',
             email: '',
@@ -2020,6 +2031,7 @@ export class Aplicacion implements OnInit {
             rol: 'ASESOR',
             clienteId: null,
             activo: true,
+            dobleFactorRequerido: true,
           };
           this.cargarUsuarios();
           this.cargarPlan();
@@ -2030,6 +2042,7 @@ export class Aplicacion implements OnInit {
   }
 
   async alternarUsuario(usuario: RespuestaUsuario): Promise<void> {
+    if (!this.puedeAdministrar() || this.seguridadUsuariosPendientes.has(usuario.id)) return;
     if (usuario.id === this.usuarioActual?.id) {
       this.error = 'No puedes desactivar tu propia cuenta';
       return;
@@ -2064,6 +2077,56 @@ export class Aplicacion implements OnInit {
         error: (error) =>
           (this.error = this.obtenerErrorApi(error, 'No se pudo actualizar el usuario')),
       });
+  }
+
+  async gestionarDobleFactor(usuario: RespuestaUsuario, restablecer = false): Promise<void> {
+    if (!this.puedeAdministrar() || this.seguridadUsuariosPendientes.has(usuario.id)) return;
+    this.seguridadUsuariosPendientes.add(usuario.id);
+    const requerido = !usuario.dobleFactorRequerido;
+    const descripcion = restablecer
+      ? `Se invalidará el autenticador anterior de ${usuario.nombre} y se cerrarán sus sesiones. ` +
+        (usuario.dobleFactorRequerido
+          ? 'Al entrar deberá vincular de nuevo su móvil con un QR. Confirma antes la identidad de la persona que pide recuperar el acceso.'
+          : 'El doble factor seguirá desactivado. Podrá vincular un nuevo móvil cuando vuelvas a activarlo.')
+      : requerido
+        ? `${usuario.nombre} deberá usar un código del autenticador. Si aún no lo ha vinculado, lo hará con un QR al entrar. Se cerrarán sus sesiones actuales.`
+        : `${usuario.nombre} podrá entrar solo con su contraseña. Se cerrarán sus sesiones actuales y se conservará la vinculación del autenticador.`;
+    const confirmado = await this.dialogos.confirmar({
+      titulo: restablecer ? 'Restablecer autenticador' : requerido ? 'Activar doble autenticación' : 'Desactivar doble autenticación',
+      descripcion: descripcion + (usuario.id === this.usuarioActual?.id ? ' Tendrás que iniciar sesión de nuevo.' : ''),
+      confirmar: restablecer ? 'Restablecer autenticador' : requerido ? 'Activar 2FA' : 'Desactivar 2FA',
+      peligro: restablecer || !requerido,
+    });
+    if (!confirmado) {
+      this.seguridadUsuariosPendientes.delete(usuario.id);
+      this.detectorCambios.markForCheck();
+      return;
+    }
+    this.limpiarMensajes();
+    const ruta = `${this.urlBaseApi}/api/usuarios/${usuario.id}`;
+    const opciones = { headers: this.cabecerasAutenticacion() };
+    const peticion = restablecer
+      ? this.http.post<RespuestaApi<RespuestaUsuario>>(`${ruta}/restablecer-autenticador`, {}, opciones)
+      : this.http.put<RespuestaApi<RespuestaUsuario>>(`${ruta}/doble-factor`, { requerido }, opciones);
+    peticion.pipe(finalize(() => {
+      this.seguridadUsuariosPendientes.delete(usuario.id);
+      this.detectorCambios.markForCheck();
+    })).subscribe({
+      next: (respuesta) => {
+        this.usuarios = this.usuarios.map((u) => u.id === usuario.id
+          ? { ...respuesta.datos, nombre: this.nombrePersona(respuesta.datos.nombre) }
+          : u);
+        this.aviso = restablecer
+          ? usuario.dobleFactorRequerido ? 'Autenticador restablecido. Al entrar configurará un nuevo QR' : 'Vinculación retirada. El doble factor sigue desactivado'
+          : requerido ? 'Doble autenticación activada' : 'Doble autenticación desactivada';
+        if (usuario.id === this.usuarioActual?.id) {
+          this.autenticacion.notificarSesionCaducada();
+        } else {
+          this.cargarAuditoria();
+        }
+      },
+      error: (error) => { this.error = this.obtenerErrorApi(error, 'No se pudo actualizar la seguridad del usuario'); },
+    });
   }
 
   assignClient(): void {

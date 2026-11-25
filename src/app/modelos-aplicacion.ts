@@ -121,6 +121,7 @@ export interface RespuestaUsuario {
   nombreEmpresa: string;
   clienteId: number | null;
   activo: boolean;
+  dobleFactorRequerido: boolean;
 }
 export interface RespuestaCliente {
   id: number;

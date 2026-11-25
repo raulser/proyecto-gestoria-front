@@ -1,0 +1,25 @@
+:host { display: block; }
+* { box-sizing: border-box; }
+article { padding: 20px 0; border-bottom: 1px solid #ece8f2; }
+header, .seguridad, footer, .acceso { display: flex; align-items: center; gap: 12px; }
+header { margin-bottom: 16px; }
+.avatar { display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 12px; background: #f0ebff; color: #6942ce; font-size: 12px; font-weight: 750; }
+.identidad { display: grid; gap: 4px; min-width: 0; flex: 1; }
+.identidad strong { color: #262334; font-size: 14px; }
+.identidad span { color: #756e83; font-size: 12px; overflow-wrap: anywhere; }
+.perfil { padding: 5px 8px; border-radius: 6px; background: #f5f3f8; color: #61576e; font-size: 11px; }
+.seguridad { justify-content: space-between; padding: 12px; background: #faf9fc; border: 1px solid #eeeaf5; border-radius: 10px; }
+.estado { display: flex; gap: 9px; align-items: center; font-size: 12px; color: #6b6377; }
+.estado strong { display: block; margin-top: 3px; font-size: 12px; color: #302938; }
+.indicador { width: 8px; height: 8px; border-radius: 50%; background: #aaa4b3; }
+.indicador.activado { background: #298254; box-shadow: 0 0 0 4px #e5f4ec; }
+button { min-height: 36px; border: 0; border-radius: 7px; padding: 6px 9px; background: transparent; font: inherit; font-size: 11px; font-weight: 650; color: #6740c9; cursor: pointer; }
+.cambiar { background: white; border: 1px solid #e1d9f4; white-space: nowrap; }
+button:hover { background: #eee8fa; }
+button:focus-visible { outline: 2px solid #7953db; outline-offset: 3px; }
+button:disabled { opacity: .45; cursor: default; }
+footer { justify-content: space-between; margin-top: 9px; flex-wrap: wrap; }
+.restablecer { padding-left: 0; text-align: left; color: #655d72; }
+.acceso { flex-wrap: wrap; gap: 4px; color: #82788d; font-size: 10px; }
+.progreso { margin: 8px 0 0; color: #6740c9; font-size: 12px; }
+@media (max-width: 440px) { button { min-height: 44px; } .perfil { max-width: 90px; } .acceso { width: 100%; justify-content: space-between; } }

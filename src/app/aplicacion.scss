@@ -1804,3 +1804,16 @@ textarea {
     content: 'Estado';
   }
 }
+.opcion-doble-factor {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #e7def5;
+  border-radius: 12px;
+  background: #faf8ff;
+  cursor: pointer;
+  input { width: 19px; height: 19px; flex: 0 0 19px; margin: 2px 0; accent-color: #7042d6; }
+  span { display: grid; gap: 5px; }
+  small { line-height: 1.5; }
+}

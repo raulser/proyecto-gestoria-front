@@ -1,0 +1,31 @@
+<article [attr.aria-label]="usuario().nombre">
+  <header>
+    <span class="avatar" aria-hidden="true">{{ usuario().nombre.slice(0, 2).toUpperCase() }}</span>
+    <div class="identidad">
+      <strong>{{ usuario().nombre }}</strong>
+      <span>{{ usuario().email }}</span>
+    </div>
+    <span class="perfil">{{ perfil() }}</span>
+  </header>
+  <div class="seguridad">
+    <div class="estado">
+      <span class="indicador" [class.activado]="usuario().dobleFactorRequerido" aria-hidden="true"></span>
+      <span>Doble autenticación <strong>{{ usuario().dobleFactorRequerido ? 'Activada' : 'Desactivada' }}</strong></span>
+    </div>
+    <button type="button" class="cambiar" [disabled]="guardando()"
+      [attr.aria-label]="(usuario().dobleFactorRequerido ? 'Desactivar' : 'Activar') + ' doble autenticación de ' + usuario().nombre"
+      (click)="dobleFactor.emit()">{{ usuario().dobleFactorRequerido ? 'Desactivar 2FA' : 'Activar 2FA' }}</button>
+  </div>
+  <footer>
+    <button type="button" class="restablecer" [disabled]="guardando()" (click)="restablecer.emit()"
+      [attr.aria-label]="'Restablecer autenticador de ' + usuario().nombre">Restablecer autenticador</button>
+    <div class="acceso">
+      <span>{{ usuario().activo ? 'Acceso activo' : 'Acceso desactivado' }}</span>
+      <button type="button" [disabled]="cuentaPropia() || guardando()" (click)="acceso.emit()"
+        [attr.aria-label]="(usuario().activo ? 'Desactivar' : 'Activar') + ' acceso de ' + usuario().nombre">
+        {{ usuario().activo ? 'Desactivar acceso' : 'Activar acceso' }}
+      </button>
+    </div>
+  </footer>
+  @if (guardando()) { <p class="progreso" role="status">Actualizando seguridad…</p> }
+</article>

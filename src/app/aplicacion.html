@@ -1575,7 +1575,11 @@
                   </select>
                 </label>
               }
-              <button type="submit" class="primary">Crear usuario</button>
+              <label class="opcion-doble-factor">
+                <input type="checkbox" name="userMfa" [(ngModel)]="nuevoUsuario.dobleFactorRequerido" />
+                <span><strong>Doble autenticación</strong><small>Al entrar vinculará su móvil con un QR y utilizará un código temporal.</small></span>
+              </label>
+              <button type="submit" class="primary" [disabled]="creandoUsuario">{{ creandoUsuario ? 'Creando usuario…' : 'Crear usuario' }}</button>
             </form>
           </div>
 
@@ -1588,24 +1592,10 @@
             </div>
             <div class="documento-listar">
               @for (usuario of usuarios; track usuario.id) {
-                <article class="documento-row">
-                  <span class="avatar">{{ usuario.nombre.slice(0, 2).toUpperCase() }}</span>
-                  <div>
-                    <strong>{{ nombrePersona(usuario.nombre) }}</strong>
-                    <span>{{ usuario.email }} · {{ etiquetaRol(usuario.rol) }}</span>
-                  </div>
-                  <span class="pill" [class.off]="!usuario.activo">{{
-                    usuario.activo ? 'Activo' : 'Inactivo'
-                  }}</span>
-                  <button
-                    type="button"
-                    class="secondary small"
-                    [disabled]="usuario.id === usuarioActual.id"
-                    (click)="alternarUsuario(usuario)"
-                  >
-                    {{ usuario.activo ? 'Desactivar' : 'Activar' }}
-                  </button>
-                </article>
+                <app-acceso-usuario [usuario]="usuario" [perfil]="etiquetaRol(usuario.rol)"
+                  [cuentaPropia]="usuario.id === usuarioActual.id" [guardando]="seguridadUsuariosPendientes.has(usuario.id)"
+                  (dobleFactor)="gestionarDobleFactor(usuario)" (restablecer)="gestionarDobleFactor(usuario, true)"
+                  (acceso)="alternarUsuario(usuario)" />
               }
             </div>
           </div>
@@ -1761,7 +1751,7 @@
                 <div>
                   <span>Segundo factor</span>
                   <strong>{{
-                    esCliente() ? 'Recomendado' : 'Obligatorio para perfiles internos'
+                    usuarioActual.dobleFactorRequerido ? 'Activado por tu gestoría' : 'Desactivado por tu gestoría'
                   }}</strong>
                 </div>
                 <a

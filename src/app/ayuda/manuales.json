@@ -101,7 +101,10 @@
           ]
         }
       ],
-      "capturas": ["acceso", "panel-cliente"]
+      "capturas": [
+        "acceso",
+        "panel-cliente"
+      ]
     },
     "entregas-cliente": {
       "titulo": "Preparar y enviar una entrega",
@@ -181,7 +184,11 @@
           ]
         }
       ],
-      "capturas": ["entrega-cliente", "subir-cliente", "reapertura-cliente"]
+      "capturas": [
+        "entrega-cliente",
+        "subir-cliente",
+        "reapertura-cliente"
+      ]
     },
     "archivos-cliente": {
       "titulo": "Organizar y consultar tus archivos",
@@ -258,7 +265,10 @@
           ]
         }
       ],
-      "capturas": ["archivos-cliente", "correccion-cliente"]
+      "capturas": [
+        "archivos-cliente",
+        "correccion-cliente"
+      ]
     },
     "expediente-cliente": {
       "titulo": "Consultar tu expediente y obligaciones",
@@ -321,7 +331,9 @@
           "incidencias": []
         }
       ],
-      "capturas": ["expediente-cliente"]
+      "capturas": [
+        "expediente-cliente"
+      ]
     },
     "inicio-gestor": {
       "titulo": "Panel y organización del trabajo",
@@ -370,7 +382,12 @@
           "incidencias": []
         }
       ],
-      "capturas": ["acceso", "panel-gestor", "panel-administrador", "movil-gestor"]
+      "capturas": [
+        "acceso",
+        "panel-gestor",
+        "panel-administrador",
+        "movil-gestor"
+      ]
     },
     "clientes": {
       "titulo": "Alta de clientes y plan documental",
@@ -546,7 +563,9 @@
           "incidencias": []
         }
       ],
-      "capturas": ["perfil-fiscal"]
+      "capturas": [
+        "perfil-fiscal"
+      ]
     },
     "solicitudes": {
       "titulo": "Pedir documentación y revisar entregas",
@@ -630,7 +649,11 @@
           ]
         }
       ],
-      "capturas": ["crear-solicitud", "editar-solicitud", "reabrir-gestor"]
+      "capturas": [
+        "crear-solicitud",
+        "editar-solicitud",
+        "reabrir-gestor"
+      ]
     },
     "documentos": {
       "titulo": "Documentos, subida y publicación",
@@ -715,7 +738,9 @@
         },
         {
           "titulo": "Subir un borrador o publicar un documento de la gestoría",
-          "antes": ["Prepara la versión correcta y confirma el cliente antes de publicar."],
+          "antes": [
+            "Prepara la versión correcta y confirma el cliente antes de publicar."
+          ],
           "pasos": [
             {
               "haz": "En el expediente, pulsa Subir documento. Si llegas desde Subir general, selecciona primero el cliente.",
@@ -835,7 +860,9 @@
           "incidencias": []
         }
       ],
-      "capturas": ["seguimiento-obligacion"]
+      "capturas": [
+        "seguimiento-obligacion"
+      ]
     },
     "estados-solicitudes": {
       "titulo": "Estados de las peticiones documentales",
@@ -961,6 +988,8 @@
         "Equipo permite crear usuarios, seleccionar su perfil y activar o desactivar accesos. Revisa el nombre y el correo para identificar a cada persona antes de cambiar su acceso.",
         "Administrador gestiona equipo, asignaciones y configuración; Gestor trabaja con los clientes que tenga asignados; Cliente accede al expediente al que está vinculado. Crear una ficha de cliente y crear su usuario de acceso son operaciones distintas.",
         "La clave temporal del alta debe cumplir la política indicada en el formulario. Facilita el acceso por un canal adecuado y comprueba que la persona cambia su clave y configura la seguridad de su cuenta según las indicaciones del portal.",
+        "Doble autenticación está activada por defecto al crear cualquier perfil, incluido Cliente. Puedes desmarcarla antes de crear la cuenta. En Equipo y accesos se muestra la política de cada persona, con Activar 2FA o Desactivar 2FA. Desactivarla permite entrar solo con contraseña y conserva el autenticador vinculado; volver a activarla reutiliza esa vinculación.",
+        "Restablecer autenticador se utiliza si la persona pierde el móvil, lo cambia o pierde acceso a su aplicación de códigos. Retira todas sus vinculaciones de autenticador anteriores y cierra sus sesiones. Con doble factor activado, al entrar deberá configurar un nuevo QR. Esta acción no cambia su contraseña ni desactiva el doble factor. Comprueba la identidad de quien solicita recuperar el acceso antes de confirmarla.",
         "Asignación de clientes vincula cada gestor con sus expedientes. Si alguien no ve un cliente, comprueba la cuenta activa, su perfil y esa asignación antes de crear un duplicado."
       ],
       "destino": "equipo",
@@ -985,12 +1014,16 @@
               "veras": "Esta selección determina qué expediente podrá consultar la nueva cuenta."
             },
             {
+              "haz": "Revisa la casilla Doble autenticación antes de crear la cuenta. Está activada por defecto para todos los perfiles.",
+              "veras": "Si la mantienes activada, el primer acceso pedirá cambiar la clave temporal y vincular un autenticador mediante un QR. Si la desmarcas, utilizará solo contraseña."
+            },
+            {
               "haz": "Pulsa Crear usuario y comprueba Equipo y accesos.",
               "veras": "La cuenta debe aparecer con el perfil y estado previstos. Facilita su acceso por un canal adecuado, sin publicar contraseñas en conversaciones documentales."
             },
             {
-              "haz": "Pide a la persona que complete las indicaciones de seguridad de su cuenta.",
-              "veras": "La gestión de contraseña y segundo factor está en Ayuda → Cuenta, soporte y privacidad."
+              "haz": "Pide a la persona que entre y complete el cambio de clave y, cuando corresponda, la vinculación del autenticador.",
+              "veras": "El QR y los códigos se configuran en su propio dispositivo. El administrador no necesita conocerlos."
             }
           ],
           "comprobar": [
@@ -1015,7 +1048,7 @@
               "veras": "Se retira esa relación entre gestor y cliente; no se elimina la ficha documental."
             },
             {
-              "haz": "Para suspender una cuenta, identifica nombre, correo y perfil en Equipo y accesos antes de usar Desactivar.",
+              "haz": "Para suspender una cuenta, identifica nombre, correo y perfil en Equipo y accesos antes de usar Desactivar acceso.",
               "veras": "Se cambia el acceso de esa persona. Evita desactivar una cuenta diferente por coincidencia de nombre."
             },
             {
@@ -1028,9 +1061,50 @@
             "El usuario cliente está vinculado a su propia ficha."
           ],
           "incidencias": []
+        },
+        {
+          "titulo": "Cambiar el doble factor o recuperar un autenticador perdido",
+          "antes": [
+            "Solo un administrador de la gestoría puede ejecutar estas acciones sobre sus usuarios. Confirma la identidad de la persona antes de recuperar su acceso."
+          ],
+          "pasos": [
+            {
+              "haz": "Abre Equipo y localiza la persona por su nombre y correo.",
+              "veras": "Su tarjeta diferencia el acceso a la cuenta de la doble autenticación. Desactivar acceso suspende la cuenta; Desactivar 2FA solo retira la exigencia del código."
+            },
+            {
+              "haz": "Para exigir o dejar de exigir el código, utiliza Activar 2FA o Desactivar 2FA y revisa la confirmación.",
+              "veras": "La nueva política se guarda, queda registrada y se cierran las sesiones anteriores. Si no había autenticador vinculado, al activar 2FA se solicitará un QR al entrar."
+            },
+            {
+              "haz": "Si ha perdido el móvil, ha cambiado de dispositivo o no puede obtener sus códigos, utiliza Restablecer autenticador.",
+              "veras": "La confirmación identifica a la persona. Mantén activado el doble factor para que la recuperación termine vinculando el nuevo móvil."
+            },
+            {
+              "haz": "Confirma Restablecer autenticador y pide a la persona que vuelva a iniciar sesión con su usuario y contraseña.",
+              "veras": "La vinculación anterior deja de ser válida. Con 2FA activado se mostrará un nuevo QR, que debe registrar en su propia aplicación de autenticación."
+            },
+            {
+              "haz": "Comprueba con la persona que completa la vinculación y puede entrar usando el código del nuevo autenticador.",
+              "veras": "No se cambia su contraseña ni se crea otra cuenta. Si el doble factor estaba desactivado, el restablecimiento lo conserva desactivado; puedes activarlo para exigir la nueva vinculación."
+            }
+          ],
+          "comprobar": [
+            "La política y la persona seleccionadas son correctas.",
+            "La recuperación no se ha resuelto dejando sin doble factor una cuenta que debía tenerlo.",
+            "Actividad reciente recoge el cambio o el restablecimiento sin guardar QR, secretos ni códigos."
+          ],
+          "incidencias": [
+            "Si se cambia la seguridad de tu propia cuenta, tendrás que volver a iniciar sesión.",
+            "Restablecer autenticador no recupera la contraseña: si tampoco se recuerda, hay que tramitar además su recuperación."
+          ]
         }
       ],
-      "capturas": ["equipo-alta", "equipo-asignaciones"]
+      "capturas": [
+        "equipo-alta",
+        "equipo-asignaciones",
+        "restablecer-autenticador"
+      ]
     },
     "plan": {
       "titulo": "Plan, consumo y configuración",
@@ -1088,11 +1162,15 @@
               "veras": "La información visible al usuario debe identificar los canales reales de la gestoría."
             }
           ],
-          "comprobar": ["No quedan datos de ejemplo como canales de contacto reales."],
+          "comprobar": [
+            "No quedan datos de ejemplo como canales de contacto reales."
+          ],
           "incidencias": []
         }
       ],
-      "capturas": ["plan-consumo"]
+      "capturas": [
+        "plan-consumo"
+      ]
     },
     "incidencias": {
       "titulo": "Subidas, errores y dudas frecuentes",
@@ -1148,6 +1226,8 @@
         "Ayuda incluye este manual adaptado a tu perfil. Puedes buscar un tema, leer sus capítulos o usar Ver PDF y Descargar PDF para consultar una copia completa. Si tu navegador no muestra el PDF integrado, utiliza Abrir PDF en otra pestaña o vuelve a Leer manual.",
         "Dentro de Cuenta, soporte y privacidad encontrarás tu usuario, perfil, el acceso a la gestión de contraseña y segundo factor, los datos de soporte y la información de privacidad disponible.",
         "La gestión de la cuenta se abre en una pestaña aparte. Sigue allí las indicaciones para contraseña, segundo factor y sesiones. Cierra sesión cuando termines de trabajar en un dispositivo compartido.",
+        "La gestoría decide si tu cuenta requiere doble autenticación. Si está activada, después de la contraseña se solicita un código temporal de tu aplicación de autenticación. La primera vez aparece un QR: regístralo en tu aplicación (por ejemplo, Google Authenticator, Microsoft Authenticator o Aegis), introduce el código que muestra y confirma. Los códigos tienen 6 dígitos y cambian cada 30 segundos; el móvil no necesita Internet para generarlos.",
+        "Si pierdes el móvil, lo cambias o pierdes acceso a tu aplicación de códigos, contacta con el administrador de tu gestoría. Puede restablecer el autenticador tras verificar tu identidad. Tendrás que volver a entrar con tu contraseña y vincular el nuevo móvil con otro QR. No compartas QR, claves de configuración ni códigos temporales por conversaciones, correo o capturas.",
         "La sesión se renueva automáticamente mientras trabajas, sin recargar la pantalla ni modificar lo que escribes. Se cierra tras 2 horas de inactividad o al alcanzar 24 horas desde el acceso. Si deja de ser válida, se abre el login con Se ha perdido la sesión. Inicia sesión de nuevo. Al volver a entrar, comprueba si tu última operación terminó antes de repetirla.",
         "Si no recuerdas tu contraseña, utiliza ¿Olvidaste la contraseña? en el acceso y sigue las instrucciones. Si el correo de recuperación no llega, contacta con la gestoría para que revise tu cuenta y el destinatario.",
         "Tu cuenta es personal. Si necesitas acceder a otro expediente o función, pide a la gestoría que revise tus permisos. No utilices la cuenta de otra persona."
@@ -1183,9 +1263,47 @@
             "La cuenta se ha cerrado si el dispositivo es compartido."
           ],
           "incidencias": []
+        },
+        {
+          "titulo": "Configurar el autenticador y recuperar el acceso",
+          "antes": [
+            "Necesitas tu usuario, contraseña y una aplicación de autenticación en tu móvil. La gestoría debe haber activado el doble factor de tu cuenta."
+          ],
+          "pasos": [
+            {
+              "haz": "Inicia sesión. Si la contraseña es temporal, cámbiala siguiendo las indicaciones.",
+              "veras": "Si todavía no has vinculado un autenticador, el acceso te pedirá configurarlo antes de entrar al portal."
+            },
+            {
+              "haz": "Añade una cuenta en tu aplicación de autenticación y escanea el QR que muestra Savia.",
+              "veras": "Si estás usando el mismo móvil y no puedes escanearlo, utiliza la opción de configuración manual de Keycloak e introduce la clave en tu autenticador. Esa clave es privada."
+            },
+            {
+              "haz": "Escribe el código de 6 dígitos que genera tu aplicación y confirma la configuración.",
+              "veras": "A partir de entonces utilizarás tu contraseña y un código vigente en cada nueva sesión. El código cambia cada 30 segundos."
+            },
+            {
+              "haz": "Si un código no se acepta, espera el siguiente y comprueba que la hora del móvil está en automático.",
+              "veras": "Utiliza el código de la cuenta correcta y evita introducir uno que esté a punto de cambiar."
+            },
+            {
+              "haz": "Si no puedes recuperar tus códigos por pérdida o cambio del móvil, solicita Restablecer autenticador al administrador.",
+              "veras": "Tras verificar tu identidad, invalidará la vinculación anterior. Vuelve a entrar y registra el nuevo QR. No es necesario crear otra cuenta."
+            }
+          ],
+          "comprobar": [
+            "Puedes iniciar una nueva sesión con el código de tu autenticador.",
+            "Solo tú conservas el QR o la clave privada de configuración."
+          ],
+          "incidencias": [
+            "El administrador puede activar o desactivar la exigencia del código. No puedes cambiar esa política desde tu cuenta.",
+            "El restablecimiento del autenticador no cambia tu contraseña."
+          ]
         }
       ],
-      "capturas": ["cuenta-soporte"]
+      "capturas": [
+        "cuenta-soporte"
+      ]
     }
   },
   "capturas": {
@@ -1195,7 +1313,9 @@
       "archivo": "manuales/capturas/panel-administrador.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["administrador"],
+      "perfiles": [
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1232,7 +1352,10 @@
       "archivo": "manuales/capturas/clientes-directorio.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1269,7 +1392,10 @@
       "archivo": "manuales/capturas/expediente-documentos.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1306,7 +1432,10 @@
       "archivo": "manuales/capturas/compartir-borrador.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1334,7 +1463,10 @@
       "archivo": "manuales/capturas/bandeja-documentos.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1371,7 +1503,10 @@
       "archivo": "manuales/capturas/revisar-documento.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1399,7 +1534,10 @@
       "archivo": "manuales/capturas/motivo-correccion.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1418,7 +1556,10 @@
       "archivo": "manuales/capturas/alta-cliente-datos.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1446,7 +1587,10 @@
       "archivo": "manuales/capturas/alta-plan-documental.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1474,7 +1618,10 @@
       "archivo": "manuales/capturas/alta-fechas-documentales.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1511,7 +1658,10 @@
       "archivo": "manuales/capturas/alta-revision.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1539,7 +1689,10 @@
       "archivo": "manuales/capturas/perfil-fiscal.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1567,7 +1720,10 @@
       "archivo": "manuales/capturas/seguimiento-obligacion.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1599,30 +1755,41 @@
       ]
     },
     "equipo-alta": {
-      "titulo": "Crear una cuenta vinculada al expediente",
-      "descripcion": "El administrador elige el perfil y, para una cuenta de cliente, el expediente que podrá consultar.",
+      "titulo": "Crear una cuenta y elegir su doble autenticación",
+      "descripcion": "El administrador decide el perfil y la exigencia de doble factor antes de crear la cuenta. La lista diferencia esta protección del acceso activo.",
       "archivo": "manuales/capturas/equipo-alta.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["administrador"],
+      "perfiles": [
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
-          "x": 22.374267578125,
-          "y": 65.05425347222223,
-          "ancho": 25.819091796875,
-          "alto": 5.555555555555555,
-          "titulo": "Permisos de la cuenta",
-          "descripcion": "Administrador, Gestor o Cliente según su función."
+          "x": 22.109375,
+          "y": 64.58333333333333,
+          "ancho": 25.546875,
+          "alto": 5.416666666666667,
+          "titulo": "Perfil de la cuenta",
+          "descripcion": "Selecciona Administrador, Gestor o Cliente. Si eliges Cliente aparecerá el expediente al que vincularlo."
         },
         {
           "numero": 2,
-          "x": 22.374267578125,
-          "y": 75.47092013888889,
-          "ancho": 25.819091796875,
-          "alto": 5.555555555555555,
-          "titulo": "Expediente permitido",
-          "descripcion": "Elige la ficha correcta antes de crear el usuario."
+          "x": 22.109375,
+          "y": 71.80555555555556,
+          "ancho": 25.546875,
+          "alto": 11.25,
+          "titulo": "Doble factor al crear",
+          "descripcion": "La casilla aparece activada por defecto, también para clientes. Determina si deberá vincular un autenticador al entrar."
+        },
+        {
+          "numero": 3,
+          "x": 85.703125,
+          "y": 42.5,
+          "ancho": 6.171875,
+          "alto": 5.138888888888888,
+          "titulo": "Cambiar la política",
+          "descripcion": "Activa o desactiva la exigencia del código en una cuenta existente; no suspende su acceso."
         }
       ]
     },
@@ -1632,7 +1799,9 @@
       "archivo": "manuales/capturas/equipo-asignaciones.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["administrador"],
+      "perfiles": [
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1660,7 +1829,9 @@
       "archivo": "manuales/capturas/plan-consumo.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["administrador"],
+      "perfiles": [
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1688,7 +1859,11 @@
       "archivo": "manuales/capturas/acceso.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente", "gestor", "administrador"],
+      "perfiles": [
+        "cliente",
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1716,7 +1891,9 @@
       "archivo": "manuales/capturas/panel-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1744,7 +1921,9 @@
       "archivo": "manuales/capturas/entrega-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1763,7 +1942,9 @@
       "archivo": "manuales/capturas/reapertura-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1782,7 +1963,9 @@
       "archivo": "manuales/capturas/subir-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1819,7 +2002,9 @@
       "archivo": "manuales/capturas/archivos-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1847,7 +2032,9 @@
       "archivo": "manuales/capturas/correccion-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1875,7 +2062,9 @@
       "archivo": "manuales/capturas/expediente-cliente.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["cliente"],
+      "perfiles": [
+        "cliente"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1894,7 +2083,9 @@
       "archivo": "manuales/capturas/panel-gestor.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor"],
+      "perfiles": [
+        "gestor"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1922,7 +2113,10 @@
       "archivo": "manuales/capturas/crear-solicitud.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1959,7 +2153,10 @@
       "archivo": "manuales/capturas/editar-solicitud.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -1987,7 +2184,10 @@
       "archivo": "manuales/capturas/reabrir-gestor.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -2006,7 +2206,10 @@
       "archivo": "manuales/capturas/cuenta-soporte.jpg",
       "ancho": 1280,
       "alto": 720,
-      "perfiles": ["gestor", "administrador"],
+      "perfiles": [
+        "gestor",
+        "administrador"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -2034,7 +2237,9 @@
       "archivo": "manuales/capturas/movil-gestor.jpg",
       "ancho": 390,
       "alto": 844,
-      "perfiles": ["gestor"],
+      "perfiles": [
+        "gestor"
+      ],
       "marcas": [
         {
           "numero": 1,
@@ -2044,6 +2249,36 @@
           "alto": 5.805687203791469,
           "titulo": "Opciones secundarias",
           "descripcion": "Abre este menú para localizar Subir y Ayuda."
+        }
+      ]
+    },
+    "restablecer-autenticador": {
+      "titulo": "Recuperar el acceso al cambiar o perder el móvil",
+      "descripcion": "La confirmación identifica a la persona y explica el efecto. La recuperación retira el autenticador anterior, cierra las sesiones y mantiene la política de doble factor.",
+      "archivo": "manuales/capturas/restablecer-autenticador.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": [
+        "administrador"
+      ],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 34.375,
+          "y": 41.94444444444444,
+          "ancho": 30.625,
+          "alto": 10.833333333333334,
+          "titulo": "Verificar persona y consecuencias",
+          "descripcion": "Confirma la identidad de quien pide recuperar el acceso. Con 2FA activado deberá registrar un nuevo QR al entrar."
+        },
+        {
+          "numero": 2,
+          "x": 51.40625,
+          "y": 55.97222222222222,
+          "ancho": 15.9375,
+          "alto": 5.555555555555555,
+          "titulo": "Confirmar la recuperación",
+          "descripcion": "El autenticador anterior dejará de servir. Cancelar cierra el diálogo sin aplicar el restablecimiento."
         }
       ]
     }

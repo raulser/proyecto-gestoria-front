@@ -105,6 +105,7 @@ Invoke-SaviaCompose -Argumentos @('exec', '-T', 'lan', 'nginx', '-t')
 Invoke-SaviaCompose -Argumentos @('exec', '-T', 'lan', 'nginx', '-s', 'reload')
 $origenAnterior = if ($estadoAnterior) { $estadoAnterior.origen } else { $origen }
 Set-SaviaClienteLan -Origen $origen -OrigenAnterior $origenAnterior
+& (Join-Path $raizProyecto 'proyecto-gestoria-back/ops/keycloak/configurar-doble-factor.ps1') -CuentasDemo
 @{ ip=$Ip; origen=$origen; certificado="http://${Ip}:$PuertoCertificado"; huellaCa=$huellaCa; caThumbprint=$ca.Thumbprint } |
     ConvertTo-Json | Set-Content $archivoEstado -Encoding utf8NoBOM
 # Una comprobación TLS real: usa la CA instalada, sin saltarse su validación.
