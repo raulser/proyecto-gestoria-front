@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, provideHttpClient } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { DeferBlockState, TestBed } from '@angular/core/testing';
 import { Aplicacion } from './aplicacion';
 import { Subject, throwError } from 'rxjs';
 import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
@@ -32,6 +32,42 @@ describe('Aplicacion', () => {
     expect(app.nuevoUsuario.dobleFactorRequerido).toBe(true);
     app.nuevoUsuario.rol = 'CLIENTE';
     expect(app.nuevoUsuario.dobleFactorRequerido).toBe(true);
+  });
+
+  it('seleccionar Cliente muestra el buscador de expediente y conserva la elección de MFA', async () => {
+    const fixture = TestBed.createComponent(Aplicacion);
+    const app = fixture.componentInstance;
+    vi.spyOn(app, 'ngOnInit').mockImplementation(() => {});
+    app.usuarioActual = usuario('ADMIN'); app.loading = false; app.vistaActiva = 'equipo';
+    app.nuevoUsuario.dobleFactorRequerido = false;
+    app.clientes = [cliente(21, 'Cliente de prueba', true, 'AUTONOMO')];
+    fixture.detectChanges();
+    const elegir = fixture.nativeElement.querySelector('app-selector-perfil input[value=CLIENTE]') as HTMLInputElement;
+    elegir.click();
+    await fixture.whenStable(); fixture.detectChanges();
+    const buscadorDiferido = (await fixture.getDeferBlocks())[0];
+    await buscadorDiferido.render(DeferBlockState.Complete);
+    fixture.detectChanges();
+    expect(app.nuevoUsuario.rol).toBe('CLIENTE');
+    expect(app.nuevoUsuario.dobleFactorRequerido).toBe(false);
+    expect(fixture.nativeElement.querySelector('select[name=userRole]')).toBeNull();
+    const buscar = fixture.nativeElement.querySelector('app-selector-cliente input') as HTMLInputElement;
+    expect(buscar.placeholder).toBe('Buscar por nombre o NIF');
+    buscar.focus(); fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('app-selector-cliente [role=option]').length).toBe(1);
+    fixture.nativeElement.querySelector('app-selector-cliente [role=option]').click();
+    await fixture.whenStable();
+    expect(app.nuevoUsuario.clienteId).toBe(21);
+  });
+
+  it('no intenta crear una cuenta de Cliente sin seleccionar su expediente', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    Object.assign(app.nuevoUsuario, { nombre: 'Persona', email: 'persona@example.test', contrasena: 'Temporal-2026!', rol: 'CLIENTE' });
+    const enviar = vi.spyOn(TestBed.inject(HttpClient), 'post');
+    app.agregarUsuario();
+    expect(enviar).not.toHaveBeenCalled();
+    expect(app.error).toContain('Selecciona el cliente');
   });
 
   it('cancelar la desactivación de MFA no envía ninguna petición', async () => {

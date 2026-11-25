@@ -1,0 +1,21 @@
+:host { display: block; min-width: 0; }
+* { box-sizing: border-box; }
+fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+legend { margin-bottom: 9px; padding: 0; color: #46536a; font-size: 13px; font-weight: 550; }
+.perfiles { display: grid; gap: 8px; }
+.perfil { display: flex; align-items: center; gap: 12px; min-height: 65px; padding: 11px 12px; border: 1px solid #e6e1ed; border-radius: 12px; background: #fff; cursor: pointer; transition: border-color 140ms, background 140ms; }
+.perfil:hover { border-color: #b5a0df; background: #fcfaff; }
+.perfil.seleccionado { border-color: #8b67d5; background: #f8f5ff; box-shadow: 0 0 0 1px #8b67d515; }
+.perfil:has(input:focus-visible) { outline: 3px solid #bca5eb; outline-offset: 3px; }
+.icono { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 9px; background: #f4f2f7; color: #82758f; }
+.seleccionado .icono { background: #ebe2fb; color: #7140c8; }
+.texto { display: grid; gap: 4px; min-width: 0; flex: 1; }
+strong { color: #3a3048; font-size: 13px; font-weight: 650; }
+small { color: #7b7288; font-size: 11px; line-height: 1.45; }
+.perfil input[type='radio'] { appearance: none; position: relative; flex: 0 0 17px; width: 17px; min-width: 17px; max-width: 17px; height: 17px; min-height: 17px; max-height: 17px; padding: 0; margin: 0; border: 1.5px solid #c8c0d3; border-radius: 50%; background: white; box-shadow: none; cursor: pointer; }
+.perfil input[type='radio']:checked { border: 5px solid #7748cc; }
+.perfil input[type='radio']:focus { outline: 0; box-shadow: none; }
+fieldset:disabled .perfil { opacity: .6; cursor: default; }
+fieldset:disabled input { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .perfil { transition: none; } }
+@media (forced-colors: active) { .perfil input[type='radio'] { appearance: auto; } .perfil.seleccionado { outline: 2px solid Highlight; } }

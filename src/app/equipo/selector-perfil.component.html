@@ -1,0 +1,21 @@
+<fieldset [disabled]="deshabilitado()">
+  <legend>Perfil</legend>
+  <div class="perfiles">
+    @for (perfil of perfiles; track perfil.valor) {
+      <label class="perfil" [class.seleccionado]="valor() === perfil.valor">
+        <span class="icono" aria-hidden="true">
+          @switch (perfil.valor) {
+            @case ('ADMIN') { <svg lucideSettings size="19"></svg> }
+            @case ('ASESOR') { <svg lucideUsers size="19"></svg> }
+            @case ('CLIENTE') { <svg lucideFileText size="19"></svg> }
+          }
+        </span>
+        <span class="texto"><strong>{{ perfil.nombre }}</strong><small [id]="grupo + '-' + perfil.valor + '-detalle'">{{ perfil.detalle }}</small></span>
+        <input type="radio" [name]="grupo" [value]="perfil.valor"
+          [attr.aria-describedby]="grupo + '-' + perfil.valor + '-detalle'"
+          [attr.aria-label]="perfil.nombre" [checked]="valor() === perfil.valor"
+          (change)="valor.set(perfil.valor)" />
+      </label>
+    }
+  </div>
+</fieldset>

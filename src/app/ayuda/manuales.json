@@ -1006,12 +1006,12 @@
               "veras": "La clave debe cumplir la política indicada: al menos 12 caracteres con mayúscula, minúscula, número y símbolo."
             },
             {
-              "haz": "Elige Perfil: Administrador, Gestor o Cliente.",
-              "veras": "Administrador gestiona la organización; Gestor trabaja con su cartera; Cliente consulta su expediente vinculado."
+              "haz": "En Perfil, pulsa la tarjeta Administrador, Gestor o Cliente. Puedes recorrer las opciones con las flechas del teclado.",
+              "veras": "La tarjeta elegida queda marcada con un borde violeta y un círculo seleccionado. Cada opción explica su ámbito de acceso."
             },
             {
-              "haz": "Si eliges Cliente, selecciona Cliente vinculado y comprueba su nombre.",
-              "veras": "Esta selección determina qué expediente podrá consultar la nueva cuenta."
+              "haz": "Si eliges Cliente, busca el Cliente vinculado por su nombre o NIF y selecciona el expediente correcto.",
+              "veras": "El buscador muestra coincidencias concretas, sin desplegar toda la cartera. Esta selección determina qué expediente podrá consultar la nueva cuenta."
             },
             {
               "haz": "Revisa la casilla Doble autenticación antes de crear la cuenta. Está activada por defecto para todos los perfiles.",
@@ -1756,7 +1756,7 @@
     },
     "equipo-alta": {
       "titulo": "Crear una cuenta y elegir su doble autenticación",
-      "descripcion": "El administrador decide el perfil y la exigencia de doble factor antes de crear la cuenta. La lista diferencia esta protección del acceso activo.",
+      "descripcion": "Las tarjetas permiten comparar los tres perfiles y ver cuál está seleccionado. Para Cliente aparece un buscador de expediente por nombre o NIF.",
       "archivo": "manuales/capturas/equipo-alta.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1765,31 +1765,22 @@
       ],
       "marcas": [
         {
+          "alto": 32.77777777777778,
+          "ancho": 25.843751430511475,
+          "descripcion": "Pulsa una tarjeta para seleccionar Administrador, Gestor o Cliente. La opción elegida queda marcada.",
           "numero": 1,
-          "x": 22.109375,
-          "y": 64.58333333333333,
-          "ancho": 25.546875,
-          "alto": 5.416666666666667,
           "titulo": "Perfil de la cuenta",
-          "descripcion": "Selecciona Administrador, Gestor o Cliente. Si eliges Cliente aparecerá el expediente al que vincularlo."
+          "x": 22.359375953674316,
+          "y": 48.83333418104384
         },
         {
+          "alto": 9.194445080227322,
+          "ancho": 25.843751430511475,
+          "descripcion": "Busca y selecciona su expediente por nombre o NIF.",
           "numero": 2,
-          "x": 22.109375,
-          "y": 71.80555555555556,
-          "ancho": 25.546875,
-          "alto": 11.25,
-          "titulo": "Doble factor al crear",
-          "descripcion": "La casilla aparece activada por defecto, también para clientes. Determina si deberá vincular un autenticador al entrar."
-        },
-        {
-          "numero": 3,
-          "x": 85.703125,
-          "y": 42.5,
-          "ancho": 6.171875,
-          "alto": 5.138888888888888,
-          "titulo": "Cambiar la política",
-          "descripcion": "Activa o desactiva la exigencia del código en una cuenta existente; no suspende su acceso."
+          "titulo": "Expediente vinculado",
+          "x": 22.359375953674316,
+          "y": 83.41667175292969
         }
       ]
     },

@@ -2,52 +2,54 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RespuestaCliente } from '../modelos-aplicacion';
 
+let siguienteSelector = 0;
+
 @Component({
   selector: 'app-selector-cliente',
   imports: [FormsModule],
   template: ` <div class="selector" (focusout)="salir($event)">
-    <label for="buscar-cliente-documentos">Cliente</label>
+    <label [for]="identificador">{{ etiqueta }}</label>
     <div class="entrada">
       <input
-        id="buscar-cliente-documentos"
+        [id]="identificador"
         role="combobox"
         autocomplete="off"
         aria-autocomplete="list"
-        aria-controls="clientes-documentos"
+        [attr.aria-controls]="identificador + '-opciones'"
         [attr.aria-expanded]="abierto"
         [attr.aria-activedescendant]="
-          abierto && resultados[activo] ? 'cliente-documentos-' + resultados[activo].id : null
+          abierto && resultados[activo] ? identificador + '-' + resultados[activo].id : null
         "
-        placeholder="Todos los clientes"
+        [placeholder]="placeholder"
+        [disabled]="deshabilitado"
+        [ngModelOptions]="{ standalone: true }"
         [ngModel]="abierto ? texto : nombreSeleccionado"
         (ngModelChange)="texto = $event; activo = 0"
         (focus)="abrir()"
         (keydown)="tecla($event)"
       />
       @if (seleccionado !== null) {
-        <button type="button" aria-label="Ver todos los clientes" (click)="elegir(null)">×</button>
+        <button type="button" [disabled]="deshabilitado"
+          [attr.aria-label]="permitirTodos ? 'Ver todos los clientes' : 'Quitar cliente seleccionado'"
+          (click)="elegir(null)">×</button>
       }
     </div>
     @if (abierto) {
       <div
         class="opciones"
-        id="clientes-documentos"
+        [id]="identificador + '-opciones'"
         role="listbox"
         aria-label="Clientes encontrados"
       >
-        <button
-          type="button"
-          role="option"
-          [attr.aria-selected]="seleccionado === null"
-          (click)="elegir(null)"
-        >
-          Todos los clientes
-        </button>
+        @if (permitirTodos) {
+          <button type="button" role="option" [attr.aria-selected]="seleccionado === null"
+            (click)="elegir(null)">Todos los clientes</button>
+        }
         @for (cliente of resultados; track cliente.id; let i = $index) {
           <button
             type="button"
             role="option"
-            [id]="'cliente-documentos-' + cliente.id"
+            [id]="identificador + '-' + cliente.id"
             [class.enfocado]="activo === i"
             [attr.aria-selected]="seleccionado === cliente.id"
             (mouseenter)="activo = i"
@@ -79,13 +81,13 @@ import { RespuestaCliente } from '../modelos-aplicacion';
         display: block;
         margin-bottom: 7px;
         color: #5b6175;
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 600;
       }
       .entrada {
         display: flex;
         align-items: center;
-        height: 42px;
+        min-height: 44px;
         border: 1px solid #e2dfea;
         border-radius: 9px;
         background: #fff;
@@ -93,7 +95,7 @@ import { RespuestaCliente } from '../modelos-aplicacion';
       input {
         width: 100%;
         min-width: 0;
-        height: 40px;
+        height: 42px;
         padding: 0 11px;
         border: 0;
         outline: 0;
@@ -135,6 +137,7 @@ import { RespuestaCliente } from '../modelos-aplicacion';
         border: 0;
         background: transparent;
         padding: 9px;
+        min-height: 44px;
         border-radius: 6px;
         text-align: left;
         color: #4b415a;
@@ -168,12 +171,17 @@ import { RespuestaCliente } from '../modelos-aplicacion';
   ],
 })
 export class SelectorClienteComponent {
+  @Input() etiqueta = 'Cliente';
+  @Input() placeholder = 'Todos los clientes';
+  @Input() permitirTodos = true;
+  @Input() deshabilitado = false;
   @Input() clientes: RespuestaCliente[] = [];
   @Input() seleccionado: number | null = null;
   @Output() cambiar = new EventEmitter<number | null>();
   abierto = false;
   texto = '';
   activo = 0;
+  readonly identificador = `buscar-cliente-${++siguienteSelector}`;
   get nombreSeleccionado(): string {
     return this.clientes.find((c) => c.id === this.seleccionado)?.nombre ?? '';
   }
@@ -192,11 +200,13 @@ export class SelectorClienteComponent {
     return this.coincidencias.slice(0, 8);
   }
   abrir(): void {
+    if (this.deshabilitado) return;
     this.abierto = true;
     this.texto = '';
     this.activo = 0;
   }
   elegir(id: number | null): void {
+    if (this.deshabilitado) return;
     this.abierto = false;
     this.texto = '';
     this.cambiar.emit(id);

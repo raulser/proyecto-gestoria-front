@@ -1556,24 +1556,13 @@
                   >12 caracteres como mínimo, con mayúscula, minúscula, número y símbolo.</small
                 >
               </label>
-              <label>
-                Perfil
-                <select name="userRole" [(ngModel)]="nuevoUsuario.rol">
-                  <option value="ADMIN">Administrador</option>
-                  <option value="ASESOR">Gestor</option>
-                  <option value="CLIENTE">Cliente</option>
-                </select>
-              </label>
+              <app-selector-perfil [(valor)]="nuevoUsuario.rol" [deshabilitado]="creandoUsuario" />
               @if (nuevoUsuario.rol === 'CLIENTE') {
-                <label>
-                  Cliente vinculado
-                  <select name="userClient" [(ngModel)]="nuevoUsuario.clienteId">
-                    <option [ngValue]="null">Selecciona un cliente</option>
-                    @for (cliente of clientes; track cliente.id) {
-                      <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
-                    }
-                  </select>
-                </label>
+                @defer (on immediate) {
+                  <app-selector-cliente etiqueta="Cliente vinculado" placeholder="Buscar por nombre o NIF"
+                    [permitirTodos]="false" [clientes]="clientes" [seleccionado]="nuevoUsuario.clienteId"
+                    [deshabilitado]="creandoUsuario" (cambiar)="nuevoUsuario.clienteId = $event" />
+                } @placeholder { <span role="status">Cargando clientes…</span> }
               }
               <label class="opcion-doble-factor">
                 <input type="checkbox" name="userMfa" [(ngModel)]="nuevoUsuario.dobleFactorRequerido" />

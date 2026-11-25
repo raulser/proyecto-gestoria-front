@@ -30,6 +30,8 @@ import { AsociarDocumentoComponent } from './documentos/asociar-documento.compon
 import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente-cliente.component';
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
 import { AccesoUsuarioComponent } from './equipo/acceso-usuario.component';
+import { SelectorPerfilComponent } from './equipo/selector-perfil.component';
+import { SelectorClienteComponent } from './documentos/selector-cliente.component';
 import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.component';
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
 import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
@@ -101,6 +103,8 @@ import {
     ResumenExpedienteClienteComponent,
     EditorSolicitudComponent,
     AccesoUsuarioComponent,
+    SelectorPerfilComponent,
+    SelectorClienteComponent,
     PerfilFiscalClienteComponent,
     RecomendacionesFiscalesComponent,
   ],
@@ -1997,13 +2001,16 @@ export class Aplicacion implements OnInit {
   }
 
   agregarUsuario(): void {
-    if (this.creandoUsuario) return;
-    if (
-      !this.puedeAdministrar() ||
-      !this.nuevoUsuario.nombre.trim() ||
-      !this.nuevoUsuario.email.trim() ||
-      !this.contrasenaTemporalValida(this.nuevoUsuario.contrasena)
-    ) {
+    if (this.creandoUsuario || !this.puedeAdministrar()) return;
+    if (!this.nuevoUsuario.nombre.trim() || !this.nuevoUsuario.email.trim()) {
+      this.error = 'Completa el nombre y el correo del usuario';
+      return;
+    }
+    if (this.nuevoUsuario.rol === 'CLIENTE' && !this.nuevoUsuario.clienteId) {
+      this.error = 'Selecciona el cliente al que tendrá acceso esta cuenta';
+      return;
+    }
+    if (!this.contrasenaTemporalValida(this.nuevoUsuario.contrasena)) {
       this.error =
         'La clave temporal debe tener al menos 12 caracteres e incluir mayúscula, minúscula, número y símbolo';
       return;
