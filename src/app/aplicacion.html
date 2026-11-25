@@ -198,7 +198,7 @@
                 </svg>
                 <span>Nueva petición</span>
               </button>
-            } @else {
+            } @else if (vistaActiva !== 'equipo') {
               <button
                 type="button"
                 class="primary"
@@ -349,6 +349,8 @@
               [clientes]="clientes"
               [solicitudes]="solicitudes"
               [puedeGestionar]="puedeGestionarClientes()"
+              [puedeDarAcceso]="usuarioActual.rol === 'ADMIN'"
+              (acceso)="abrirAltaUsuario($event)"
               (crear)="nuevoAltaCliente()"
               (editar)="editarCliente($event)"
               (documentos)="abrirExpediente($event)"
@@ -1527,109 +1529,109 @@
       }
 
       @if (vistaActiva === 'equipo' && puedeAdministrar()) {
-        <section class="two-column">
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Alta de usuario</h2>
-              </div>
-            </div>
-            <form class="form" (ngSubmit)="agregarUsuario()">
-              <label>
-                Nombre
-                <input name="userName" [(ngModel)]="nuevoUsuario.nombre" />
-              </label>
-              <label>
-                Email
-                <input name="userEmail" type="email" [(ngModel)]="nuevoUsuario.email" />
-              </label>
-              <label>
-                Clave temporal
-                <input
-                  name="userPassword"
-                  type="password"
-                  minlength="12"
-                  autocomplete="new-password"
-                  [(ngModel)]="nuevoUsuario.contrasena"
-                />
-                <small
-                  >12 caracteres como mínimo, con mayúscula, minúscula, número y símbolo.</small
-                >
-              </label>
-              <app-selector-perfil [(valor)]="nuevoUsuario.rol" [deshabilitado]="creandoUsuario" />
-              @if (nuevoUsuario.rol === 'CLIENTE') {
-                @defer (on immediate) {
-                  <app-selector-cliente etiqueta="Cliente vinculado" placeholder="Buscar por nombre o NIF"
-                    [permitirTodos]="false" [clientes]="clientes" [seleccionado]="nuevoUsuario.clienteId"
-                    [deshabilitado]="creandoUsuario" (cambiar)="nuevoUsuario.clienteId = $event" />
-                } @placeholder { <span role="status">Cargando clientes…</span> }
-              }
-              <label class="opcion-doble-factor">
-                <input type="checkbox" name="userMfa" [(ngModel)]="nuevoUsuario.dobleFactorRequerido" />
-                <span><strong>Doble autenticación</strong><small>Al entrar vinculará su móvil con un QR y utilizará un código temporal.</small></span>
-              </label>
-              <button type="submit" class="primary" [disabled]="creandoUsuario">{{ creandoUsuario ? 'Creando usuario…' : 'Crear usuario' }}</button>
-            </form>
+        <div class="panel-header">
+          <div class="inline-form" role="group" aria-label="Secciones de equipo">
+            <button
+              type="button"
+              [class]="equipoSeccion === 'usuarios' ? 'primary' : 'secondary'"
+              [attr.aria-pressed]="equipoSeccion === 'usuarios'"
+              (click)="equipoSeccion = 'usuarios'"
+            >
+              Usuarios y accesos
+            </button>
+            <button
+              type="button"
+              [class]="equipoSeccion === 'asignaciones' ? 'primary' : 'secondary'"
+              [attr.aria-pressed]="equipoSeccion === 'asignaciones'"
+              (click)="equipoSeccion = 'asignaciones'"
+            >
+              Carteras de gestores
+            </button>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Equipo y accesos</h2>
-                <p>{{ usuarios.length }} usuarios</p>
-              </div>
-            </div>
-            <div class="documento-listar">
-              @for (usuario of usuarios; track usuario.id) {
-                <app-acceso-usuario [usuario]="usuario" [perfil]="etiquetaRol(usuario.rol)"
-                  [cuentaPropia]="usuario.id === usuarioActual.id" [guardando]="seguridadUsuariosPendientes.has(usuario.id)"
-                  (dobleFactor)="gestionarDobleFactor(usuario)" (restablecer)="gestionarDobleFactor(usuario, true)"
-                  (acceso)="alternarUsuario(usuario)" />
-              }
-            </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Asignación de clientes</h2>
-              <p>Cada gestor solo verá los clientes que tenga asignados</p>
-            </div>
-          </div>
-          <form class="inline-form" (ngSubmit)="assignClient()">
-            <select name="assignmentAdvisor" [(ngModel)]="formularioAsignacion.asesorId">
-              @for (asesor of asesores(); track asesor.id) {
-                <option [ngValue]="asesor.id">{{ nombrePersona(asesor.nombre) }}</option>
-              }
-            </select>
-            <select name="assignmentClient" [(ngModel)]="formularioAsignacion.clienteId">
-              @for (cliente of clientes; track cliente.id) {
-                <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
-              }
-            </select>
-            <button type="submit" class="primary">Asignar</button>
-          </form>
-          <div class="documento-listar asignacion-listar">
-            @for (asignacion of asignaciones; track asignacion.id) {
-              <article class="documento-row">
+          @if (equipoSeccion === 'usuarios') {
+            <button type="button" class="primary" (click)="abrirAltaUsuario()">
+              + Nuevo usuario interno
+            </button>
+          } @else if (!nuevaAsignacionAbierta) {
+            <button type="button" class="primary" (click)="nuevaAsignacionAbierta = true">
+              + Asignar cliente a gestor
+            </button>
+          }
+        </div>
+        @if (equipoSeccion === 'usuarios') {
+          <section>
+            <div class="panel">
+              <div class="panel-header">
                 <div>
-                  <strong>{{ nombrePersona(asignacion.nombreAsesor) }}</strong>
-                  <span>{{ asignacion.nombreCliente }}</span>
+                  <h2>Equipo y accesos</h2>
+                  <p>{{ usuarios.length }} usuarios</p>
                 </div>
-                <button
-                  type="button"
-                  class="secondary small danger"
-                  (click)="desasignarCliente(asignacion)"
-                >
-                  Quitar acceso a este cliente
+              </div>
+              <div class="documento-listar">
+                @for (usuario of usuarios; track usuario.id) {
+                  <app-acceso-usuario
+                    [usuario]="usuario"
+                    [perfil]="etiquetaRol(usuario.rol)"
+                    [cuentaPropia]="usuario.id === usuarioActual.id"
+                    [guardando]="seguridadUsuariosPendientes.has(usuario.id)"
+                    (dobleFactor)="gestionarDobleFactor(usuario)"
+                    (restablecer)="gestionarDobleFactor(usuario, true)"
+                    (acceso)="alternarUsuario(usuario)"
+                  />
+                }
+              </div>
+            </div>
+          </section>
+        } @else {
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>
+                  {{ nuevaAsignacionAbierta ? 'Asignar cliente a gestor' : 'Carteras de gestores' }}
+                </h2>
+                <p>Cada gestor solo verá los clientes que tenga asignados</p>
+              </div>
+            </div>
+            @if (nuevaAsignacionAbierta) {
+              <form class="inline-form" (ngSubmit)="assignClient()">
+                <select name="assignmentAdvisor" [(ngModel)]="formularioAsignacion.asesorId">
+                  @for (asesor of asesores(); track asesor.id) {
+                    <option [ngValue]="asesor.id">{{ nombrePersona(asesor.nombre) }}</option>
+                  }
+                </select>
+                <select name="assignmentClient" [(ngModel)]="formularioAsignacion.clienteId">
+                  @for (cliente of clientes; track cliente.id) {
+                    <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
+                  }
+                </select>
+                <button type="submit" class="primary">Asignar</button>
+                <button type="button" class="secondary" (click)="nuevaAsignacionAbierta = false">
+                  Cancelar
                 </button>
-              </article>
-            } @empty {
-              <p class="empty">No hay asignaciones.</p>
+              </form>
+            } @else {
+              <div class="documento-listar asignacion-listar">
+                @for (asignacion of asignaciones; track asignacion.id) {
+                  <article class="documento-row">
+                    <div>
+                      <strong>{{ nombrePersona(asignacion.nombreAsesor) }}</strong>
+                      <span>{{ asignacion.nombreCliente }}</span>
+                    </div>
+                    <button
+                      type="button"
+                      class="secondary small danger"
+                      (click)="desasignarCliente(asignacion)"
+                    >
+                      Quitar acceso a este cliente
+                    </button>
+                  </article>
+                } @empty {
+                  <p class="empty">No hay asignaciones.</p>
+                }
+              </div>
             }
-          </div>
-        </section>
+          </section>
+        }
       }
 
       @if (vistaActiva === 'plan' && puedeAdministrar()) {
@@ -1719,7 +1721,7 @@
         }
         <details class="ajustes-ayuda">
           <summary>Cuenta, soporte y privacidad</summary>
-          <section class="two-column">
+          <section>
             <div class="panel">
               <div class="panel-header">
                 <div>
@@ -1740,7 +1742,9 @@
                 <div>
                   <span>Segundo factor</span>
                   <strong>{{
-                    usuarioActual.dobleFactorRequerido ? 'Activado por tu gestoría' : 'Desactivado por tu gestoría'
+                    usuarioActual.dobleFactorRequerido
+                      ? 'Activado por tu gestoría'
+                      : 'Desactivado por tu gestoría'
                   }}</strong>
                 </div>
                 <a
@@ -1887,3 +1891,16 @@
   [error]="visorDocumentoError"
   (cerrar)="cerrarVisorDocumento()"
 />
+
+@if (editorUsuarioAbierto) {
+  @defer (on immediate) {
+    <app-editor-usuario
+      [formulario]="nuevoUsuario"
+      [cliente]="clienteAccesoFijo"
+      [guardando]="creandoUsuario"
+      [error]="errorUsuario"
+      (guardar)="agregarUsuario()"
+      (cancelar)="cerrarAltaUsuario()"
+    />
+  }
+}

@@ -26,7 +26,7 @@ button:disabled {
 }
 .directorio {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   align-items: start;
 }
@@ -458,7 +458,7 @@ button:disabled {
 }
 @media (max-width: 1250px) {
   .directorio {
-    grid-template-columns: minmax(0, 1fr) 270px;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
   }
   .columnas,
@@ -571,4 +571,24 @@ button:disabled {
   .lista > footer {
     font-size: 10px;
   }
+}
+
+.directorio {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ficha {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 860px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+.ficha > .secundario {
+  align-self: flex-start;
+  margin-bottom: 22px;
+}
+.ficha > .grande {
+  margin-top: 18px;
 }

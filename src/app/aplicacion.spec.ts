@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, provideHttpClient } from '@angular/common/http';
-import { DeferBlockState, TestBed } from '@angular/core/testing';
+import { DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import { Aplicacion } from './aplicacion';
 import { Subject, throwError } from 'rxjs';
 import { ServicioAutenticacionKeycloak } from './servicio-autenticacion-keycloak';
@@ -17,6 +17,7 @@ describe('Aplicacion', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Aplicacion],
+      deferBlockBehavior: DeferBlockBehavior.Manual,
       providers: [provideHttpClient()],
     }).compileComponents();
   });
@@ -34,47 +35,82 @@ describe('Aplicacion', () => {
     expect(app.nuevoUsuario.dobleFactorRequerido).toBe(true);
   });
 
-  it('seleccionar Cliente muestra el buscador de expediente y conserva la elección de MFA', async () => {
+  it('el alta interna se abre aparte, sin opción Cliente ni selector de expediente', async () => {
     const fixture = TestBed.createComponent(Aplicacion);
     const app = fixture.componentInstance;
     vi.spyOn(app, 'ngOnInit').mockImplementation(() => {});
-    app.usuarioActual = usuario('ADMIN'); app.loading = false; app.vistaActiva = 'equipo';
-    app.nuevoUsuario.dobleFactorRequerido = false;
-    app.clientes = [cliente(21, 'Cliente de prueba', true, 'AUTONOMO')];
+    app.usuarioActual = usuario('ADMIN');
+    app.loading = false;
+    app.vistaActiva = 'equipo';
     fixture.detectChanges();
-    const elegir = fixture.nativeElement.querySelector('app-selector-perfil input[value=CLIENTE]') as HTMLInputElement;
-    elegir.click();
-    await fixture.whenStable(); fixture.detectChanges();
-    const buscadorDiferido = (await fixture.getDeferBlocks())[0];
-    await buscadorDiferido.render(DeferBlockState.Complete);
+    expect(fixture.nativeElement.querySelector('app-editor-usuario')).toBeNull();
+    const boton = [...fixture.nativeElement.querySelectorAll('button')] as HTMLButtonElement[];
+    boton.find((b) => b.textContent?.includes('Nuevo usuario interno'))!.click();
     fixture.detectChanges();
-    expect(app.nuevoUsuario.rol).toBe('CLIENTE');
-    expect(app.nuevoUsuario.dobleFactorRequerido).toBe(false);
-    expect(fixture.nativeElement.querySelector('select[name=userRole]')).toBeNull();
-    const buscar = fixture.nativeElement.querySelector('app-selector-cliente input') as HTMLInputElement;
-    expect(buscar.placeholder).toBe('Buscar por nombre o NIF');
-    buscar.focus(); fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('app-selector-cliente [role=option]').length).toBe(1);
-    fixture.nativeElement.querySelector('app-selector-cliente [role=option]').click();
-    await fixture.whenStable();
-    expect(app.nuevoUsuario.clienteId).toBe(21);
+    for (const bloque of await fixture.getDeferBlocks())
+      await bloque.render(DeferBlockState.Complete);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('app-editor-usuario input[value=CLIENTE]'),
+    ).toBeNull();
+    expect(
+      fixture.nativeElement.querySelectorAll('app-editor-usuario input[type=radio]').length,
+    ).toBe(2);
+    expect(fixture.nativeElement.querySelector('app-editor-usuario select')).toBeNull();
   });
 
-  it('no intenta crear una cuenta de Cliente sin seleccionar su expediente', () => {
+  it('el acceso de cliente usa la ficha fijada aunque se altere el antiguo selector del formulario', () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     app.usuarioActual = usuario('ADMIN');
-    Object.assign(app.nuevoUsuario, { nombre: 'Persona', email: 'persona@example.test', contrasena: 'Temporal-2026!', rol: 'CLIENTE' });
+    const ficha = cliente(21, 'Cliente de prueba', true, 'AUTONOMO');
+    app.abrirAltaUsuario(ficha);
+    Object.assign(app.nuevoUsuario, {
+      nombre: 'Persona',
+      email: 'persona@example.test',
+      contrasena: 'Temporal-2026!',
+      clienteId: 999,
+      rol: 'ADMIN',
+    });
+    const respuesta = new Subject<any>();
+    const enviar = vi.spyOn(TestBed.inject(HttpClient), 'post').mockReturnValue(respuesta);
+    app.agregarUsuario();
+    expect(enviar).toHaveBeenCalledWith(
+      expect.stringContaining('/api/clientes/21/usuarios'),
+      expect.objectContaining({ nifExpediente: ficha.nif }),
+      expect.anything(),
+    );
+    const cuerpo = enviar.mock.calls[0][1] as Record<string, unknown>;
+    expect(cuerpo['clienteId']).toBeUndefined();
+    expect(cuerpo['rol']).toBeUndefined();
+    respuesta.error(new HttpErrorResponse({ status: 503 }));
+    expect(app.editorUsuarioAbierto).toBe(true);
+    expect(app.clienteAccesoFijo?.id).toBe(21);
+    expect(app.errorUsuario).toContain('No se pudo crear');
+  });
+
+  it('no permite crear cuentas de Cliente desde el alta general', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    Object.assign(app.nuevoUsuario, {
+      nombre: 'Persona',
+      email: 'persona@example.test',
+      contrasena: 'Temporal-2026!',
+      rol: 'CLIENTE',
+      clienteId: 21,
+    });
     const enviar = vi.spyOn(TestBed.inject(HttpClient), 'post');
     app.agregarUsuario();
     expect(enviar).not.toHaveBeenCalled();
-    expect(app.error).toContain('Selecciona el cliente');
+    expect(app.errorUsuario).toContain('desde la ficha');
   });
 
   it('cancelar la desactivación de MFA no envía ninguna petición', async () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     app.usuarioActual = usuario('ADMIN');
     const cambiar = vi.spyOn(TestBed.inject(HttpClient), 'put');
-    const confirmar = vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar').mockResolvedValue(false);
+    const confirmar = vi
+      .spyOn(TestBed.inject(ServicioDialogos), 'confirmar')
+      .mockResolvedValue(false);
     await app.gestionarDobleFactor(usuario('CLIENTE'));
     expect(confirmar).toHaveBeenCalledWith(expect.objectContaining({ peligro: true }));
     expect(cambiar).not.toHaveBeenCalled();
@@ -93,9 +129,14 @@ describe('Aplicacion', () => {
     await app.gestionarDobleFactor(cliente, true);
     await app.gestionarDobleFactor(cliente, true);
     expect(enviar).toHaveBeenCalledOnce();
-    expect(enviar).toHaveBeenCalledWith(expect.stringContaining('/usuarios/3/restablecer-autenticador'), {}, expect.anything());
+    expect(enviar).toHaveBeenCalledWith(
+      expect.stringContaining('/usuarios/3/restablecer-autenticador'),
+      {},
+      expect.anything(),
+    );
     expect(app.seguridadUsuariosPendientes.has(3)).toBe(true);
-    respuesta.next({ datos: cliente }); respuesta.complete();
+    respuesta.next({ datos: cliente });
+    respuesta.complete();
     expect(app.usuarios[0].dobleFactorRequerido).toBe(true);
     expect(app.aviso).toContain('nuevo QR');
     expect(app.seguridadUsuariosPendientes.size).toBe(0);
@@ -104,9 +145,12 @@ describe('Aplicacion', () => {
   it('un error al cambiar MFA conserva el estado visible y permite reintentar', async () => {
     const app = TestBed.createComponent(Aplicacion).componentInstance;
     app.usuarioActual = usuario('ADMIN');
-    const cliente = usuario('CLIENTE'); app.usuarios = [cliente];
+    const cliente = usuario('CLIENTE');
+    app.usuarios = [cliente];
     vi.spyOn(TestBed.inject(ServicioDialogos), 'confirmar').mockResolvedValue(true);
-    vi.spyOn(TestBed.inject(HttpClient), 'put').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 503 })));
+    vi.spyOn(TestBed.inject(HttpClient), 'put').mockReturnValue(
+      throwError(() => new HttpErrorResponse({ status: 503 })),
+    );
     await app.gestionarDobleFactor(cliente);
     expect(app.usuarios[0].dobleFactorRequerido).toBe(true);
     expect(app.error).toContain('No se pudo actualizar');

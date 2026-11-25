@@ -1,0 +1,88 @@
+<div class="fondo" (click)="cerrar()"></div>
+<section role="dialog" aria-modal="true" aria-labelledby="titulo-alta-usuario">
+  <header>
+    <div>
+      <span>{{ cliente ? 'Acceso de cliente' : 'Equipo de la gestoría' }}</span>
+      <h2 id="titulo-alta-usuario">
+        {{ cliente ? 'Crear usuario de acceso' : 'Nuevo usuario interno' }}
+      </h2>
+    </div>
+    <button
+      type="button"
+      aria-label="Cerrar alta de usuario"
+      [disabled]="guardando"
+      (click)="cerrar()"
+    >
+      ×
+    </button>
+  </header>
+  <form (ngSubmit)="guardar.emit()">
+    <div class="contenido">
+      @if (cliente) {
+        <div class="expediente" role="group" aria-label="Expediente vinculado, no editable">
+          <small>EXPEDIENTE VINCULADO</small><strong>{{ cliente.nombre }}</strong
+          ><span>{{ cliente.nif }}</span>
+          <p>Este acceso pertenece exclusivamente a este expediente.</p>
+        </div>
+      }
+      <fieldset [disabled]="guardando">
+        <label
+          >Nombre de la persona<input
+            name="userName"
+            required
+            maxlength="160"
+            autocomplete="name"
+            [(ngModel)]="formulario.nombre"
+        /></label>
+        <label
+          >Correo de acceso<input
+            name="userEmail"
+            required
+            type="email"
+            maxlength="180"
+            autocomplete="email"
+            [(ngModel)]="formulario.email"
+        /></label>
+        <label
+          >Clave temporal<input
+            name="userPassword"
+            required
+            type="password"
+            minlength="12"
+            maxlength="80"
+            autocomplete="new-password"
+            [(ngModel)]="formulario.contrasena"
+          /><small
+            >12 caracteres como mínimo, con mayúscula, minúscula, número y símbolo.</small
+          ></label
+        >
+        @if (!cliente) {
+          <app-selector-perfil
+            [(valor)]="formulario.rol"
+            [soloInternos]="true"
+            [deshabilitado]="guardando"
+          />
+        }
+        <label class="mfa"
+          ><input
+            name="userMfa"
+            type="checkbox"
+            [(ngModel)]="formulario.dobleFactorRequerido"
+          /><span
+            ><strong>Doble autenticación</strong
+            ><small>Vinculará su autenticador al entrar por primera vez.</small></span
+          ></label
+        >
+      </fieldset>
+      @if (error) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+    </div>
+    <footer>
+      <button type="button" [disabled]="guardando" (click)="cerrar()">Cancelar</button
+      ><button type="submit" class="principal" [disabled]="guardando">
+        {{ guardando ? 'Creando usuario…' : 'Crear usuario' }}
+      </button>
+    </footer>
+  </form>
+</section>

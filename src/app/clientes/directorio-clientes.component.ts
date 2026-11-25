@@ -14,6 +14,8 @@ export class DirectorioClientesComponent {
   @Input() clientes: RespuestaCliente[] = [];
   @Input() solicitudes: RespuestaSolicitudDocumento[] = [];
   @Input() puedeGestionar = false;
+  @Input() puedeDarAcceso = false;
+  @Output() acceso = new EventEmitter<RespuestaCliente>();
   @Output() crear = new EventEmitter<void>();
   @Output() editar = new EventEmitter<RespuestaCliente>();
   @Output() documentos = new EventEmitter<RespuestaCliente>();
@@ -23,19 +25,16 @@ export class DirectorioClientesComponent {
   busqueda = '';
   filtro = 'ACTIVOS';
   seleccionadoId: number | null = null;
-  @ViewChild('ficha') private ficha?: ElementRef<HTMLElement>;
+  @ViewChild('ficha') set ficha(ref: ElementRef<HTMLElement> | undefined) {
+    if (ref)
+      queueMicrotask(() => {
+        ref.nativeElement.focus({ preventScroll: true });
+        ref.nativeElement.scrollIntoView?.({ block: 'start', behavior: 'instant' });
+      });
+  }
 
   seleccionar(clienteId: number): void {
     this.seleccionadoId = clienteId;
-    if (globalThis.matchMedia?.('(max-width: 1000px)').matches) {
-      this.ficha?.nativeElement.focus({ preventScroll: true });
-      this.ficha?.nativeElement.scrollIntoView({
-        block: 'start',
-        behavior: globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
-          ? 'instant'
-          : 'smooth',
-      });
-    }
   }
 
   get activos(): number {
@@ -53,7 +52,7 @@ export class DirectorioClientesComponent {
     );
   }
   get seleccionado(): RespuestaCliente | null {
-    return this.filtrados.find((c) => c.id === this.seleccionadoId) ?? this.filtrados[0] ?? null;
+    return this.clientes.find((c) => c.id === this.seleccionadoId) ?? null;
   }
   iniciales(nombre: string): string {
     return nombre

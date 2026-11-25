@@ -1,113 +1,118 @@
 <div class="directorio">
-  <section class="lista">
-    <header class="cabecera">
-      <div>
-        <span class="sobre">TU CARTERA</span>
-        <h2>
-          Cartera de clientes<span>{{ activos }} activos</span>
-        </h2>
-      </div>
-      @if (puedeGestionar) {
-        <button type="button" class="principal" (click)="crear.emit()">
-          <span aria-hidden="true">+</span>Nuevo cliente
-        </button>
-      }
-    </header>
-    <div class="herramientas">
-      <nav aria-label="Estado de los clientes">
-        @for (
-          opcion of [
-            ['ACTIVOS', 'Activos'],
-            ['TODOS', 'Todos'],
-            ['ARCHIVADOS', 'Archivados'],
-          ];
-          track opcion[0]
-        ) {
-          <button
-            type="button"
-            [class.actual]="filtro === opcion[0]"
-            [attr.aria-pressed]="filtro === opcion[0]"
-            (click)="filtro = opcion[0]"
-          >
-            {{ opcion[1] }}
+  @if (!seleccionado) {
+    <section class="lista">
+      <header class="cabecera">
+        <div>
+          <span class="sobre">TU CARTERA</span>
+          <h2>
+            Cartera de clientes<span>{{ activos }} activos</span>
+          </h2>
+        </div>
+        @if (puedeGestionar) {
+          <button type="button" class="principal" (click)="crear.emit()">
+            <span aria-hidden="true">+</span>Nuevo cliente
           </button>
         }
-      </nav>
-      <label class="busqueda"
-        ><span aria-hidden="true">⌕</span
-        ><input
-          [(ngModel)]="busqueda"
-          placeholder="Nombre, NIF o correo"
-          aria-label="Buscar clientes"
-      /></label>
-    </div>
-    <div class="tabla">
-      <div class="columnas" aria-hidden="true">
-        <span>CLIENTE</span><span>ENTREGAS</span><span>ESTADO</span>
-      </div>
-      @for (cliente of filtrados; track cliente.id) {
-        <button
-          type="button"
-          class="fila"
-          [class.seleccionada]="seleccionado?.id === cliente.id"
-          [attr.aria-pressed]="seleccionado?.id === cliente.id"
-          [attr.aria-label]="'Ver ficha de ' + cliente.nombre"
-          (click)="seleccionar(cliente.id)"
-        >
-          <span class="identidad"
-            ><span class="avatar" [attr.data-color]="cliente.id % 4">{{
-              iniciales(cliente.nombre)
-            }}</span
-            ><span
-              ><strong>{{ cliente.nombre }}</strong
-              ><small>{{ cliente.nif }} · {{ tipo(cliente) }}</small></span
-            ></span
-          >
-          <span class="entregas">
-            @if (entregas(cliente, true)) {
-              <b>{{ entregas(cliente, true) }} por revisar</b>
-            } @else if (entregas(cliente)) {
-              <span>{{ entregas(cliente) }} por recibir</span>
-            } @else {
-              <span class="muted">Sin entregas abiertas</span>
-            }
-          </span>
-          <span class="estado" [class.archivado]="!cliente.activo"
-            ><i></i>{{ cliente.activo ? 'Activo' : 'Archivado' }}</span
-          >
-        </button>
-      } @empty {
-        <div class="vacio">
-          <strong>{{ clientes.length ? 'No hay coincidencias' : 'No hay clientes' }}</strong>
-          <p>
-            {{
-              clientes.length
-                ? 'Prueba otro nombre o cambia el filtro.'
-                : 'Añade tu primer cliente y prepara su plan documental.'
-            }}
-          </p>
-          @if (!clientes.length && puedeGestionar) {
-            <button type="button" class="principal" (click)="crear.emit()">
-              Crear primer cliente
+      </header>
+      <div class="herramientas">
+        <nav aria-label="Estado de los clientes">
+          @for (
+            opcion of [
+              ['ACTIVOS', 'Activos'],
+              ['TODOS', 'Todos'],
+              ['ARCHIVADOS', 'Archivados'],
+            ];
+            track opcion[0]
+          ) {
+            <button
+              type="button"
+              [class.actual]="filtro === opcion[0]"
+              [attr.aria-pressed]="filtro === opcion[0]"
+              (click)="filtro = opcion[0]"
+            >
+              {{ opcion[1] }}
             </button>
           }
+        </nav>
+        <label class="busqueda"
+          ><span aria-hidden="true">⌕</span
+          ><input
+            [(ngModel)]="busqueda"
+            placeholder="Nombre, NIF o correo"
+            aria-label="Buscar clientes"
+        /></label>
+      </div>
+      <div class="tabla">
+        <div class="columnas" aria-hidden="true">
+          <span>CLIENTE</span><span>ENTREGAS</span><span>ESTADO</span>
         </div>
-      }
-    </div>
-    <footer>
-      <span
-        >{{ filtrados.length }} {{ filtrados.length === 1 ? 'cliente' : 'clientes' }} en esta
-        vista</span
-      ><span
-        >{{ porRevisar }}
-        {{ porRevisar === 1 ? 'entrega por revisar' : 'entregas por revisar' }}</span
-      >
-    </footer>
-    <div class="importar"><ng-content /></div>
-  </section>
+        @for (cliente of filtrados; track cliente.id) {
+          <button
+            type="button"
+            class="fila"
+            [class.seleccionada]="seleccionadoId === cliente.id"
+            [attr.aria-pressed]="seleccionadoId === cliente.id"
+            [attr.aria-label]="'Ver ficha de ' + cliente.nombre"
+            (click)="seleccionar(cliente.id)"
+          >
+            <span class="identidad"
+              ><span class="avatar" [attr.data-color]="cliente.id % 4">{{
+                iniciales(cliente.nombre)
+              }}</span
+              ><span
+                ><strong>{{ cliente.nombre }}</strong
+                ><small>{{ cliente.nif }} · {{ tipo(cliente) }}</small></span
+              ></span
+            >
+            <span class="entregas">
+              @if (entregas(cliente, true)) {
+                <b>{{ entregas(cliente, true) }} por revisar</b>
+              } @else if (entregas(cliente)) {
+                <span>{{ entregas(cliente) }} por recibir</span>
+              } @else {
+                <span class="muted">Sin entregas abiertas</span>
+              }
+            </span>
+            <span class="estado" [class.archivado]="!cliente.activo"
+              ><i></i>{{ cliente.activo ? 'Activo' : 'Archivado' }}</span
+            >
+          </button>
+        } @empty {
+          <div class="vacio">
+            <strong>{{ clientes.length ? 'No hay coincidencias' : 'No hay clientes' }}</strong>
+            <p>
+              {{
+                clientes.length
+                  ? 'Prueba otro nombre o cambia el filtro.'
+                  : 'Añade tu primer cliente y prepara su plan documental.'
+              }}
+            </p>
+            @if (!clientes.length && puedeGestionar) {
+              <button type="button" class="principal" (click)="crear.emit()">
+                Crear primer cliente
+              </button>
+            }
+          </div>
+        }
+      </div>
+      <footer>
+        <span
+          >{{ filtrados.length }} {{ filtrados.length === 1 ? 'cliente' : 'clientes' }} en esta
+          vista</span
+        ><span
+          >{{ porRevisar }}
+          {{ porRevisar === 1 ? 'entrega por revisar' : 'entregas por revisar' }}</span
+        >
+      </footer>
+      <div class="importar"><ng-content /></div>
+    </section>
+  }
   @if (seleccionado; as cliente) {
     <aside #ficha class="ficha" tabindex="-1" aria-label="Ficha rápida del cliente">
-      <span class="sobre">VISTA RÁPIDA</span>
+      <button type="button" class="secundario" (click)="seleccionadoId = null">
+        ← Volver a clientes
+      </button>
+      <span class="sobre">FICHA DEL CLIENTE</span>
       <span class="avatar grande" [attr.data-color]="cliente.id % 4">{{
         iniciales(cliente.nombre)
       }}</span>
@@ -130,6 +135,14 @@
         </div>
       </div>
       <div class="accesos">
+        @if (puedeDarAcceso && cliente.activo) {
+          <button type="button" (click)="acceso.emit(cliente)">
+            <span
+              ><strong>Crear usuario de acceso</strong
+              ><small>Vinculado a este expediente</small></span
+            ><span aria-hidden="true">↗</span>
+          </button>
+        }
         <button type="button" (click)="documentos.emit(cliente)">
           <span><strong>Documentos</strong><small>Archivos aportados y publicados</small></span
           ><span aria-hidden="true">↗</span></button

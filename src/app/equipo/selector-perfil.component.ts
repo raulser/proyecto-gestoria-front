@@ -13,9 +13,17 @@ let siguienteGrupo = 0;
 export class SelectorPerfilComponent {
   readonly valor = model<Rol>('ASESOR');
   readonly deshabilitado = input(false);
+  readonly soloInternos = input(false);
+  get opciones() {
+    return this.soloInternos() ? this.perfiles.filter((p) => p.valor !== 'CLIENTE') : this.perfiles;
+  }
   readonly grupo = `perfil-usuario-${++siguienteGrupo}`;
   readonly perfiles = [
-    { valor: 'ADMIN' as const, nombre: 'Administrador', detalle: 'Equipo, clientes y configuración' },
+    {
+      valor: 'ADMIN' as const,
+      nombre: 'Administrador',
+      detalle: 'Equipo, clientes y configuración',
+    },
     { valor: 'ASESOR' as const, nombre: 'Gestor', detalle: 'Trabaja con sus clientes asignados' },
     { valor: 'CLIENTE' as const, nombre: 'Cliente', detalle: 'Accede a su propio expediente' },
   ];

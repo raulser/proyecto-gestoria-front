@@ -985,50 +985,46 @@
       "titulo": "Equipo, cuentas y asignaciones",
       "resumen": "Crear accesos y decidir quién trabaja con cada cliente.",
       "parrafos": [
-        "Equipo permite crear usuarios, seleccionar su perfil y activar o desactivar accesos. Revisa el nombre y el correo para identificar a cada persona antes de cambiar su acceso.",
-        "Administrador gestiona equipo, asignaciones y configuración; Gestor trabaja con los clientes que tenga asignados; Cliente accede al expediente al que está vinculado. Crear una ficha de cliente y crear su usuario de acceso son operaciones distintas.",
+        "Equipo abre el listado de usuarios y accesos. Nuevo usuario interno abre un formulario independiente para Administrador o Gestor. Carteras de gestores tiene su propia vista para gestionar asignaciones.",
+        "Las cuentas Cliente se crean exclusivamente desde Clientes: abre su ficha y pulsa Crear usuario de acceso. El nombre y NIF del expediente aparecen fijados, sin un selector para cambiarlo. La aplicación impide trasladar una cuenta Cliente a otro expediente o convertir una cuenta interna en Cliente.",
         "La clave temporal del alta debe cumplir la política indicada en el formulario. Facilita el acceso por un canal adecuado y comprueba que la persona cambia su clave y configura la seguridad de su cuenta según las indicaciones del portal.",
         "Doble autenticación está activada por defecto al crear cualquier perfil, incluido Cliente. Puedes desmarcarla antes de crear la cuenta. En Equipo y accesos se muestra la política de cada persona, con Activar 2FA o Desactivar 2FA. Desactivarla permite entrar solo con contraseña y conserva el autenticador vinculado; volver a activarla reutiliza esa vinculación.",
         "Restablecer autenticador se utiliza si la persona pierde el móvil, lo cambia o pierde acceso a su aplicación de códigos. Retira todas sus vinculaciones de autenticador anteriores y cierra sus sesiones. Con doble factor activado, al entrar deberá configurar un nuevo QR. Esta acción no cambia su contraseña ni desactiva el doble factor. Comprueba la identidad de quien solicita recuperar el acceso antes de confirmarla.",
-        "Asignación de clientes vincula cada gestor con sus expedientes. Si alguien no ve un cliente, comprueba la cuenta activa, su perfil y esa asignación antes de crear un duplicado."
+        "Carteras de gestores vincula a cada gestor con sus expedientes. Se gestiona aparte del alta de usuarios. Si alguien no ve un cliente, comprueba su cuenta activa, perfil y asignación antes de crear un duplicado."
       ],
       "destino": "equipo",
       "accion": "Abrir equipo",
       "recorridos": [
         {
-          "titulo": "Dar acceso a una persona y vincular su expediente",
+          "titulo": "Crear una cuenta interna",
           "antes": [
-            "Crea primero la ficha del cliente si el nuevo usuario tendrá perfil Cliente. Cada persona debe utilizar su propia cuenta."
+            "Solo el administrador de la gestoría puede dar de alta usuarios. Cada persona debe utilizar su propia cuenta."
           ],
           "pasos": [
             {
-              "haz": "Abre Equipo y completa Nombre, Email y Clave temporal en Alta de usuario.",
-              "veras": "La clave debe cumplir la política indicada: al menos 12 caracteres con mayúscula, minúscula, número y símbolo."
+              "haz": "En Equipo, abre Usuarios y accesos y pulsa Nuevo usuario interno.",
+              "veras": "El formulario se abre aparte. Cancelar o cerrar vuelve al listado sin crear la cuenta."
             },
             {
-              "haz": "En Perfil, pulsa la tarjeta Administrador, Gestor o Cliente. Puedes recorrer las opciones con las flechas del teclado.",
-              "veras": "La tarjeta elegida queda marcada con un borde violeta y un círculo seleccionado. Cada opción explica su ámbito de acceso."
+              "haz": "Completa Nombre de la persona, Correo de acceso y Clave temporal.",
+              "veras": "La clave debe tener al menos 12 caracteres, con mayúscula, minúscula, número y símbolo."
             },
             {
-              "haz": "Si eliges Cliente, busca el Cliente vinculado por su nombre o NIF y selecciona el expediente correcto.",
-              "veras": "El buscador muestra coincidencias concretas, sin desplegar toda la cartera. Esta selección determina qué expediente podrá consultar la nueva cuenta."
+              "haz": "Selecciona la tarjeta Administrador o Gestor. Revisa Doble autenticación, activada por defecto.",
+              "veras": "Administrador gestiona equipo y configuración; Gestor trabaja con su cartera asignada. Las cuentas Cliente se crean desde su ficha."
             },
             {
-              "haz": "Revisa la casilla Doble autenticación antes de crear la cuenta. Está activada por defecto para todos los perfiles.",
-              "veras": "Si la mantienes activada, el primer acceso pedirá cambiar la clave temporal y vincular un autenticador mediante un QR. Si la desmarcas, utilizará solo contraseña."
+              "haz": "Pulsa Crear usuario y comprueba el listado.",
+              "veras": "Al guardar se cierra el formulario. Si hay un error, aparece dentro del formulario para poder corregirlo."
             },
             {
-              "haz": "Pulsa Crear usuario y comprueba Equipo y accesos.",
-              "veras": "La cuenta debe aparecer con el perfil y estado previstos. Facilita su acceso por un canal adecuado, sin publicar contraseñas en conversaciones documentales."
-            },
-            {
-              "haz": "Pide a la persona que entre y complete el cambio de clave y, cuando corresponda, la vinculación del autenticador.",
-              "veras": "El QR y los códigos se configuran en su propio dispositivo. El administrador no necesita conocerlos."
+              "haz": "Facilita el acceso a la persona por un canal adecuado.",
+              "veras": "En su primer acceso cambiará la clave temporal y, si se exige doble factor, vinculará su autenticador."
             }
           ],
           "comprobar": [
-            "Correo, perfil y cliente vinculado son correctos.",
-            "No se ha creado otra cuenta para resolver una asignación que faltaba."
+            "Nombre, correo y perfil corresponden a la persona prevista.",
+            "La nueva cuenta aparece en Equipo y accesos."
           ],
           "incidencias": [
             "Si el usuario ya existe, revisa su acceso antes de repetir el alta.",
@@ -1036,12 +1032,44 @@
           ]
         },
         {
+          "titulo": "Crear el acceso de un cliente desde su ficha",
+          "antes": [
+            "Crea o comprueba primero la ficha activa del cliente y su DNI/NIF. El expediente debe pertenecer a tu gestoría."
+          ],
+          "pasos": [
+            {
+              "haz": "Abre Clientes y busca al cliente por nombre, NIF o correo. Pulsa su fila.",
+              "veras": "El listado deja paso a la ficha de ese cliente. Volver a clientes regresa al listado."
+            },
+            {
+              "haz": "Comprueba su nombre y NIF y pulsa Crear usuario de acceso.",
+              "veras": "El formulario muestra el expediente vinculado, con su nombre y NIF bloqueados. No hay lista para elegir otro cliente."
+            },
+            {
+              "haz": "Indica el nombre de la persona, su correo de acceso y una clave temporal. Revisa Doble autenticación.",
+              "veras": "El perfil Cliente se establece automáticamente. Puedes cambiar el correo propuesto antes de guardar."
+            },
+            {
+              "haz": "Pulsa Crear usuario y comprueba la cuenta en Equipo y accesos.",
+              "veras": "La nueva cuenta pertenece a este expediente. Si se detecta que la ficha ha cambiado o hay un error, el formulario permanece abierto con la explicación."
+            }
+          ],
+          "comprobar": [
+            "La persona recibirá acceso al expediente que estaba abierto.",
+            "El correo de acceso es correcto y no se comparte una cuenta entre personas."
+          ],
+          "incidencias": [
+            "Si abriste la ficha equivocada, cancela el alta y vuelve al listado antes de abrir la ficha correcta.",
+            "Una cuenta Cliente existente no se puede trasladar a otro expediente cambiando su perfil o vínculo. Revisa cualquier error de alta con el administrador."
+          ]
+        },
+        {
           "titulo": "Asignar cartera y desactivar accesos",
           "antes": [],
           "pasos": [
             {
-              "haz": "En Asignación de clientes, selecciona el gestor y el cliente, y pulsa Asignar.",
-              "veras": "La relación aparece en la lista. El gestor podrá trabajar con ese expediente."
+              "haz": "En Equipo, abre Carteras de gestores y pulsa Asignar cliente a gestor. Selecciona ambas fichas y pulsa Asignar.",
+              "veras": "El formulario sustituye temporalmente al listado. Cancelar vuelve a las asignaciones; guardar incorpora la nueva relación."
             },
             {
               "haz": "Para retirar una asignación, comprueba la fila y usa Quitar acceso a este cliente.",
@@ -1101,7 +1129,9 @@
         }
       ],
       "capturas": [
+        "equipo-listado",
         "equipo-alta",
+        "acceso-cliente",
         "equipo-asignaciones",
         "restablecer-autenticador"
       ]
@@ -1347,8 +1377,8 @@
       ]
     },
     "clientes-directorio": {
-      "titulo": "Buscar un cliente y abrir su expediente",
-      "descripcion": "Directorio con dos clientes ficticios. Cada ficha da acceso a su documentación y trámites.",
+      "titulo": "Localizar un cliente",
+      "descripcion": "El listado ocupa la vista. Al seleccionar una fila se abre únicamente su ficha.",
       "archivo": "manuales/capturas/clientes-directorio.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1359,30 +1389,21 @@
       "marcas": [
         {
           "numero": 1,
-          "x": 55.849609375,
+          "x": 82.333984375,
           "y": 31.49956597222222,
-          "ancho": 13.807373046875,
+          "ancho": 13.807373046874998,
           "alto": 5.555555555555555,
-          "titulo": "Buscar clientes",
-          "descripcion": "Escribe nombre, NIF o correo para localizar una ficha."
+          "titulo": "Buscar y filtrar",
+          "descripcion": "Localiza al cliente por nombre, NIF o correo."
         },
         {
           "numero": 2,
-          "x": 74.188232421875,
-          "y": 66.79036458333333,
-          "ancho": 19.84375,
-          "alto": 8.333333333333334,
-          "titulo": "Documentos del cliente",
-          "descripcion": "Abre la pantalla exclusiva del cliente seleccionado."
-        },
-        {
-          "numero": 3,
-          "x": 60.074462890625,
-          "y": 20.123697916666668,
-          "ancho": 10.44189453125,
-          "alto": 5.555555555555555,
-          "titulo": "Nuevo cliente",
-          "descripcion": "Inicia el alta guiada de datos y plan documental."
+          "x": 20.577392578125,
+          "y": 47.74956597222222,
+          "ancho": 76.34521484375,
+          "alto": 11.666666666666666,
+          "titulo": "Abrir ficha",
+          "descripcion": "Pulsa la fila del cliente para entrar en su contexto."
         }
       ]
     },
@@ -1755,8 +1776,8 @@
       ]
     },
     "equipo-alta": {
-      "titulo": "Crear una cuenta y elegir su doble autenticación",
-      "descripcion": "Las tarjetas permiten comparar los tres perfiles y ver cuál está seleccionado. Para Cliente aparece un buscador de expediente por nombre o NIF.",
+      "titulo": "Alta de usuario interno",
+      "descripcion": "El formulario se abre de forma independiente. Solo ofrece los perfiles internos.",
       "archivo": "manuales/capturas/equipo-alta.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1765,28 +1786,28 @@
       ],
       "marcas": [
         {
-          "alto": 32.77777777777778,
-          "ancho": 25.843751430511475,
-          "descripcion": "Pulsa una tarjeta para seleccionar Administrador, Gestor o Cliente. La opción elegida queda marcada.",
           "numero": 1,
-          "titulo": "Perfil de la cuenta",
-          "x": 22.359375953674316,
-          "y": 48.83333418104384
+          "x": 30.9375,
+          "y": 58.12500000000001,
+          "ancho": 36.953125,
+          "alto": 22.63888888888889,
+          "titulo": "Perfil interno",
+          "descripcion": "Selecciona Administrador o Gestor."
         },
         {
-          "alto": 9.194445080227322,
-          "ancho": 25.843751430511475,
-          "descripcion": "Busca y selecciona su expediente por nombre o NIF.",
           "numero": 2,
-          "titulo": "Expediente vinculado",
-          "x": 22.359375953674316,
-          "y": 83.41667175292969
+          "x": 28.90625,
+          "y": 87.08333333333333,
+          "ancho": 42.1875,
+          "alto": 10.694444444444445,
+          "titulo": "Guardar o cancelar",
+          "descripcion": "El listado se recupera al cerrar el formulario."
         }
       ]
     },
     "equipo-asignaciones": {
-      "titulo": "Asignar clientes al gestor",
-      "descripcion": "La ficha del cliente, la cuenta de acceso y las asignaciones del equipo son elementos separados.",
+      "titulo": "Asignar una cartera al gestor",
+      "descripcion": "Las asignaciones tienen su propia vista, separada de las cuentas.",
       "archivo": "manuales/capturas/equipo-asignaciones.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1796,21 +1817,21 @@
       "marcas": [
         {
           "numero": 1,
-          "x": 87.811279296875,
-          "y": 62.024739583333336,
-          "ancho": 6.142578125,
+          "x": 20.499267578125,
+          "y": 17.5,
+          "ancho": 29.6875,
           "alto": 5.694444444444445,
-          "titulo": "Dar acceso al expediente",
-          "descripcion": "Selecciona gestor y cliente en las listas y pulsa Asignar."
+          "titulo": "Carteras de gestores",
+          "descripcion": "Selecciona esta sección para gestionar las asignaciones."
         },
         {
           "numero": 2,
-          "x": 36.00341796875,
-          "y": 71.74696180555556,
-          "ancho": 55.997314453125,
-          "alto": 5.416666666666667,
-          "titulo": "Retirar una asignación",
-          "descripcion": "Quita a este gestor el acceso a este cliente; no elimina la ficha del cliente."
+          "x": 82.110595703125,
+          "y": 18.61111111111111,
+          "ancho": 14.89013671875,
+          "alto": 5.694444444444445,
+          "titulo": "Nueva asignación",
+          "descripcion": "Abre el formulario para elegir gestor y cliente."
         }
       ]
     },
@@ -2270,6 +2291,66 @@
           "alto": 5.555555555555555,
           "titulo": "Confirmar la recuperación",
           "descripcion": "El autenticador anterior dejará de servir. Cancelar cierra el diálogo sin aplicar el restablecimiento."
+        }
+      ]
+    },
+    "equipo-listado": {
+      "titulo": "Usuarios y accesos",
+      "descripcion": "El equipo se consulta sin un formulario de alta permanentemente abierto.",
+      "archivo": "manuales/capturas/equipo-listado.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": [
+        "administrador"
+      ],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 20.499267578125,
+          "y": 17.5,
+          "ancho": 29.6875,
+          "alto": 5.694444444444445,
+          "titulo": "Elegir la tarea",
+          "descripcion": "Usuarios y accesos y Carteras de gestores se consultan por separado."
+        },
+        {
+          "numero": 2,
+          "x": 81.6943359375,
+          "y": 18.61111111111111,
+          "ancho": 14.134521484375002,
+          "alto": 5.694444444444445,
+          "titulo": "Nuevo usuario interno",
+          "descripcion": "Abre el formulario de Administrador o Gestor."
+        }
+      ]
+    },
+    "acceso-cliente": {
+      "titulo": "Acceso de cliente vinculado a su ficha",
+      "descripcion": "Se abre desde la ficha del cliente. El expediente queda fijado y no existe selector para cambiarlo.",
+      "archivo": "manuales/capturas/acceso-cliente.jpg",
+      "ancho": 1280,
+      "alto": 720,
+      "perfiles": [
+        "administrador"
+      ],
+      "marcas": [
+        {
+          "numero": 1,
+          "x": 30.9375,
+          "y": 18.61111111111111,
+          "ancho": 36.953125,
+          "alto": 17.291666666666668,
+          "titulo": "Expediente fijo",
+          "descripcion": "Revisa el nombre y NIF antes de dar acceso."
+        },
+        {
+          "numero": 2,
+          "x": 30.9375,
+          "y": 38.958333333333336,
+          "ancho": 36.953125,
+          "alto": 9.583333333333334,
+          "titulo": "Persona que accederá",
+          "descripcion": "Indica su nombre. El perfil Cliente se asigna automáticamente."
         }
       ]
     }

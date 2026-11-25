@@ -14,6 +14,8 @@ describe('Directorio de clientes', () => {
     component.busqueda = '';
     component.filtro = 'ARCHIVADOS';
     expect(component.filtrados.map((c) => c.id)).toEqual([2]);
+    expect(component.seleccionado).toBeNull();
+    component.seleccionar(2);
     expect(component.seleccionado?.id).toBe(2);
     component.clientes = [];
     expect(component.seleccionado).toBeNull();

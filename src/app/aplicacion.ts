@@ -30,8 +30,7 @@ import { AsociarDocumentoComponent } from './documentos/asociar-documento.compon
 import { ResumenExpedienteClienteComponent } from './clientes/resumen-expediente-cliente.component';
 import { EditorSolicitudComponent } from './solicitudes/editor-solicitud.component';
 import { AccesoUsuarioComponent } from './equipo/acceso-usuario.component';
-import { SelectorPerfilComponent } from './equipo/selector-perfil.component';
-import { SelectorClienteComponent } from './documentos/selector-cliente.component';
+import { EditorUsuarioComponent } from './equipo/editor-usuario.component';
 import { PerfilFiscalClienteComponent } from './clientes/perfil-fiscal-cliente.component';
 import { RecomendacionesFiscalesComponent } from './clientes/recomendaciones-fiscales.component';
 import { PanelTrabajoComponent } from './panel/panel-trabajo.component';
@@ -103,8 +102,7 @@ import {
     ResumenExpedienteClienteComponent,
     EditorSolicitudComponent,
     AccesoUsuarioComponent,
-    SelectorPerfilComponent,
-    SelectorClienteComponent,
+    EditorUsuarioComponent,
     PerfilFiscalClienteComponent,
     RecomendacionesFiscalesComponent,
   ],
@@ -403,6 +401,33 @@ export class Aplicacion implements OnInit {
 
   readonly seguridadUsuariosPendientes = new Set<number>();
   creandoUsuario = false;
+  editorUsuarioAbierto = false;
+  clienteAccesoFijo: RespuestaCliente | null = null;
+  errorUsuario = '';
+  equipoSeccion: 'usuarios' | 'asignaciones' = 'usuarios';
+  nuevaAsignacionAbierta = false;
+
+  abrirAltaUsuario(cliente: RespuestaCliente | null = null): void {
+    if (this.usuarioActual?.rol !== 'ADMIN' || (cliente && !cliente.activo)) return;
+    this.clienteAccesoFijo = cliente ? { ...cliente } : null;
+    this.nuevoUsuario = {
+      nombre: '',
+      email: cliente?.email ?? '',
+      contrasena: '',
+      rol: cliente ? 'CLIENTE' : 'ASESOR',
+      clienteId: null,
+      activo: true,
+      dobleFactorRequerido: true,
+    };
+    this.errorUsuario = '';
+    this.editorUsuarioAbierto = true;
+  }
+  cerrarAltaUsuario(): void {
+    if (this.creandoUsuario) return;
+    this.editorUsuarioAbierto = false;
+    this.clienteAccesoFijo = null;
+    this.nuevoUsuario.contrasena = '';
+  }
 
   formularioAsignacion = {
     asesorId: null as number | null,
@@ -2003,31 +2028,47 @@ export class Aplicacion implements OnInit {
   agregarUsuario(): void {
     if (this.creandoUsuario || !this.puedeAdministrar()) return;
     if (!this.nuevoUsuario.nombre.trim() || !this.nuevoUsuario.email.trim()) {
-      this.error = 'Completa el nombre y el correo del usuario';
+      this.errorUsuario = 'Completa el nombre y el correo del usuario';
       return;
     }
-    if (this.nuevoUsuario.rol === 'CLIENTE' && !this.nuevoUsuario.clienteId) {
-      this.error = 'Selecciona el cliente al que tendrá acceso esta cuenta';
+    if (this.nuevoUsuario.rol === 'CLIENTE' && !this.clienteAccesoFijo) {
+      this.errorUsuario = 'Crea el acceso desde la ficha del cliente';
       return;
     }
     if (!this.contrasenaTemporalValida(this.nuevoUsuario.contrasena)) {
-      this.error =
+      this.errorUsuario =
         'La clave temporal debe tener al menos 12 caracteres e incluir mayúscula, minúscula, número y símbolo';
       return;
     }
-    const payload = {
-      ...this.nuevoUsuario,
-      clienteId: this.nuevoUsuario.rol === 'CLIENTE' ? this.nuevoUsuario.clienteId : null,
-    };
+    const fijo = this.clienteAccesoFijo;
+    const payload = fijo
+      ? {
+          nombre: this.nuevoUsuario.nombre,
+          email: this.nuevoUsuario.email,
+          contrasena: this.nuevoUsuario.contrasena,
+          dobleFactorRequerido: this.nuevoUsuario.dobleFactorRequerido,
+          nifExpediente: fijo.nif,
+        }
+      : { ...this.nuevoUsuario, clienteId: null };
+    this.errorUsuario = '';
     this.limpiarMensajes();
     this.creandoUsuario = true;
     this.http
-      .post<
-        RespuestaApi<RespuestaUsuario>
-      >(`${this.urlBaseApi}/api/usuarios`, payload, { headers: this.cabecerasAutenticacion() })
-      .pipe(finalize(() => { this.creandoUsuario = false; this.detectorCambios.markForCheck(); }))
+      .post<RespuestaApi<RespuestaUsuario>>(
+        `${this.urlBaseApi}${fijo ? '/api/clientes/' + fijo.id + '/usuarios' : '/api/usuarios'}`,
+        payload,
+        { headers: this.cabecerasAutenticacion() },
+      )
+      .pipe(
+        finalize(() => {
+          this.creandoUsuario = false;
+          this.detectorCambios.markForCheck();
+        }),
+      )
       .subscribe({
         next: () => {
+          this.editorUsuarioAbierto = false;
+          this.clienteAccesoFijo = null;
           this.aviso = payload.dobleFactorRequerido
             ? 'Usuario creado. Al entrar cambiará la clave y vinculará su autenticador'
             : 'Usuario creado. Deberá cambiar la clave al entrar';
@@ -2044,7 +2085,8 @@ export class Aplicacion implements OnInit {
           this.cargarPlan();
           this.cargarAuditoria();
         },
-        error: (error) => (this.error = this.obtenerErrorApi(error, 'No se pudo crear el usuario')),
+        error: (error) =>
+          (this.errorUsuario = this.obtenerErrorApi(error, 'No se pudo crear el usuario')),
       });
   }
 
@@ -2099,9 +2141,19 @@ export class Aplicacion implements OnInit {
         ? `${usuario.nombre} deberá usar un código del autenticador. Si aún no lo ha vinculado, lo hará con un QR al entrar. Se cerrarán sus sesiones actuales.`
         : `${usuario.nombre} podrá entrar solo con su contraseña. Se cerrarán sus sesiones actuales y se conservará la vinculación del autenticador.`;
     const confirmado = await this.dialogos.confirmar({
-      titulo: restablecer ? 'Restablecer autenticador' : requerido ? 'Activar doble autenticación' : 'Desactivar doble autenticación',
-      descripcion: descripcion + (usuario.id === this.usuarioActual?.id ? ' Tendrás que iniciar sesión de nuevo.' : ''),
-      confirmar: restablecer ? 'Restablecer autenticador' : requerido ? 'Activar 2FA' : 'Desactivar 2FA',
+      titulo: restablecer
+        ? 'Restablecer autenticador'
+        : requerido
+          ? 'Activar doble autenticación'
+          : 'Desactivar doble autenticación',
+      descripcion:
+        descripcion +
+        (usuario.id === this.usuarioActual?.id ? ' Tendrás que iniciar sesión de nuevo.' : ''),
+      confirmar: restablecer
+        ? 'Restablecer autenticador'
+        : requerido
+          ? 'Activar 2FA'
+          : 'Desactivar 2FA',
       peligro: restablecer || !requerido,
     });
     if (!confirmado) {
@@ -2113,27 +2165,50 @@ export class Aplicacion implements OnInit {
     const ruta = `${this.urlBaseApi}/api/usuarios/${usuario.id}`;
     const opciones = { headers: this.cabecerasAutenticacion() };
     const peticion = restablecer
-      ? this.http.post<RespuestaApi<RespuestaUsuario>>(`${ruta}/restablecer-autenticador`, {}, opciones)
-      : this.http.put<RespuestaApi<RespuestaUsuario>>(`${ruta}/doble-factor`, { requerido }, opciones);
-    peticion.pipe(finalize(() => {
-      this.seguridadUsuariosPendientes.delete(usuario.id);
-      this.detectorCambios.markForCheck();
-    })).subscribe({
-      next: (respuesta) => {
-        this.usuarios = this.usuarios.map((u) => u.id === usuario.id
-          ? { ...respuesta.datos, nombre: this.nombrePersona(respuesta.datos.nombre) }
-          : u);
-        this.aviso = restablecer
-          ? usuario.dobleFactorRequerido ? 'Autenticador restablecido. Al entrar configurará un nuevo QR' : 'Vinculación retirada. El doble factor sigue desactivado'
-          : requerido ? 'Doble autenticación activada' : 'Doble autenticación desactivada';
-        if (usuario.id === this.usuarioActual?.id) {
-          this.autenticacion.notificarSesionCaducada();
-        } else {
-          this.cargarAuditoria();
-        }
-      },
-      error: (error) => { this.error = this.obtenerErrorApi(error, 'No se pudo actualizar la seguridad del usuario'); },
-    });
+      ? this.http.post<RespuestaApi<RespuestaUsuario>>(
+          `${ruta}/restablecer-autenticador`,
+          {},
+          opciones,
+        )
+      : this.http.put<RespuestaApi<RespuestaUsuario>>(
+          `${ruta}/doble-factor`,
+          { requerido },
+          opciones,
+        );
+    peticion
+      .pipe(
+        finalize(() => {
+          this.seguridadUsuariosPendientes.delete(usuario.id);
+          this.detectorCambios.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (respuesta) => {
+          this.usuarios = this.usuarios.map((u) =>
+            u.id === usuario.id
+              ? { ...respuesta.datos, nombre: this.nombrePersona(respuesta.datos.nombre) }
+              : u,
+          );
+          this.aviso = restablecer
+            ? usuario.dobleFactorRequerido
+              ? 'Autenticador restablecido. Al entrar configurará un nuevo QR'
+              : 'Vinculación retirada. El doble factor sigue desactivado'
+            : requerido
+              ? 'Doble autenticación activada'
+              : 'Doble autenticación desactivada';
+          if (usuario.id === this.usuarioActual?.id) {
+            this.autenticacion.notificarSesionCaducada();
+          } else {
+            this.cargarAuditoria();
+          }
+        },
+        error: (error) => {
+          this.error = this.obtenerErrorApi(
+            error,
+            'No se pudo actualizar la seguridad del usuario',
+          );
+        },
+      });
   }
 
   assignClient(): void {
@@ -2147,6 +2222,7 @@ export class Aplicacion implements OnInit {
       >(`${this.urlBaseApi}/api/asignaciones`, this.formularioAsignacion, { headers: this.cabecerasAutenticacion() })
       .subscribe({
         next: () => {
+          this.nuevaAsignacionAbierta = false;
           this.aviso = 'Cliente asignado';
           this.cargarAsignaciones();
           this.cargarAuditoria();
