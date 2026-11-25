@@ -1,0 +1,162 @@
+<div class="fondo-editor" aria-hidden="true"></div>
+<section
+  class="editor-solicitud"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="titulo-editor-solicitud"
+  [attr.aria-busy]="guardando"
+>
+  <header class="cabecera-editor">
+    <div>
+      <span class="eyebrow-editor">Petición documental</span>
+      <h2 id="titulo-editor-solicitud">{{ editando ? 'Editar petición' : 'Nueva petición' }}</h2>
+    </div>
+    <button
+      type="button"
+      class="cerrar"
+      (click)="cerrar()"
+      [disabled]="guardando"
+      aria-label="Cerrar petición"
+    >
+      <svg lucideX size="20"></svg>
+    </button>
+  </header>
+  <form #form="ngForm" (ngSubmit)="enviar(form)">
+    <div class="cuerpo-editor">
+      <fieldset class="datos" [disabled]="guardando">
+        <legend class="sr-only">Datos de la petición</legend>
+        <div class="fila" [class.una-columna]="!puedeAdministrar">
+          <label
+            >Cliente
+            <select
+              name="requestClient"
+              [(ngModel)]="formulario.clienteId"
+              [disabled]="editando"
+              required
+            >
+              @for (cliente of clientes; track cliente.id) {
+                <option [ngValue]="cliente.id">{{ cliente.nombre }}</option>
+              }
+            </select>
+          </label>
+          @if (puedeAdministrar) {
+            <label
+              >Responsable
+              <select name="requestAdvisor" [(ngModel)]="formulario.asesorAsignadoId">
+                <option [ngValue]="null">Sin asignar</option>
+                @for (asesor of asesores; track asesor.id) {
+                  <option [ngValue]="asesor.id">{{ asesor.nombre }}</option>
+                }
+              </select>
+            </label>
+          }
+        </div>
+        <label
+          >Qué necesitas
+          <input
+            #titulo
+            name="requestTitle"
+            [(ngModel)]="formulario.titulo"
+            placeholder="Ej. Facturas de ventas y gastos de noviembre"
+            maxlength="180"
+            required
+          />
+        </label>
+        @if (intentoEnviar && !formulario.titulo.trim()) {
+          <p class="error-campo">Indica qué documentación necesitas.</p>
+        }
+        <label
+          >Instrucciones para el cliente <span class="opcional">Opcional</span>
+          <textarea
+            name="requestDescription"
+            [(ngModel)]="formulario.descripcion"
+            rows="3"
+            maxlength="1200"
+            placeholder="Periodo, archivos que debe incluir o cualquier indicación necesaria."
+          ></textarea>
+        </label>
+      </fieldset>
+      <fieldset
+        class="documentacion"
+        [disabled]="guardando"
+        aria-describedby="ayuda-tipos-solicitud"
+      >
+        <legend>
+          Documentación esperada
+          <span class="contador-tipos"
+            >{{ formulario.tiposDocumentoEsperados.length }}
+            {{
+              formulario.tiposDocumentoEsperados.length === 1 ? 'seleccionado' : 'seleccionados'
+            }}</span
+          >
+        </legend>
+        <p id="ayuda-tipos-solicitud">Selecciona uno o varios tipos.</p>
+        <div class="opciones-tipo">
+          @for (opcion of opcionesTipo; track opcion.valor) {
+            <label
+              class="opcion-tipo"
+              [class.seleccionada]="formulario.tiposDocumentoEsperados.includes(opcion.valor)"
+            >
+              <input
+                type="checkbox"
+                [name]="'requestType-' + opcion.valor"
+                [ngModel]="formulario.tiposDocumentoEsperados.includes(opcion.valor)"
+                (ngModelChange)="alternarTipo(opcion.valor, $event)"
+              />
+              <span>{{ opcion.etiqueta }}</span>
+            </label>
+          }
+        </div>
+        @if (intentoEnviar && !formulario.tiposDocumentoEsperados.length) {
+          <p class="error-campo" role="alert">Selecciona al menos un tipo de documento.</p>
+        }
+      </fieldset>
+      <fieldset class="datos fechas" [disabled]="guardando">
+        <legend>Plazo y repetición</legend>
+        <div class="fila">
+          <label
+            >Vencimiento
+            <input
+              name="requestDue"
+              type="date"
+              [(ngModel)]="formulario.fechaVencimiento"
+              required
+            />
+            @if (intentoEnviar && !formulario.fechaVencimiento) {
+              <span class="error-campo">Elige una fecha de vencimiento.</span>
+            }
+          </label>
+          <label
+            >Repetición
+            <select
+              name="requestRecurrence"
+              [(ngModel)]="formulario.recurrencia"
+              [disabled]="editando"
+            >
+              <option value="NINGUNA">Una vez</option>
+              <option value="MENSUAL">Mensual</option>
+              <option value="TRIMESTRAL">Trimestral</option>
+              <option value="ANUAL">Anual</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
+    </div>
+    <footer class="pie-editor">
+      @if (error) {
+        <p class="error-guardado" role="alert">{{ error }}</p>
+      }
+      <div class="acciones-editor">
+        <button type="button" class="secundario" (click)="cerrar()" [disabled]="guardando">
+          Cancelar
+        </button>
+        <button type="submit" class="principal" [disabled]="guardando">
+          @if (!guardando) {
+            <svg lucideCheck size="17"></svg>
+          }
+          {{ guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear petición' }}
+        </button>
+      </div>
+    </footer>
+  </form>
+</section>

@@ -174,6 +174,13 @@ al origen configurados para la API.
 
 ## Manual de usuario
 
+En Solicitudes, el seguimiento ocupa la vista principal. Nueva petición y Editar
+abren un panel independiente con categorías seleccionables mediante casillas,
+cabecera y botones fijos, navegación por teclado y errores de guardado dentro
+del propio panel. Un error conserva el borrador; un guardado correcto vuelve al
+seguimiento. La solicitud de documentos desde una obligación abre el mismo panel
+con su contexto preparado.
+
 Ayuda muestra un manual adaptado al perfil: cliente, gestor o administrador
 (incluye administración de plataforma). El lector permite buscar sin acentos,
 cambiar de capítulo y volver al flujo de trabajo desde su acceso directo.

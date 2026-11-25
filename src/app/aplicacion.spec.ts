@@ -434,6 +434,45 @@ describe('Aplicacion', () => {
     expect(app.nuevaSolicitud.tiposDocumentoEsperados).toContain('EXTRACTO_BANCARIO');
     expect(app.nuevaSolicitud.recurrencia).toBe('TRIMESTRAL');
     expect(app.clienteObligacionesSeleccionado).toBeNull();
+    expect(app.editorSolicitudAbierto).toBe(true);
+  });
+
+  it('abre el alta aparte del seguimiento y descarta la edición al cancelar', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    app.clientes = [cliente(21, 'Cliente', true, 'AUTONOMO')];
+    expect(app.editorSolicitudAbierto).toBe(false);
+    app.editarSolicitud(solicitud());
+    expect(app.editorSolicitudAbierto).toBe(true);
+    app.cancelarEdicionSolicitud();
+    expect(app.editorSolicitudAbierto).toBe(false);
+    app.abrirNuevaSolicitud();
+    expect(app.solicitudEditandoId).toBeNull();
+    expect(app.nuevaSolicitud.titulo).toBe('');
+    expect(app.nuevaSolicitud.clienteId).toBe(21);
+    expect(app.editorSolicitudAbierto).toBe(true);
+  });
+
+  it('conserva el borrador tras un fallo de guardado e impide envíos duplicados', () => {
+    const app = TestBed.createComponent(Aplicacion).componentInstance;
+    app.usuarioActual = usuario('ADMIN');
+    app.editarSolicitud(solicitud());
+    const peticion = new Subject<unknown>();
+    const guardar = vi.spyOn(TestBed.inject(HttpClient), 'put').mockReturnValue(peticion);
+    try {
+      app.agregarSolicitud();
+      app.agregarSolicitud();
+      app.cancelarEdicionSolicitud();
+      expect(guardar).toHaveBeenCalledOnce();
+      expect(app.editorSolicitudAbierto).toBe(true);
+      peticion.error(new HttpErrorResponse({ status: 500 }));
+      expect(app.guardandoSolicitud).toBe(false);
+      expect(app.editorSolicitudAbierto).toBe(true);
+      expect(app.nuevaSolicitud.titulo).toBe(solicitud().titulo);
+      expect(app.errorSolicitud).toContain('No se pudo editar');
+    } finally {
+      guardar.mockRestore();
+    }
   });
 
   it('aplica una plantilla como propuesta editable con su checklist', () => {

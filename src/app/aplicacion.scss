@@ -1237,6 +1237,52 @@ textarea {
   border-radius: 8px;
 }
 
+.seguimiento-solicitudes {
+  min-width: 0;
+}
+.ayuda-solicitudes {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  padding: 8px 0;
+  background: none;
+  color: #8c6bb5;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.solicitudes-vacias {
+  display: grid;
+  justify-items: center;
+  gap: 13px;
+  padding: 54px 20px 62px;
+  text-align: center;
+}
+.icono-sin-solicitudes {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: #f3eefb;
+  color: #9a7bbd;
+  margin-bottom: 5px;
+}
+.solicitudes-vacias h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #51425f;
+}
+.solicitudes-vacias p {
+  max-width: 370px;
+  margin: 0 0 7px;
+  color: #998aa4;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
 .solicitud-card.vencida {
   border-color: #e9a899;
   background: #fff9f7;

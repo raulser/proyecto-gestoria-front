@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.24.2",
+  "version": "2026.11.25",
   "perfiles": {
     "cliente": {
       "nombre": "Cliente",
@@ -552,8 +552,8 @@
       "titulo": "Pedir documentación y revisar entregas",
       "resumen": "Crear peticiones claras y mantener su conversación y archivos juntos.",
       "parrafos": [
-        "En Solicitudes, Pedir documentación permite indicar cliente, título, instrucciones, vencimiento, recurrencia y tipos esperados. La asignación del responsable depende de tus permisos. Revisa el contexto antes de guardar.",
-        "Editar carga la petición en el formulario de edición. Guarda los cambios o cancela para volver a una nueva petición. Ver documentos abre su repositorio filtrado; Conversación mantiene los mensajes junto a la entrega.",
+        "En Solicitudes, el seguimiento ocupa la pantalla principal. Nueva petición abre un panel separado para indicar cliente, título, instrucciones, vencimiento, repetición y documentación esperada. El administrador puede seleccionar también el responsable.",
+        "Editar abre la petición en ese mismo panel con sus datos cargados. Guarda los cambios o pulsa Cancelar para volver al seguimiento. Las categorías se marcan con casillas independientes; puedes seleccionar varias tocando cada fila, sin Ctrl ni Cmd. Ver documentos abre el expediente de la petición y Conversación reúne sus mensajes.",
         "El cliente puede aportar archivos en varias sesiones y pulsa He terminado: enviar al acabar. Mientras está en Entrega en curso, no debe interpretarse como una entrega finalizada.",
         "En Pendiente de revisión, comprueba los archivos y su checklist. Si falta documentación, reabre la petición o resuelve la solicitud de reapertura del cliente indicando el motivo. Cerrar petición documental confirma la revisión de esa petición; no registra la presentación fiscal.",
         "Los avisos y sus enlaces requieren que el cliente tenga una cuenta activa y que el correo esté configurado. Si un mensaje no llega, pide al administrador que revise el destinatario y el envío; no crees una petición duplicada para intentar resolverlo."
@@ -566,20 +566,20 @@
           "antes": [],
           "pasos": [
             {
-              "haz": "Abre Solicitudes y, en Pedir documentación, elige Cliente.",
-              "veras": "El gestor solo trabaja con su cartera. El administrador puede seleccionar además el responsable disponible."
+              "haz": "Abre Solicitudes, pulsa Nueva petición y elige Cliente en el panel.",
+              "veras": "El seguimiento queda detrás y permanece disponible al cerrar el panel. El administrador puede seleccionar también el responsable."
             },
             {
               "haz": "Escribe Qué necesitas e Instrucciones para el cliente.",
               "veras": "Un título como Facturas de ventas y gastos identifica la entrega; las instrucciones concretan periodo, legibilidad y qué debe incluir."
             },
             {
-              "haz": "Selecciona Documentación esperada, Vencimiento y Repetición.",
-              "veras": "En ordenador, Ctrl o Cmd permite seleccionar varias categorías. Una vez evita una repetición no deseada."
+              "haz": "Marca las casillas de Documentación esperada y revisa Vencimiento y Repetición.",
+              "veras": "Puedes seleccionar varias categorías pulsando su fila. La selección se resalta y el contador indica cuántas has marcado. Una vez evita una repetición no deseada."
             },
             {
-              "haz": "Pulsa Crear solicitud y comprueba que aparece en Seguimiento.",
-              "veras": "La petición queda disponible para el cliente vinculado. El correo y su enlace dependen de cuentas activas y del servicio de envío."
+              "haz": "Pulsa Crear petición y comprueba que aparece en Seguimiento.",
+              "veras": "El panel se cierra tras guardar correctamente. Si falla, el mensaje aparece junto a los botones y conserva lo escrito para corregirlo o reintentarlo. El correo y su enlace requieren cuentas activas y el servicio de envío configurado."
             },
             {
               "haz": "Si procede de una obligación, utiliza Crear petición de documentos desde su seguimiento.",
@@ -601,11 +601,11 @@
           "pasos": [
             {
               "haz": "Pulsa Editar en la tarjeta de la petición.",
-              "veras": "El formulario de la izquierda cambia a Editar solicitud y carga sus datos. En móvil, vuelve al formulario superior si no lo ves."
+              "veras": "Se abre el panel Editar petición con su título, instrucciones, categorías y fecha. No necesitas buscar otro formulario en la pantalla."
             },
             {
-              "haz": "Modifica los campos permitidos y pulsa Guardar cambios; Cancelar edición descarta la edición.",
-              "veras": "El cliente y la repetición permanecen bloqueados en esta edición. Comprueba que el título de edición desaparece tras guardar o cancelar."
+              "haz": "Modifica los campos permitidos y pulsa Guardar cambios. Cancelar o la cruz cierran el panel sin guardar.",
+              "veras": "Cliente y Repetición permanecen bloqueados durante la edición. Un guardado correcto vuelve al seguimiento; un error se muestra en el panel y mantiene los datos."
             },
             {
               "haz": "En una entrega enviada, pulsa Ver documentos y revisa cada archivo y las categorías solicitadas.",
@@ -1917,8 +1917,8 @@
       ]
     },
     "crear-solicitud": {
-      "titulo": "Pedir documentación al cliente",
-      "descripcion": "La petición reúne instrucciones, categorías, fecha y conversación. El administrador puede elegir además el responsable.",
+      "titulo": "Crear una petición en su propio panel",
+      "descripcion": "El alta se abre aparte del seguimiento. Las casillas permiten seleccionar varias categorías pulsando cada fila.",
       "archivo": "manuales/capturas/crear-solicitud.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1926,27 +1926,36 @@
       "marcas": [
         {
           "numero": 1,
-          "x": 22.374267578125,
-          "y": 37.361111111111114,
-          "ancho": 25.819091796875,
-          "alto": 5.555555555555555,
-          "titulo": "Título concreto",
-          "descripcion": "Describe una entrega que el cliente pueda identificar."
+          "x": 46.09375,
+          "y": 27.416667938232422,
+          "ancho": 24.796874523162842,
+          "alto": 6.944444444444445,
+          "titulo": "Selección por categoría",
+          "descripcion": "Marca o desmarca cada casilla; las demás selecciones se conservan."
         },
         {
           "numero": 2,
-          "x": 22.374267578125,
-          "y": 61.80555555555556,
-          "ancho": 25.819091796875,
-          "alto": 16.944444444444443,
-          "titulo": "Categorías esperadas",
-          "descripcion": "Selecciona los tipos necesarios para la lista de comprobación."
+          "x": 60.772461891174316,
+          "y": 19.08333460489909,
+          "ancho": 7.334961295127869,
+          "alto": 2.7777777777777777,
+          "titulo": "Categorías seleccionadas",
+          "descripcion": "Comprueba el contador y las filas resaltadas."
+        },
+        {
+          "numero": 3,
+          "x": 85.51465034484863,
+          "y": 91.66666666666667,
+          "ancho": 12.141602039337158,
+          "alto": 6.111111111111111,
+          "titulo": "Guardar la petición",
+          "descripcion": "El botón permanece visible al desplazarte. El panel se cierra cuando el guardado termina correctamente."
         }
       ]
     },
     "editar-solicitud": {
-      "titulo": "Editar una petición existente",
-      "descripcion": "Editar carga la petición en el formulario de la izquierda. El cliente y la repetición no se cambian en esta edición.",
+      "titulo": "Editar una petición sin salir del seguimiento",
+      "descripcion": "Editar abre el panel con la información existente. Cliente y Repetición permanecen bloqueados durante la edición.",
       "archivo": "manuales/capturas/editar-solicitud.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1954,27 +1963,27 @@
       "marcas": [
         {
           "numero": 1,
-          "x": 55.390625,
-          "y": 6.111111111111111,
-          "ancho": 37.5,
-          "alto": 3.1944444444444446,
-          "titulo": "Edición activa",
-          "descripcion": "Comprueba el título y los datos antes de modificar."
+          "x": 46.09375,
+          "y": 33.41666751437717,
+          "ancho": 50.374999046325684,
+          "alto": 5.555555555555555,
+          "titulo": "Datos de la petición",
+          "descripcion": "Comprueba el título y las instrucciones cargadas antes de modificar."
         },
         {
           "numero": 2,
-          "x": 83.358154296875,
-          "y": 84.72222222222223,
-          "ancho": 13.594970703125,
-          "alto": 5.833333333333333,
-          "titulo": "Guardar la edición",
-          "descripcion": "Aplica los cambios a esta petición; Cancelar edición los descarta."
+          "x": 84.05468940734863,
+          "y": 91.66666666666667,
+          "ancho": 13.601562976837158,
+          "alto": 6.111111111111111,
+          "titulo": "Guardar o cancelar",
+          "descripcion": "Guardar cambios aplica la edición. Cancelar vuelve al seguimiento sin guardarla."
         }
       ]
     },
     "reabrir-gestor": {
       "titulo": "Reabrir una entrega enviada",
-      "descripcion": "Explica por qué debe volver a preparar la entrega. El cliente tendrá que finalizarla otra vez.",
+      "descripcion": "Indica la documentación pendiente. El cliente podrá añadir archivos y tendrá que finalizar la entrega otra vez.",
       "archivo": "manuales/capturas/reabrir-gestor.jpg",
       "ancho": 1280,
       "alto": 720,
@@ -1982,12 +1991,12 @@
       "marcas": [
         {
           "numero": 1,
-          "x": 30.6640625,
-          "y": 44.84809027777778,
+          "x": 30.656249523162842,
+          "y": 44.833335876464844,
           "ancho": 37.5,
-          "alto": 14.609375,
+          "alto": 14.555555979410805,
           "titulo": "Motivo para el cliente",
-          "descripcion": "Concreta la documentación que falta."
+          "descripcion": "Concreta por qué necesita aportar más documentación."
         }
       ]
     },

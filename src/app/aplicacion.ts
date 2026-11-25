@@ -311,6 +311,9 @@ export class Aplicacion implements OnInit {
   indiceArchivoSubiendo = 0;
   totalArchivosSubida = 0;
   solicitudEditandoId: number | null = null;
+  editorSolicitudAbierto = false;
+  guardandoSolicitud = false;
+  errorSolicitud = '';
   cumplimientoOrigenSolicitudId: number | null = null;
   solicitudConversacionId: number | null = null;
   comentariosSolicitud: Record<number, RespuestaComentarioSolicitud[]> = {};
@@ -422,6 +425,7 @@ export class Aplicacion implements OnInit {
   }
 
   cerrarSesion(): void {
+    this.editorSolicitudAbierto = false;
     this.clienteExpedienteDocumental = null;
     this.clienteSubidaFijo = null;
     this.token = '';
@@ -1575,6 +1579,8 @@ export class Aplicacion implements OnInit {
         : 'NINGUNA',
     };
     this.vistaActiva = 'solicitudes';
+    this.errorSolicitud = '';
+    this.editorSolicitudAbierto = true;
     this.cerrarObligaciones();
   }
 
@@ -1612,6 +1618,8 @@ export class Aplicacion implements OnInit {
       recurrencia: 'NINGUNA',
     };
     this.vistaActiva = 'solicitudes';
+    this.errorSolicitud = '';
+    this.editorSolicitudAbierto = true;
     this.cerrarObligaciones();
   }
 
@@ -1631,16 +1639,25 @@ export class Aplicacion implements OnInit {
     this.plantillaObligacionSeleccionada = '';
   }
 
+  abrirNuevaSolicitud(): void {
+    if (!this.puedeGestionarClientes() || this.guardandoSolicitud) return;
+    this.cancelarEdicionSolicitud();
+    this.editorSolicitudAbierto = true;
+  }
+
   agregarSolicitud(): void {
+    if (this.guardandoSolicitud || !this.puedeGestionarClientes()) return;
     if (
       !this.nuevaSolicitud.clienteId ||
       !this.nuevaSolicitud.titulo.trim() ||
       this.nuevaSolicitud.tiposDocumentoEsperados.length === 0
     ) {
-      this.error = 'Selecciona un cliente e indica qué documentación necesitas';
+      this.errorSolicitud = 'Selecciona un cliente e indica qué documentación necesitas';
       return;
     }
     this.limpiarMensajes();
+    this.errorSolicitud = '';
+    this.guardandoSolicitud = true;
     const peticion =
       this.solicitudEditandoId === null
         ? this.http.post<RespuestaApi<RespuestaSolicitudDocumento>>(
@@ -1665,22 +1682,34 @@ export class Aplicacion implements OnInit {
             { headers: this.cabecerasAutenticacion() },
           );
     const editando = this.solicitudEditandoId !== null;
-    peticion.subscribe({
-      next: () => {
-        this.aviso = editando ? 'Solicitud editada' : 'Solicitud creada';
-        this.cancelarEdicionSolicitud();
-        this.cargarSolicitudes();
-        this.cargarAuditoria();
-      },
-      error: (error) =>
-        (this.error = this.obtenerErrorApi(
-          error,
-          editando ? 'No se pudo editar la solicitud' : 'No se pudo crear la solicitud',
-        )),
-    });
+    peticion
+      .pipe(
+        finalize(() => {
+          this.guardandoSolicitud = false;
+          this.detectorCambios.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.aviso = editando ? 'Solicitud editada' : 'Solicitud creada';
+          this.guardandoSolicitud = false;
+          this.cancelarEdicionSolicitud();
+          this.cargarSolicitudes();
+          this.cargarAuditoria();
+        },
+        error: (error) => {
+          this.errorSolicitud = this.obtenerErrorApi(
+            error,
+            editando ? 'No se pudo editar la solicitud' : 'No se pudo crear la solicitud',
+          );
+        },
+      });
   }
 
   editarSolicitud(solicitud: RespuestaSolicitudDocumento): void {
+    if (!this.puedeGestionarClientes() || this.guardandoSolicitud) return;
+    this.editorSolicitudAbierto = true;
+    this.errorSolicitud = '';
     this.solicitudEditandoId = solicitud.id;
     this.cumplimientoOrigenSolicitudId = solicitud.cumplimientoObligacionId;
     this.nuevaSolicitud = {
@@ -1697,6 +1726,9 @@ export class Aplicacion implements OnInit {
   }
 
   cancelarEdicionSolicitud(): void {
+    if (this.guardandoSolicitud) return;
+    this.editorSolicitudAbierto = false;
+    this.errorSolicitud = '';
     const clienteId = this.nuevaSolicitud.clienteId ?? this.clientes[0]?.id ?? null;
     this.solicitudEditandoId = null;
     this.cumplimientoOrigenSolicitudId = null;

@@ -176,15 +176,39 @@
               vistaActiva === 'subir'
             "
           >
-            <button
-              type="button"
-              class="primary"
-              [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
-              (click)="abrirSubida()"
-            >
-              <svg lucideFileUp size="17"></svg>
-              <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
-            </button>
+            @if (vistaActiva === 'solicitudes' && puedeGestionarClientes()) {
+              <button
+                type="button"
+                class="primary"
+                (click)="abrirNuevaSolicitud()"
+                aria-label="Nueva petición"
+                title="Nueva petición"
+                [disabled]="clientes.length === 0"
+              >
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                <span>Nueva petición</span>
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="primary"
+                [attr.aria-label]="esCliente() ? 'Añadir documentos' : 'Subir documento'"
+                (click)="abrirSubida()"
+              >
+                <svg lucideFileUp size="17"></svg>
+                <span>{{ esCliente() ? 'Añadir documentos' : 'Subir documento' }}</span>
+              </button>
+            }
           </div>
         </header>
       }
@@ -988,13 +1012,8 @@
       }
 
       @if (vistaActiva === 'solicitudes') {
-        <div class="acceso-manual-contextual">
-          <button type="button" (click)="abrirManual('estados-solicitudes')">
-            <svg lucideFileText size="15"></svg> Ayuda con los estados
-          </button>
-        </div>
-        <section class="two-column">
-          @if (puedeGestionarClientes()) {
+        <section class="seguimiento-solicitudes">
+          @if (puedeGestionarClientes() && editorSolicitudAbierto) {
             <app-editor-solicitud
               [formulario]="nuevaSolicitud"
               [clientes]="clientes"
@@ -1002,6 +1021,8 @@
               [opcionesTipo]="opcionesTipoAportacion"
               [puedeAdministrar]="puedeAdministrar()"
               [editando]="solicitudEditandoId !== null"
+              [guardando]="guardandoSolicitud"
+              [error]="errorSolicitud"
               (guardar)="agregarSolicitud()"
               (cancelar)="cancelarEdicionSolicitud()"
             />
@@ -1016,6 +1037,13 @@
                   {{ esCliente() ? 'entregas pendientes o en revisión' : 'peticiones abiertas' }}
                 </p>
               </div>
+              <button
+                type="button"
+                class="ayuda-solicitudes"
+                (click)="abrirManual('estados-solicitudes')"
+              >
+                <svg lucideFileText size="15"></svg> Ayuda con los estados
+              </button>
             </div>
             <div class="documento-listar">
               @for (solicitud of solicitudes; track solicitud.id) {
@@ -1200,13 +1228,28 @@
                   }
                 </article>
               } @empty {
-                <p class="empty">
-                  {{
-                    esCliente()
-                      ? 'Ahora mismo tu gestoría no te ha pedido ninguna entrega.'
-                      : 'No hay peticiones de documentación.'
-                  }}
-                </p>
+                <div class="solicitudes-vacias">
+                  <span class="icono-sin-solicitudes" aria-hidden="true"
+                    ><svg lucideFileText size="25"></svg
+                  ></span>
+                  <h3>
+                    {{
+                      esCliente() ? 'No tienes entregas pendientes' : 'Todavía no hay peticiones'
+                    }}
+                  </h3>
+                  <p>
+                    {{
+                      esCliente()
+                        ? 'Las peticiones de tu gestoría aparecerán aquí.'
+                        : 'Solicita documentación a un cliente para empezar.'
+                    }}
+                  </p>
+                  @if (puedeGestionarClientes() && clientes.length > 0) {
+                    <button type="button" class="primary" (click)="abrirNuevaSolicitud()">
+                      Pedir documentación
+                    </button>
+                  }
+                </div>
               }
             </div>
           </div>
